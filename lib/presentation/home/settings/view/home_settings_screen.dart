@@ -1,5 +1,10 @@
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 class HomeSettingsScreen extends StatefulWidget {
   const HomeSettingsScreen({super.key});
@@ -9,85 +14,75 @@ class HomeSettingsScreen extends StatefulWidget {
 }
 
 class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
-  // Color Palette matching previous screens
-  final Color bgColor = const Color(0xFFF2EEE4);
-  final Color darkBrown = const Color(0xFF433428);
-  final Color mutedBrown = const Color(0xFF8C8071);
-  final Color cardBg = Colors.white;
-  final Color menuBg = const Color(0xFFFAF8F3);
-  final String fontSerif = 'Serif'; // Recommended: 'DM Serif Display'
+  final String fontSerif = 'Serif';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor,
+      backgroundColor: ColorManager.secondaryBackGround,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: EdgeInsets.symmetric(horizontal: 24.0.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
-              // Header
+              SizedBox(height: 40.h),
+              // =============  Header ================
               Text(
                 'Settings',
-                style: TextStyle(
-                  fontSize: 36,
-                  fontFamily: fontSerif,
+                style: getRegularStyle16_600(
+                  fontSize: 32.sp,
                   fontWeight: FontWeight.bold,
-                  color: darkBrown,
+                  color: ColorManager.brown,
                 ),
               ),
-              const SizedBox(height: 25),
+              SizedBox(height: 25.h),
 
               // Profile Card
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(20.w),
                 decoration: BoxDecoration(
-                  color: cardBg,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.black.withOpacity(0.05)),
+                  color: ColorManager.whiteColor,
+                  borderRadius: BorderRadius.circular(24.r),
+                  border: Border.all(
+                    color: ColorManager.brown.withValues(alpha: .5),
+                  ),
                 ),
                 child: Row(
                   children: [
-                    // Profile Image
-                    const CircleAvatar(
-                      radius: 35,
+                    // =========  Profile Image ===========
+                    CircleAvatar(
+                      radius: 35.r,
                       backgroundImage: NetworkImage(
-                        'https://pbs.twimg.com/profile_images/1564398871996174336/M-N6gu7M_400x400.jpg', // Placeholder for Yasir
+                        'https://wallpapers.com/images/featured/goku-super-saiyan-dm8zixw58guf3x1b.jpg', // Placeholder for Yasir
                       ),
                     ),
-                    const SizedBox(width: 15),
-                    // Profile Info
+                    SizedBox(width: 15.w),
+                    // ========  Profile Info =============
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'Yasir Abed Rabbu',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: fontSerif,
+                            style: getRegularStyle20_500(
                               fontWeight: FontWeight.bold,
-                              color: darkBrown,
-                            ),
+                              color: ColorManager.brown,
+                            ).copyWith(fontFamily: fontSerif),
                           ),
                           Text(
                             'yasirabedrabbu@gmail.com',
-                            style: TextStyle(
+                            style: getLightStyle14_400(
                               fontSize: 14,
-                              fontFamily: fontSerif,
-                              color: mutedBrown,
-                            ),
+                              color: ColorManager.brown,
+                            ).copyWith(fontFamily: fontSerif),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4.h),
                           Text(
                             'Member since January 2024',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: fontSerif,
-                              color: mutedBrown.withOpacity(0.7),
-                            ),
+                            style: getLightStyle12_400(
+                              color: ColorManager.brown300,
+                            ).copyWith(fontFamily: fontSerif),
                           ),
                         ],
                       ),
@@ -96,22 +91,22 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: 30.h),
 
               // Menu Items
-              _buildMenuTile(Icons.person_outline, "Account", () {
+              _buildMenuTile(IconManager.userIcon, "Account", () {
                 Navigator.pushNamed(context, RoutesName.accountScreen);
               }),
-              const SizedBox(height: 15),
-              _buildMenuTile(Icons.notifications_none, "Notifications", () {
+              SizedBox(height: 15.h),
+              _buildMenuTile(IconManager.notificationIcon, "Notifications", () {
                 Navigator.pushNamed(context, RoutesName.notificationScreen);
               }),
-              const SizedBox(height: 15),
-              _buildMenuTile(Icons.help_outline, "About", () {
+              SizedBox(height: 15.h),
+              _buildMenuTile(IconManager.aboutIcon, "About", () {
                 Navigator.pushNamed(context, RoutesName.aboutScreen);
               }),
 
-              const SizedBox(height: 30),
+              SizedBox(height: 30.h),
 
               // Bottom Action Buttons
               Row(
@@ -120,8 +115,8 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
                   Expanded(
                     child: _buildActionButton(
                       label: "Account Delete",
-                      icon: Icons.delete_outline,
-                      color: const Color(0xFFE53935), // Red
+                      icon: IconManager.deleteIcon,
+                      color: ColorManager.redColor, // Red
                       textColor: Colors.white,
                     ),
                   ),
@@ -130,14 +125,14 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
                   Expanded(
                     child: _buildActionButton(
                       label: "Sign out",
-                      icon: Icons.logout,
-                      color: const Color(0xFFCFD1D3), // Grey
-                      textColor: darkBrown,
+                      icon: IconManager.exitIcon,
+                      color: ColorManager.greyColor, // Grey
+                      textColor: ColorManager.brown,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
             ],
           ),
         ),
@@ -146,26 +141,30 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
   }
 
   // Helper Widget for Menu Tiles
-  Widget _buildMenuTile(IconData icon, String title, VoidCallback onTap) {
+  Widget _buildMenuTile(String icon, String title, VoidCallback onTap) {
     return Container(
       decoration: BoxDecoration(
-        color: menuBg,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.black.withOpacity(0.05)),
+        color: ColorManager.containerColor,
+        borderRadius: BorderRadius.circular(18.r),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
       ),
       child: ListTile(
-        leading: Icon(icon, color: darkBrown, size: 24),
+        leading: SvgPicture.asset(icon, width: 20.w, height: 20.h),
         title: Text(
           title,
-          style: TextStyle(
-            fontSize: 18,
-            fontFamily: fontSerif,
-            color: darkBrown.withOpacity(0.8),
+          style: getRegularStyle16_500(
+            color: ColorManager.brown.withValues(alpha: 0.8),
           ),
         ),
-        trailing: Icon(Icons.chevron_right, color: darkBrown, size: 24),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        trailing: SvgPicture.asset(
+          IconManager.arrowIcon,
+          width: 20.w,
+          height: 20.h,
+        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.r),
+        ),
         onTap: onTap,
       ),
     );
@@ -174,34 +173,32 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
   // Helper Widget for Bottom Action Buttons
   Widget _buildActionButton({
     required String label,
-    required IconData icon,
+    required String icon,
     required Color color,
     required Color textColor,
   }) {
     return Container(
-      height: 60,
+      height: 50.h,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           onTap: () {},
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, color: textColor, size: 22),
-              const SizedBox(width: 10),
+              SvgPicture.asset(icon, width: 20.w, height: 20.h),
+              SizedBox(width: 10.w),
               Text(
                 label,
-                style: TextStyle(
+                style: getRegularStyle16_500(
                   color: textColor,
-                  fontSize: 16,
-                  fontFamily: fontSerif,
                   fontWeight: FontWeight.w500,
-                ),
+                ).copyWith(fontFamily: fontSerif),
               ),
             ],
           ),

@@ -1,4 +1,5 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/balances/view/balances_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/bills/view/bills_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/goals/view/goals_screen.dart';
@@ -6,6 +7,7 @@ import 'package:bendrummond1819_fo529642dc3c7/presentation/home/view/home_screen
 import 'package:bendrummond1819_fo529642dc3c7/presentation/pay/view/pay_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import '../viewmodel/bottom_nav_bar_viewmodel.dart';
 
 class BottomNavBarScreen extends ConsumerStatefulWidget {
@@ -54,28 +56,23 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildNavItem(
-                    0,
-                    Icons.payments_outlined,
-                    "Pay",
-                    selectedIndex,
-                  ),
+                  _buildNavItem(0, IconManager.payIcon, "Pay", selectedIndex),
                   _buildNavItem(
                     1,
-                    Icons.receipt_long_outlined,
+                    IconManager.billsIcon,
                     "Bills",
                     selectedIndex,
                   ),
-                  _buildNavItem(2, Icons.home_outlined, "Home", selectedIndex),
+                  _buildNavItem(2, IconManager.homeIcon, "Home", selectedIndex),
                   _buildNavItem(
                     3,
-                    Icons.account_balance_wallet_outlined,
+                    IconManager.balanceIcon,
                     "Balances",
                     selectedIndex,
                   ),
                   _buildNavItem(
                     4,
-                    Icons.track_changes_outlined,
+                    IconManager.goalsIcon,
                     "Goals",
                     selectedIndex,
                   ),
@@ -91,7 +88,7 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
   // ========= Bottom Nav Items ============
   Widget _buildNavItem(
     int index,
-    IconData icon,
+    String icon,
     String label,
     int selectedIndex,
   ) {
@@ -114,11 +111,15 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
+            SvgPicture.asset(
               icon,
               color: isSelected ? activeColor : inactiveColor,
-              size: 24,
             ),
+            // Icon(
+            //   icon,
+            //   color: isSelected ? activeColor : inactiveColor,
+            //   size: 24,
+            // ),
             const SizedBox(height: 4),
             Text(
               label,

@@ -7,6 +7,7 @@ import 'package:bendrummond1819_fo529642dc3c7/presentation/home/settings/view/ho
 import 'package:bendrummond1819_fo529642dc3c7/presentation/pay/view/pay_screen.dart';
 import 'package:flutter/material.dart';
 import '../../presentation/bottom_nav/view/bottom_nav_bar_screen.dart';
+import '../../presentation/onboading/view/onboading_screen.dart';
 import '../../presentation/splash/view/splash_screen.dart';
 import '../resource/constants/strings_manager.dart';
 import 'routes_name.dart';
@@ -32,6 +33,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => NotificationScreen());
       case RoutesName.aboutScreen:
         return MaterialPageRoute(builder: (_) => AboutScreen());
+      case RoutesName.onBoardingRoute:
+        return MaterialPageRoute(builder: (_) => OnboardingScreen());
 
       default:
         return unDefineRoute();
