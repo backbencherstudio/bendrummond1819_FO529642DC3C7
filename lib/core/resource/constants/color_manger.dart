@@ -67,6 +67,7 @@ class ColorManager {
   static const Color brown500 = Color(0xFF4A3A2F);
   static const Color backButtonColor = Color(0xFFEDE6DB);
   static const Color navicons = Color(0xFF8C7055);
+  static const Color gold = Color(0xFFA07848);
 
   static const LinearGradient metallicGradient = LinearGradient(
     begin: Alignment.topLeft,
