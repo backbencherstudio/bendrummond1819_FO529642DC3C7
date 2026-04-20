@@ -189,6 +189,10 @@ class _SigningScreenState extends State<SigningScreen> {
                                   decoration: TextDecoration.underline,
                                   decorationColor: ColorManager.brown,
                                 ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.pushNamed(context, RoutesName.signUpRoute);
+                              },
                           ),
                         ],
                       ),

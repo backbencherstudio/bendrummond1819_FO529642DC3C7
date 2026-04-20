@@ -1,4 +1,5 @@
 import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signin/view/signin_screen.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/view/signup_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../presentation/bottom_nav/view/bottom_nav_bar_screen.dart';
@@ -18,6 +19,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => OnboardingScreen());
       case RoutesName.signInRoute:
         return MaterialPageRoute(builder: (_) => SigningScreen());
+      case RoutesName.signUpRoute:
+        return MaterialPageRoute(builder: (_) => SignupScreen());
 
       default:
         return unDefineRoute();
