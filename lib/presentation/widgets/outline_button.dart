@@ -53,7 +53,7 @@ class CustomOutlinedButton extends StatelessWidget {
             ],
             Text(
               title,
-              style: textStyle ?? getBoldStyle(color: ColorManager.black400),
+              style: textStyle ?? getSemiBoldStyle22(color: ColorManager.black400),
             ),
           ],
         ),

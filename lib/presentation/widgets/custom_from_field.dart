@@ -1,7 +1,6 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../core/resource/constants/color_manger.dart';
 
 class CustomFromField extends StatelessWidget {
@@ -23,6 +22,7 @@ class CustomFromField extends StatelessWidget {
   final VoidCallback? onTap;
   final bool readOnly;
   final BoxConstraints? suffixIconConstraints;
+  final BoxConstraints? prefixIconConstraints; // prefix এর জন্য constraints যোগ করা হয়েছে
   final int? maxLines;
 
   const CustomFromField({
@@ -45,6 +45,7 @@ class CustomFromField extends StatelessWidget {
     this.onTap,
     this.readOnly = false,
     this.suffixIconConstraints,
+    this.prefixIconConstraints,
     this.maxLines,
   });
 
@@ -58,29 +59,55 @@ class CustomFromField extends StatelessWidget {
       onChanged: onChanged,
       onTap: onTap,
       maxLines: maxLines ?? 1,
-
       readOnly: readOnly,
-      style: style ?? getBoldStyle(color: ColorManager.brown400),
+      style: style ?? getRegularStyle16_400(color: ColorManager.brown400),
       decoration: InputDecoration(
-        contentPadding:
-            contentPadding ??
-            EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.w),
-        filled: filled ?? false,
+        contentPadding: contentPadding ??
+            EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+        filled: filled ?? true,
         fillColor: fillColor ?? ColorManager.formFieldColor,
         hintText: hintText,
         labelText: labelText,
-        hintStyle: style ?? getBoldStyle(color: ColorManager.brown400),
-        prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon,
-        suffixIconConstraints: suffixIconConstraints,
-        enabledBorder:
-            enabledBorder ??
+        hintStyle: style ?? getRegularStyle16_400(color: ColorManager.brown400),
+
+        // Prefix Icon setup with constraints
+        prefixIcon: prefixIcon != null
+            ? Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.w),
+          child: SizedBox(
+            width: 20.w,
+            height: 20.h,
+            child: FittedBox(fit: BoxFit.contain, child: prefixIcon!),
+          ),
+        )
+            : null,
+        prefixIconConstraints: prefixIconConstraints ?? BoxConstraints(
+          minWidth: 44.w,
+          minHeight: 20.h,
+        ),
+
+        // Suffix Icon setup with constraints
+        suffixIcon: suffixIcon != null
+            ? Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.w),
+          child: SizedBox(
+            width: 20.w,
+            height: 20.h,
+            child: FittedBox(fit: BoxFit.contain, child: suffixIcon!),
+          ),
+        )
+            : null,
+        suffixIconConstraints: suffixIconConstraints ?? BoxConstraints(
+          minWidth: 44.w,
+          minHeight: 20.h,
+        ),
+
+        enabledBorder: enabledBorder ??
             OutlineInputBorder(
               borderRadius: BorderRadius.circular(16.r),
               borderSide: BorderSide(color: ColorManager.borderColor1),
             ),
-        focusedBorder:
-            focusedBorder ??
+        focusedBorder: focusedBorder ??
             OutlineInputBorder(
               borderRadius: BorderRadius.circular(16.r),
               borderSide: BorderSide(
@@ -90,11 +117,11 @@ class CustomFromField extends StatelessWidget {
             ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide(color: Colors.red),
+          borderSide: const BorderSide(color: Colors.red),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide(color: Colors.red),
+          borderSide: const BorderSide(color: Colors.red),
         ),
       ),
     );
