@@ -1,3 +1,4 @@
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/balances/view/balances_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/bills/view/bills_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/goals/view/goals_screen.dart';
@@ -28,7 +29,7 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
     final selectedIndex = ref.watch(bottomNavBarProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF2EEE4),
+      backgroundColor: const Color.fromARGB(255, 242, 228, 230),
       body: Stack(
         children: [
           _screenList[selectedIndex],
@@ -39,9 +40,8 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
               decoration: BoxDecoration(
-                color: const Color(
-                  0xFFEBE5D8,
-                ), // Slightly darker beige/cream bar
+                color: ColorManager
+                    .bottomNavBackGround, // Slightly darker beige/cream bar
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
@@ -88,6 +88,7 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
     );
   }
 
+  // ========= Bottom Nav Items ============
   Widget _buildNavItem(
     int index,
     IconData icon,

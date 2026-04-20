@@ -6,12 +6,15 @@ class ColorManager {
   ColorManager._();
 
   // ===== Primary Colors =====
-  static const Color primary = Color(0xFF00136B);
-  static const Color primaryLight = Color(0xFF334289);
+  static const Color primary = Color(0xFFF0EBE3);
+  static const Color secondary = Color(0xFFF7F3EB);
+  static const Color primaryLight = Color(0xFFF7F3EB);
   static const Color primaryDark = Color(0xFF000C48);
 
   // ===== Background Colors =====
   static const Color background = Color(0xFFF5F5F5);
+  static const Color secondaryBackGround = Color(0xFFFBF8F2);
+  static const Color bottomNavBackGround = Color(0xFFEDE6DB);
   static const Color backgroundDark = Color(0xFF121212);
   static const Color scaffoldLight = Color(0xFFFFFFFF);
   static const Color scaffoldDark = Color(0xFF1E1E1E);
@@ -35,8 +38,10 @@ class ColorManager {
   static const Color transparentColor = Colors.transparent;
 
   // ===== Border Colors =====
-  static const Color borderColor = Color(0xFFDADADA);
-  static const Color borderColor1 = Color(0xFF00136B);
+  static const Color borderColor = Color(0xFFFBF8F2);
+  static const Color borderColor1 = Color(0xFFE0D9D1);
+  static const Color borderColor2 = Color(0xFFDFE1E7);
+  static const Color borderColor3 = Color(0xFFC4A06A);
 
   // ===== Container & Fill Colors =====
   static const Color containerColor = Color(0xFFEFEFEF);
@@ -53,4 +58,28 @@ class ColorManager {
   static const Color shadowColor = Color(0x1A000000); // 10% opacity black
   static const Color dividerColor = Color(0xFFE0E0E0);
   static const Color overlayColor = Color(0x33000000); // 20% opacity black
+
+  static const Color primaryButton = Color(0xFF5C473B);
+  static const Color customOutlineButtonBorder = Color(0xFFDFE1E7);
+  static const Color black400 = Color(0xFF4A4C56);
+  static const Color formFieldColor = Color(0xFFFBF8F2);
+  static const Color brown = Color(0xFF4A3A2F);
+  static const Color brown300 = Color(0xFF867B74);
+  static const Color brown400 = Color(0xFF6E6159);
+  static const Color brown500 = Color(0xFF4A3A2F);
+  static const Color backButtonColor = Color(0xFFEDE6DB);
+  static const Color navicons = Color(0xFF8C7055);
+
+  static const LinearGradient metallicGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xFF4A3A2F),
+      Color(0xFFB08A70),
+      Color(0xFF4A3A2F),
+      Color(0xFFB08A70),
+      Color(0xFF4A3A2F),
+      Color(0xFFB08A70),
+    ],
+  );
 }

@@ -1,5 +1,15 @@
 import 'package:bendrummond1819_fo529642dc3c7/presentation/bottom_nav/view/bottom_nav_bar_screen.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/outline_button.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../../../core/resource/constants/image_manager.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,6 +27,42 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: BottomNavBarScreen()));
+    return Scaffold(
+      backgroundColor: ColorManager.primary,
+      appBar: AppBar(
+        leading: customBackButton(context),
+        backgroundColor: ColorManager.primary,
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Image(image: AssetImage(ImageManager.splash)),
+              SizedBox(height: 10),
+              PrimaryButton(
+                title: "test",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BottomNavBarScreen(),
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: 10),
+              CustomOutlinedButton(
+                title: "Continue with google",
+                onTap: () {},
+                icon: SvgPicture.asset(IconManager.googleIcon),
+              ),
+              SizedBox(height: 10),
+              CustomFromField(filled: true, hintText: "Enter name"),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

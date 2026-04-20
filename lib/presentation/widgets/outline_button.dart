@@ -1,0 +1,63 @@
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+class CustomOutlinedButton extends StatelessWidget {
+  final String title;
+  final VoidCallback onTap;
+  final Color? color;
+  final Color? fillColor;
+  final Widget? icon;
+  final TextStyle? textStyle;
+
+  const CustomOutlinedButton({
+    super.key,
+    required this.title,
+    required this.onTap,
+    this.color,
+    this.fillColor,
+    this.icon,
+    this.textStyle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        height: 56.h,
+        padding: EdgeInsets.all(14.h),
+        decoration: BoxDecoration(
+          color: fillColor ?? ColorManager.formFieldColor,
+          border: Border.all(
+            color: ColorManager.customOutlineButtonBorder,
+            width: 1.w,
+          ),
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (icon != null) ...[
+              SizedBox(
+                width: 20.w,
+                height: 20.h,
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: icon!,
+                ),
+              ),
+              SizedBox(width: 10.w),
+            ],
+            Text(
+              title,
+              style: textStyle ?? getBoldStyle(color: ColorManager.black400),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
