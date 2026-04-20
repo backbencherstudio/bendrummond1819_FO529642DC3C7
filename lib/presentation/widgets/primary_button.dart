@@ -59,7 +59,7 @@ class PrimaryButton extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               title,
-              style: textStyle ?? getSemiBoldStyle22(color: ColorManager.whiteColor),
+              style: textStyle ?? getRegularStyle20_500(color: ColorManager.whiteColor,fontSize: 18.sp),
             ),
           ),
         ),
