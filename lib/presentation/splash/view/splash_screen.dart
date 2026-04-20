@@ -1,5 +1,6 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -42,14 +43,8 @@ class _SplashScreenState extends State<SplashScreen>
 
     _bounceAnimation =
         TweenSequence<double>([
-          TweenSequenceItem(
-            tween: Tween(begin: 0.0, end: 15.0),
-            weight: 50,
-          ),
-          TweenSequenceItem(
-            tween: Tween(begin: 15.0, end: 0.0),
-            weight: 50,
-          ),
+          TweenSequenceItem(tween: Tween(begin: 0.0, end: 15.0), weight: 50),
+          TweenSequenceItem(tween: Tween(begin: 15.0, end: 0.0), weight: 50),
         ]).animate(
           CurvedAnimation(
             parent: _punchEffectController,
@@ -68,7 +63,17 @@ class _SplashScreenState extends State<SplashScreen>
         setState(() => _showColorEffect = true);
 
         _progressController.forward().then((_) {
-          _punchEffectController.forward();
+          _punchEffectController.forward().then((_) async {
+            await Future.delayed(const Duration(seconds: 3));
+            /// *************** on Boarding screen *********************
+            if (mounted) {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                RoutesName.onBoardingRoute,
+                (predicate) => false,
+              );
+            }
+          });
         });
       }
     });
@@ -142,16 +147,23 @@ class _SplashScreenState extends State<SplashScreen>
                           animation: _progressController,
                           builder: (context, child) {
                             return ClipRRect(
-                              borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.r),
+                              ),
                               child: ShaderMask(
                                 shaderCallback: (Rect bounds) {
-                                  return ColorManager.metallicGradient.createShader(bounds);
+                                  return ColorManager.metallicGradient
+                                      .createShader(bounds);
                                 },
                                 blendMode: BlendMode.srcIn,
                                 child: LinearProgressIndicator(
                                   value: _progressController.value,
-                                  backgroundColor: ColorManager.primary.withAlpha(30),
-                                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                                  backgroundColor: ColorManager.primary
+                                      .withAlpha(30),
+                                  valueColor:
+                                      const AlwaysStoppedAnimation<Color>(
+                                        Colors.white,
+                                      ),
                                   minHeight: 5.h,
                                 ),
                               ),
@@ -163,7 +175,7 @@ class _SplashScreenState extends State<SplashScreen>
                       Text(
                         "Know what's safe to spend.",
                         textAlign: TextAlign.center,
-                        style: getLight300Style16(color: ColorManager.gold)
+                        style: getLight300Style16(color: ColorManager.gold),
                       ),
                     ],
                   ),
