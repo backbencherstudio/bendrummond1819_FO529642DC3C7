@@ -6,8 +6,9 @@ class ColorManager {
   ColorManager._();
 
   // ===== Primary Colors =====
-  static const Color primary = Color(0xFF00136B);
-  static const Color primaryLight = Color(0xFF334289);
+  static const Color primary = Color(0xFFF0EBE3);
+  static const Color secondary = Color(0xFFF7F3EB);
+  static const Color primaryLight = Color(0xFFF7F3EB);
   static const Color primaryDark = Color(0xFF000C48);
 
   // ===== Background Colors =====
@@ -53,4 +54,9 @@ class ColorManager {
   static const Color shadowColor = Color(0x1A000000); // 10% opacity black
   static const Color dividerColor = Color(0xFFE0E0E0);
   static const Color overlayColor = Color(0x33000000); // 20% opacity black
+
+  static const Color primaryButton = Color(0xFF5C473B);
+  static const Color customOutlineButton = Color(0xFFFBF8F2);
+  static const Color customOutlineButtonBorder = Color(0xFFDFE1E7);
+  static const Color black400 = Color(0xFF4A4C56);
 }
