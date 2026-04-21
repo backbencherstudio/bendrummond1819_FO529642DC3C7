@@ -115,7 +115,7 @@ TextStyle getSemiBoldStyle22({
 // ===== Bold Style =====
 TextStyle getBoldStyle24({
   double fontSize = FontSize.s24,
-  FontWeight fontWeight = FontWeightManager.medium500,
+  FontWeight fontWeight = FontWeightManager.bold700,
   required Color color,
 }) {
   return _getTextStyle(fontSize, FontConstants.fontFamily, fontWeight, color);
