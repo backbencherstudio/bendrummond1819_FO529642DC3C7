@@ -1,3 +1,7 @@
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/forget_password/view/forgot_password.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signin/view/signin_screen.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/view/signup_screen.dart';
+
 import 'package:bendrummond1819_fo529642dc3c7/presentation/bills/addBills/view/add_bill_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/goals/addGoal/view/add_goal_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/home/settings/about/view/about_screen.dart';
@@ -35,6 +39,12 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => AboutScreen());
       case RoutesName.onBoardingRoute:
         return MaterialPageRoute(builder: (_) => OnboardingScreen());
+      case RoutesName.signInRoute:
+        return MaterialPageRoute(builder: (_) => SigningScreen());
+      case RoutesName.signUpRoute:
+        return MaterialPageRoute(builder: (_) => SignupScreen());
+      case RoutesName.forgotPasswordRoute:
+        return MaterialPageRoute(builder: (_) => ForgotPassword());
 
       default:
         return unDefineRoute();

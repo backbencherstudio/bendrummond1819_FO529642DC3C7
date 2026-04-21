@@ -1,6 +1,9 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/image_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/outline_button.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -13,8 +16,9 @@ class OnboardingScreen extends StatelessWidget {
     final double imageSectionHeight = screenHeight * 0.58;
 
     return Scaffold(
-      backgroundColor: ColorManager.secondary,
+      backgroundColor: ColorManager.primary,
       body: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
         child: Column(
           children: [
             SizedBox(
@@ -65,62 +69,34 @@ class OnboardingScreen extends StatelessWidget {
 
                   Text(
                     "See what money comes in and goes out. Know what's actually safe to spend.",
-                    style: getRegularStyle16_400(
-                      color: ColorManager.whiteColor
-                    ),
+                    style: getRegularStyle16_400(color: ColorManager.brown400),
                   ),
 
                   SizedBox(height: 25.h),
 
-                  _buildFeatureRow("2-Minute Setup"),
-                  SizedBox(height: 10.h),
-                  _buildFeatureRow("One Question at a Time"),
-                  SizedBox(height: 10.h),
-                  _buildFeatureRow("Really simple"),
-
-                  SizedBox(height: 50.h), // স্পেসারের বদলে ফিক্সড গ্যাপ
-
-                  // বাটন সেকশন
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56.h,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: ColorManager.primaryButton,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                      ),
-                      child: Text(
-                        "Get Started",
-                        style: getMediumStyle18(fontSize: 16.sp, color: Colors.white),
-                      ),
-                    ),
+                  Wrap(
+                    spacing: 10.w,
+                    runSpacing: 12.h,
+                    children: [
+                      _buildFeatureRow("2-Minute Setup"),
+                      _buildFeatureRow("One Question at a Time"),
+                      _buildFeatureRow("Really simple"),
+                    ],
                   ),
+
+                  SizedBox(height: 15.h),
+                  /// ************ Get Started Button *****************
+                  PrimaryButton(title: "Get Started", onTap: () {}),
 
                   SizedBox(height: 12.h),
-
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56.h,
-                    child: OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: ColorManager.customOutlineButtonBorder),
-                        backgroundColor: Colors.white.withOpacity(0.3),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                      ),
-                      child: Text(
-                        "Sign in to your account",
-                        style: getMediumStyle18(fontSize: 16.sp, color: ColorManager.brown500),
-                      ),
-                    ),
+                  /// ************ Sign in Button *****************
+                  CustomOutlinedButton(
+                    title: "Sign in to your account",
+                    onTap: () {
+                      Navigator.pushNamed(context, RoutesName.signInRoute);
+                    },
                   ),
-                  SizedBox(height: 40.h), // নিচের গ্যাপ
+                  SizedBox(height: 40.h),
                 ],
               ),
             ),
@@ -135,21 +111,15 @@ class OnboardingScreen extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 5.r,
-          height: 5.r,
+          width: 8.w,
+          height: 8.h,
           decoration: const BoxDecoration(
-            color: Color(0xFFA07848),
+            gradient: ColorManager.linearGradientColor2,
             shape: BoxShape.circle,
           ),
         ),
         SizedBox(width: 10.w),
-        Text(
-          text,
-          style: getRegularStyle16_400(
-              fontSize: 14.sp,
-              color: ColorManager.subtitleText.withOpacity(0.8)
-          ),
-        ),
+        Text(text, style: getLightStyle12_400(color: ColorManager.brown300)),
       ],
     );
   }
