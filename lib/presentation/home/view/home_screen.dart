@@ -2,6 +2,7 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_mang
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_logo_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,7 +12,7 @@ class HomeScreen extends StatelessWidget {
 
   // Color Palette
   final Color bgColor = ColorManager.background;
-  final String fontSerif = 'Serif'; // Recommended: 'DM Serif Display'
+  //final String fontSerif = 'Serif'; // Recommended: 'DM Serif Display'
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +33,7 @@ class HomeScreen extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'STABILITY',
-                        style: getRegularStyle16_500(
-                          fontSize: 28,
-
-                          color: ColorManager.brown,
-                        ).copyWith(fontFamily: fontSerif, letterSpacing: 4),
-                      ),
+                      customLogoText(),
                       Text(
                         'Good evening, Yasir',
                         style:
@@ -47,7 +41,7 @@ class HomeScreen extends StatelessWidget {
                               fontSize: 16,
                               color: ColorManager.gold,
                             ).copyWith(
-                              fontFamily: fontSerif,
+                             
                               fontStyle: FontStyle.italic,
                             ),
                       ),
@@ -123,7 +117,7 @@ class HomeScreen extends StatelessWidget {
                           color: ColorManager.backgroundDark.withValues(
                             alpha: 0.9,
                           ),
-                        ).copyWith(fontFamily: fontSerif),
+                        ),
                       ),
 
                       // Divider with Text
@@ -141,7 +135,7 @@ class HomeScreen extends StatelessWidget {
                               'October 1st paycheck',
                               style: getLightStyle14_400(
                                 color: ColorManager.gold,
-                              ).copyWith(fontFamily: fontSerif),
+                              ),
                             ),
                           ),
                           Container(
@@ -164,7 +158,7 @@ class HomeScreen extends StatelessWidget {
                 style: getRegularStyle16_500(
                   fontSize: 18.sp,
                   color: const Color(0xFFA67C52),
-                ).copyWith(fontFamily: fontSerif),
+                ),
               ),
               SizedBox(height: 30.h),
 
@@ -188,14 +182,14 @@ class HomeScreen extends StatelessWidget {
                     style: getMediumStyle18(
                       fontWeight: FontWeight.bold,
                       color: ColorManager.backgroundDark,
-                    ).copyWith(fontFamily: fontSerif),
+                    ),
                   ),
                   Text(
                     '\$185',
                     style: getMediumStyle18(
                       fontWeight: FontWeight.bold,
                       color: ColorManager.backgroundDark,
-                    ).copyWith(fontFamily: fontSerif),
+                    ),
                   ),
                 ],
               ),
@@ -215,7 +209,7 @@ class HomeScreen extends StatelessWidget {
           label,
           style: getRegularStyle16_400(
             color: ColorManager.gold,
-          ).copyWith(fontFamily: fontSerif),
+          ),
         ),
         Expanded(
           child: Padding(
@@ -227,7 +221,7 @@ class HomeScreen extends StatelessWidget {
           value,
           style: getRegularStyle16_400(
             color: ColorManager.gold,
-          ).copyWith(fontFamily: fontSerif),
+          ),
         ),
       ],
     );
