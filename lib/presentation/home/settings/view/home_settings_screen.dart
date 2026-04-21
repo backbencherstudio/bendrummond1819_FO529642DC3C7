@@ -32,7 +32,7 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
                 'Settings',
                 style: getRegularStyle16_600(
                   fontSize: 32.sp,
-                  fontWeight: FontWeight.bold,
+               
                   color: ColorManager.brown,
                 ),
               ),

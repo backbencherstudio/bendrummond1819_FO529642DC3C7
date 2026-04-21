@@ -6,6 +6,7 @@ class FontConstants {
 
 class FontWeightManager {
   static const FontWeight light300 = FontWeight.w300;
+  static const FontWeight light100 = FontWeight.w100;
   static const FontWeight regular400 = FontWeight.w400;
   static const FontWeight medium500 = FontWeight.w500;
   static const FontWeight semiBold600 = FontWeight.w600;
