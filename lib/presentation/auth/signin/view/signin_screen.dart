@@ -159,7 +159,9 @@ class _SigningScreenState extends State<SigningScreen> {
                   SizedBox(height: 25.h),
 
                   /// ************ Sign in Button *****************
-                  PrimaryButton(title: "Sign In", onTap: () {}),
+                  PrimaryButton(title: "Sign In", onTap: () {
+                    Navigator.pushNamed(context, RoutesName.bottomNavRoute);
+                  }),
 
                   SizedBox(height: 12.h),
 
