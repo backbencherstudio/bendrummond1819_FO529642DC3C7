@@ -9,6 +9,8 @@ import '../../../../core/resource/constants/color_manger.dart';
 import '../../../../core/resource/constants/image_manager.dart';
 import '../../../../core/resource/constants/style_manager.dart';
 import '../../../../core/route/routes_name.dart';
+import '../../../widgets/custom_back_button.dart';
+import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/outline_button.dart';
 import '../../../widgets/primary_button.dart';
 
@@ -46,13 +48,9 @@ class _SigningScreenState extends State<SigningScreen> {
                   ),
                   SafeArea(
                     child: Padding(
-                      padding: EdgeInsets.only(left: 24.w, top: 20.h),
-                      child: Text(
-                        "STABILITY",
-                        style: getRegularStyle16_400(
-                          fontSize: 20.sp,
-                          color: ColorManager.brown500,
-                        ).copyWith(letterSpacing: 6),
+                      padding: EdgeInsets.all(8.h),
+                      child: Row(
+                        children: [customBackButton(context), customLogoText()],
                       ),
                     ),
                   ),
@@ -92,6 +90,7 @@ class _SigningScreenState extends State<SigningScreen> {
                       fontSize: 14.sp,
                     ),
                   ),
+
                   /// ************ Email Field *****************
                   CustomFromField(
                     hintText: "you@example.com",
@@ -109,9 +108,15 @@ class _SigningScreenState extends State<SigningScreen> {
                           fontSize: 14.sp,
                         ),
                       ),
+
                       /// ************ Forgot password Button *****************
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            RoutesName.forgotPasswordRoute,
+                          );
+                        },
                         child: Text(
                           "Forgot password?",
                           style:
@@ -126,6 +131,7 @@ class _SigningScreenState extends State<SigningScreen> {
                       ),
                     ],
                   ),
+
                   /// ***************** password field ****************
                   CustomFromField(
                     hintText: "Your password",
@@ -162,7 +168,7 @@ class _SigningScreenState extends State<SigningScreen> {
                     title: "Continue with Google",
                     icon: SvgPicture.asset(IconManager.googleIcon),
                     onTap: () {
-                      Navigator.pushNamed(context, RoutesName.signInRoute);
+                      /// google sign in
                     },
                   ),
                   SizedBox(height: 20.h),
@@ -191,7 +197,10 @@ class _SigningScreenState extends State<SigningScreen> {
                                 ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.pushNamed(context, RoutesName.signUpRoute);
+                                Navigator.pushNamed(
+                                  context,
+                                  RoutesName.signUpRoute,
+                                );
                               },
                           ),
                         ],
@@ -207,6 +216,8 @@ class _SigningScreenState extends State<SigningScreen> {
       ),
     );
   }
+
+
 
   /// ************* custom widget **************
   Widget customDivider() {

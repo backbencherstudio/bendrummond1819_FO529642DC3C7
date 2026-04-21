@@ -1,3 +1,4 @@
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/forget_password/view/forgot_password.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signin/view/signin_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/view/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => SigningScreen());
       case RoutesName.signUpRoute:
         return MaterialPageRoute(builder: (_) => SignupScreen());
+      case RoutesName.forgotPasswordRoute:
+        return MaterialPageRoute(builder: (_) => ForgotPassword());
 
       default:
         return unDefineRoute();

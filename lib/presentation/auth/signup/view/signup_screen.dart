@@ -8,7 +8,9 @@ import '../../../../core/resource/constants/icon_manager.dart';
 import '../../../../core/resource/constants/image_manager.dart';
 import '../../../../core/resource/constants/style_manager.dart';
 import '../../../../core/route/routes_name.dart';
+import '../../../widgets/custom_back_button.dart';
 import '../../../widgets/custom_from_field.dart';
+import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/outline_button.dart';
 import '../../../widgets/primary_button.dart';
 
@@ -49,13 +51,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   SafeArea(
                     child: Padding(
-                      padding: EdgeInsets.only(left: 24.w, top: 20.h),
-                      child: Text(
-                        "STABILITY",
-                        style: getRegularStyle16_400(
-                          fontSize: 20.sp,
-                          color: ColorManager.brown500,
-                        ).copyWith(letterSpacing: 6),
+                      padding: EdgeInsets.all(8.h),
+                      child: Row(
+                        children: [customBackButton(context), customLogoText()],
                       ),
                     ),
                   ),
@@ -88,6 +86,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
 
                   SizedBox(height: 25.h),
+
                   /// ************ name Field *****************
                   Text(
                     "Your full name",
@@ -96,13 +95,14 @@ class _SignupScreenState extends State<SignupScreen> {
                       fontSize: 14.sp,
                     ),
                   ),
-                  SizedBox(height: 5.h,),
+                  SizedBox(height: 5.h),
                   CustomFromField(
                     hintText: "What should we call you?",
                     controller: _fullNameController,
                   ),
 
                   SizedBox(height: 12.h),
+
                   /// ************ email Field *****************
                   Text(
                     "Email address",
@@ -111,7 +111,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       fontSize: 14.sp,
                     ),
                   ),
-                  SizedBox(height: 5.h,),
+                  SizedBox(height: 5.h),
 
                   CustomFromField(
                     hintText: "you@example.com",
@@ -119,6 +119,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
 
                   SizedBox(height: 12.h),
+
                   /// ***************** password field ****************
                   Text(
                     "Password",
@@ -127,7 +128,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       fontSize: 14.sp,
                     ),
                   ),
-                  SizedBox(height: 5.h,),
+                  SizedBox(height: 5.h),
 
                   CustomFromField(
                     hintText: "Your password",
@@ -139,6 +140,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
 
                   SizedBox(height: 12.h),
+
                   /// ************ phone Field *****************
                   Text(
                     "Phone number",
@@ -147,7 +149,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       fontSize: 14.sp,
                     ),
                   ),
-                  SizedBox(height: 5.h,),
+                  SizedBox(height: 5.h),
 
                   CustomFromField(
                     hintText: "(123) 456-7890",
@@ -155,6 +157,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
 
                   SizedBox(height: 12.h),
+
                   /// ************ dob Field *****************
                   Text(
                     "Date of birth",
@@ -163,7 +166,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       fontSize: 14.sp,
                     ),
                   ),
-                  SizedBox(height: 5.h,),
+                  SizedBox(height: 5.h),
 
                   CustomFromField(
                     hintText: "MM/DD/YYYY",
@@ -173,7 +176,12 @@ class _SignupScreenState extends State<SignupScreen> {
                   SizedBox(height: 25.h),
 
                   /// ************ Sign in Button *****************
-                  PrimaryButton(title: "Create account", onTap: () {}),
+                  PrimaryButton(
+                    title: "Create account",
+                    onTap: () {
+                      Navigator.pushNamed(context, RoutesName.signInRoute);
+                    },
+                  ),
 
                   SizedBox(height: 12.h),
 
@@ -182,7 +190,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     title: "Continue with Google",
                     icon: SvgPicture.asset(IconManager.googleIcon),
                     onTap: () {
-                      Navigator.pushNamed(context, RoutesName.signInRoute);
+                      /// google sign in
                     },
                   ),
                   SizedBox(height: 20.h),
