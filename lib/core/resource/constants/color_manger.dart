@@ -13,6 +13,8 @@ class ColorManager {
 
   // ===== Background Colors =====
   static const Color background = Color(0xFFF5F5F5);
+  static const Color secondaryBackGround = Color(0xFFFBF8F2);
+  static const Color bottomNavBackGround = Color(0xFFEDE6DB);
   static const Color backgroundDark = Color(0xFF121212);
   static const Color scaffoldLight = Color(0xFFFFFFFF);
   static const Color scaffoldDark = Color(0xFF1E1E1E);
@@ -22,7 +24,9 @@ class ColorManager {
   static const Color textSecondary = Color(0xFF757575);
   static const Color titleText = Color(0xFF2F3131);
   static const Color titleText1 = Color(0xFF535353);
-  static const Color subtitleText = Color(0xFFF0EBE3); ///
+  static const Color subtitleText = Color(0xFFF0EBE3);
+
+  ///
   static const Color subtitleText1 = Color(0xFF60655C);
   static const Color mediumText = Color(0xFF363A33);
 
@@ -69,7 +73,11 @@ class ColorManager {
   static const Color backButtonColor = Color(0xFFEDE6DB);
   static const Color navicons = Color(0xFF8C7055);
   static const Color gold = Color(0xFFA07848);
+
   static const Color gold2 = Color(0xFFD5BE90);
+
+  static const Color redColor = Color(0xFFE53935);
+  static const Color greyColor = Color(0xFFCFD1D3);
 
   static const LinearGradient metallicGradient = LinearGradient(
     begin: Alignment.topLeft,
@@ -83,12 +91,15 @@ class ColorManager {
       Color(0xFFB08A70),
     ],
   );
+
   static const LinearGradient linearGradientColor2 = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [
-      Color(0xFF7C5638),
-      Color(0xFFCA9C79),
-    ],
+    colors: [Color(0xFF7C5638), Color(0xFFCA9C79)],
   );
+
+  //
+  static const Color cE9D6A5 = Color(0xFFE9D6A5);
+  static const Color cEADFC6 = Color(0xFFEADFC6);
+  static const Color cF0EBE3 = Color(0xFFF0EBE3);
 }

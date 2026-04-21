@@ -1,3 +1,4 @@
+import 'package:bendrummond1819_fo529642dc3c7/presentation/bottom_nav/view/bottom_nav_bar_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
@@ -28,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     _progressController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 2),
     );
 
     _shimmerController = AnimationController(
@@ -65,6 +66,7 @@ class _SplashScreenState extends State<SplashScreen>
         _progressController.forward().then((_) {
           _punchEffectController.forward().then((_) async {
             await Future.delayed(const Duration(seconds: 3));
+
             /// *************** on Boarding screen *********************
             if (mounted) {
               Navigator.pushNamedAndRemoveUntil(
