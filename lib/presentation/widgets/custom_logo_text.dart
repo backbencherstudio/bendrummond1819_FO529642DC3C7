@@ -10,6 +10,6 @@ Widget customLogoText() {
     style: getRegularStyle16_400(
       fontSize: 20.sp,
       color: ColorManager.brown500,
-    ).copyWith(letterSpacing: 6, fontFamily: "Serif"),
+    ).copyWith(letterSpacing: 6),
   );
 }

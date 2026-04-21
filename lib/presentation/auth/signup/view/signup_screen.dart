@@ -75,7 +75,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     style: getBoldStyle24(
                       fontSize: 28.sp,
                       color: ColorManager.brown,
-                    ).copyWith(height: 1.1, letterSpacing: -0.5),
+                    ).copyWith(letterSpacing: -0.5),
                   ),
 
                   SizedBox(height: 15.h),

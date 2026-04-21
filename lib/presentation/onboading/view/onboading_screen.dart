@@ -2,6 +2,7 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_mang
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/image_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_logo_text.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/outline_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
@@ -35,13 +36,7 @@ class OnboardingScreen extends StatelessWidget {
                   SafeArea(
                     child: Padding(
                       padding: EdgeInsets.only(left: 24.w, top: 20.h),
-                      child: Text(
-                        "STABILITY",
-                        style: getRegularStyle16_400(
-                          fontSize: 20.sp,
-                          color: ColorManager.brown500,
-                        ).copyWith(letterSpacing: 6),
-                      ),
+                      child: customLogoText()
                     ),
                   ),
                 ],
@@ -62,7 +57,7 @@ class OnboardingScreen extends StatelessWidget {
                     style: getBoldStyle24(
                       fontSize: 28.sp,
                       color: ColorManager.brown,
-                    ).copyWith(height: 1.1, letterSpacing: -0.5),
+                    ).copyWith( letterSpacing: -0.5,),
                   ),
 
                   SizedBox(height: 15.h),
