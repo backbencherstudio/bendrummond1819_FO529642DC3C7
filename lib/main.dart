@@ -1,3 +1,4 @@
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       ensureScreenSize: true,
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(primarySwatch: Colors.blue),
+        theme: ThemeData(scaffoldBackgroundColor: ColorManager.scaffoldLight),
         onGenerateRoute: RouteGenerator.getRoute,
         initialRoute: RoutesName.splashRoute,
       ),

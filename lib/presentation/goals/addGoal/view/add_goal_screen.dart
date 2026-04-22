@@ -1,7 +1,13 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/utils.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 class AddGoalScreen extends StatefulWidget {
   const AddGoalScreen({super.key});
@@ -11,70 +17,42 @@ class AddGoalScreen extends StatefulWidget {
 }
 
 class _AddGoalScreenState extends State<AddGoalScreen> {
-  // Color Palette
-  final Color darkBrown = const Color(0xFF433428);
-  final Color mutedBrown = const Color(0xFF8C8071);
-  final Color inputBg = const Color(0xFFFAF8F3);
-  final Color chipBg = const Color(
-    0xFFF7F9FB,
-  ); // Very light greyish-white for chips
-  final String fontSerif = 'Serif'; // Recommended: 'DM Serif Display'
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorManager.secondaryBackGround,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: EdgeInsets.symmetric(horizontal: 20.0.r, vertical: 32.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
-              // ======== Back Button & Title =========
               Row(
+                spacing: 12.w,
                 children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFEBE5D8), // Slightly darker beige
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.chevron_left,
-                        color: darkBrown,
-                        size: 24,
-                      ),
-                    ),
+                  customBackButton(
+                    context,
+                    borderColor: ColorManager.customOutlineButtonBorder,
                   ),
-                  const SizedBox(width: 20),
                   Text(
-                    'Add goal',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontFamily: fontSerif,
-                      fontWeight: FontWeight.bold,
-                      color: darkBrown,
-                    ),
+                    "Add goal",
+                    style: getSemiBoldStyle22(color: ColorManager.textPrimary),
                   ),
                 ],
               ),
 
-              const SizedBox(height: 35),
+              SizedBox(height: 35.h),
 
               // ========== Saving for Section ================
               _buildLabel("What are you saving for?"),
-              const SizedBox(height: 10),
+              SizedBox(height: 6.h),
               CustomFromField(hintText: 'Buy a Iphone 17 Pro'),
 
-              const SizedBox(height: 15),
+              SizedBox(height: 6.h),
 
               // Suggestion Chips
               Wrap(
-                spacing: 10,
-                runSpacing: 10,
+                spacing: 12,
+                runSpacing: 12,
                 children: [
                   _buildSuggestionChip("Emergency fund"),
                   _buildSuggestionChip("Vacation"),
@@ -84,23 +62,26 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                 ],
               ),
 
-              const SizedBox(height: 25),
+               SizedBox(height: 12.h),
 
               // ===================== Amount ========================
               _buildLabel("Amount"),
-              const SizedBox(height: 10),
-              CustomFromField(hintText: '\$ 60'),
+               SizedBox(height: 6.h),
+              CustomFromField(hintText: '60',prefixIcon:SvgPicture.asset(IconManager.dollar) ,),
 
-              const SizedBox(height: 25),
+               SizedBox(height: 12.h),
 
               // ================ Frequency Section ===================
               _buildLabel("Frequency"),
-              const SizedBox(height: 10),
+               SizedBox(height: 6.h,),
               _buildDropdownField("Per month"),
-              const SizedBox(height: 40),
+               SizedBox(height: 24.h),
               // ================ Add Goal Button =====================
-              PrimaryButton(title: 'Add Goal', onTap: () {}),
-              const SizedBox(height: 20),
+              PrimaryButton(title: 'Add Goal', onTap: () {
+                 Navigator.pop(context);
+                      Utils.showToast(message: "Goal Added", backgroundColor: ColorManager.successColor, textColor: ColorManager.whiteColor);
+              }),
+               SizedBox(height: 20),
             ],
           ),
         ),
@@ -112,25 +93,21 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
   Widget _buildLabel(String text) {
     return Text(
       text,
-      style: TextStyle(color: mutedBrown, fontSize: 16, fontFamily: fontSerif),
+      style: getRegularStyle16_400(color: ColorManager.brown300, fontSize: 14),
     );
   }
 
   // ======= Suggestion Chip ==========
   Widget _buildSuggestionChip(String label) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 6.r),
       decoration: BoxDecoration(
-        color: chipBg,
-        borderRadius: BorderRadius.circular(30),
+        color: ColorManager.backgroudNormal,
+        borderRadius: BorderRadius.circular(999.r),
       ),
       child: Text(
         label,
-        style: TextStyle(
-          color: mutedBrown,
-          fontSize: 15,
-          fontFamily: fontSerif,
-        ),
+        style: getMediumStyle18(color: ColorManager.brown300, fontSize: 14),
       ),
     );
   }
@@ -138,24 +115,30 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
   // ======== Dropdown Field ==============
   Widget _buildDropdownField(String value) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+      padding: EdgeInsets.only(
+        top: 14.r,
+        right: 12.r,
+        bottom: 14.r,
+        left: 16.r,
+      ),
       decoration: BoxDecoration(
-        color: inputBg,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.black.withOpacity(0.08)),
+        color: ColorManager.secondaryBackGround,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: ColorManager.borderE0D9D1),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
+          dropdownColor: ColorManager.secondaryBackGround,
           value: value,
-          icon: Icon(Icons.keyboard_arrow_down, color: darkBrown),
-          isExpanded: true,
-          style: TextStyle(
-            color: darkBrown,
-            fontSize: 18,
-            fontFamily: fontSerif,
+          icon: Icon(
+            Icons.keyboard_arrow_down,
+            color: ColorManager.primaryButton,
+            size: 20.sp,
           ),
+          isExpanded: true,
+          style: getRegularStyle16_400(color: ColorManager.brown400),
           items: [value].map((String val) {
-            return DropdownMenuItem<String>(value: val, child: Text(val));
+            return DropdownMenuItem<String>(value: val, child: Text(val,style: getRegularStyle16_400(color: ColorManager.brown400),));
           }).toList(),
           onChanged: (_) {},
         ),
