@@ -16,11 +16,12 @@ class ColorManager {
   static const Color secondaryBackGround = Color(0xFFFBF8F2);
   static const Color bottomNavBackGround = Color(0xFFEDE6DB);
   static const Color backgroundDark = Color(0xFF121212);
-  static const Color scaffoldLight = Color(0xFFFFFFFF);
+  static const Color scaffoldLight = Color(0xFFF7F3EB);
   static const Color scaffoldDark = Color(0xFF1E1E1E);
+  static const Color backgroudNormal = Color(0xFFF6F8FA);
 
   // ===== Text Colors =====
-  static const Color textPrimary = Color(0xFF212121);
+  static const Color textPrimary = Color(0xFF4A3A2F);
   static const Color textSecondary = Color(0xFF757575);
   static const Color titleText = Color(0xFF2F3131);
   static const Color titleText1 = Color(0xFF535353);
@@ -44,6 +45,7 @@ class ColorManager {
   static const Color borderColor1 = Color(0xFFE0D9D1);
   static const Color borderColor2 = Color(0xFFDFE1E7);
   static const Color borderColor3 = Color(0xFFC4A06A);
+  static const Color borderE0D9D1 = Color(0xFFE0D9D1);
 
   // ===== Container & Fill Colors =====
   static const Color containerColor = Color(0xFFEFEFEF);

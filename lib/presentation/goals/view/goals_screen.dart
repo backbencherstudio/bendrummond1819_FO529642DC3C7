@@ -1,5 +1,8 @@
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GoalsScreen extends StatefulWidget {
   const GoalsScreen({super.key});
@@ -9,38 +12,30 @@ class GoalsScreen extends StatefulWidget {
 }
 
 class _GoalsScreenState extends State<GoalsScreen> {
-  // Color Palette - Matching your UI design
-  final Color bgColor = const Color(0xFFF2EEE4);
-  final Color darkBrown = const Color(0xFF433428);
-  final Color mutedBrown = const Color(0xFF8C8071);
-  final Color cardBg = const Color(0xFFFAF8F3);
-  final String fontSerif =
-      'Serif'; // Recommended: 'DM Serif Display' from Google Fonts
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: SingleChildScrollView(
+          padding:  EdgeInsets.symmetric(horizontal: 20.0,vertical: 32.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
+             
 
               // Header: Goals
               Text(
                 'Goals',
-                style: TextStyle(
-                  fontSize: 36,
-                  fontFamily: fontSerif,
-                  fontWeight: FontWeight.bold,
-                  color: darkBrown,
+                style: getSemiBoldStyle22(
+                  color: ColorManager.textPrimary,
+                  fontSize: 32.sp,
                 ),
+
               ),
 
-              const SizedBox(height: 20),
+               SizedBox(height: 24.h),
 
               // Sub-header Row: "Your future goals" + Add Button
               Row(
@@ -48,33 +43,34 @@ class _GoalsScreenState extends State<GoalsScreen> {
                 children: [
                   Text(
                     'Your future goals',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: fontSerif,
-                      color: mutedBrown,
-                    ),
+                    style: getRegularStyle16_400(color: ColorManager.brown400),
+           
                   ),
                   // Small circular plus button
                   InkWell(
                     onTap: () =>
                         Navigator.pushNamed(context, RoutesName.addGoalScreen),
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6.r),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFEBE5D8),
+                        color: ColorManager.backButtonColor,
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(Icons.add, color: darkBrown, size: 20),
+                      child: Icon(
+                        Icons.add,
+                        color: ColorManager.primaryButton,
+                        size: 20.sp,
+                      ),
                     ),
                   ),
                 ],
               ),
 
-              const SizedBox(height: 25),
+              SizedBox(height: 16.h,),
 
               // Goals List
               _buildGoalCard("Buy a Iphone 17 Pro", "\$60/monthly"),
-              const SizedBox(height: 15),
+               SizedBox(height: 12.h),
               _buildGoalCard("Emergency fund", "\$30/monthly"),
             ],
           ),
@@ -87,11 +83,11 @@ class _GoalsScreenState extends State<GoalsScreen> {
   Widget _buildGoalCard(String title, String subtitle) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: cardBg,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.black.withOpacity(0.08)),
+        color: ColorManager.secondaryBackGround,
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: ColorManager.borderColor1),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -102,25 +98,20 @@ class _GoalsScreenState extends State<GoalsScreen> {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontFamily: fontSerif,
-                    color: darkBrown.withOpacity(0.8),
-                  ),
+                  style: getRegularStyle16_400(color: ColorManager.brown400),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 12.h),
                 Text(
                   subtitle,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: fontSerif,
-                    color: mutedBrown,
+                  style: getRegularStyle16_400(
+                    color: ColorManager.black400,
+                    fontSize: 14.sp,
                   ),
                 ),
               ],
             ),
           ),
-          Icon(Icons.close, color: darkBrown, size: 24),
+          Icon(Icons.close, color: ColorManager.primaryButton, size: 20.sp),
         ],
       ),
     );

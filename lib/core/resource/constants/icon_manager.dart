@@ -15,4 +15,5 @@ class IconManager {
   static String eyeIcon = '$baseUrl/eye.svg';
   static String editIcon = '$baseUrl/edit.svg';
   static String leftArrowIcon = '$baseUrl/leftArrow.svg';
+  static String dollar = '$baseUrl/dollar.svg';
 }
