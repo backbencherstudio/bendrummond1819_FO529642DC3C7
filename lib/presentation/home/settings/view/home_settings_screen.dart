@@ -14,7 +14,6 @@ class HomeSettingsScreen extends StatefulWidget {
 }
 
 class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
-  final String fontSerif = 'Serif';
 
   @override
   Widget build(BuildContext context) {
@@ -22,28 +21,27 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
       backgroundColor: ColorManager.secondaryBackGround,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24.0.w),
+          padding: EdgeInsets.symmetric(horizontal: 20.0.r, vertical: 32.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 40.h),
               // =============  Header ================
               Text(
                 'Settings',
                 style: getRegularStyle16_600(
                   fontSize: 32.sp,
-               
-                  color: ColorManager.brown,
+
+                  color: ColorManager.textPrimary,
                 ),
               ),
-              SizedBox(height: 25.h),
+              SizedBox(height: 24.h),
 
               // Profile Card
               Container(
-                padding: EdgeInsets.all(20.w),
+                padding: EdgeInsets.all(16.r),
                 decoration: BoxDecoration(
                   color: ColorManager.whiteColor,
-                  borderRadius: BorderRadius.circular(24.r),
+                  borderRadius: BorderRadius.circular(16.r),
                   border: Border.all(
                     color: ColorManager.brown.withValues(alpha: .5),
                   ),
@@ -52,7 +50,7 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
                   children: [
                     // =========  Profile Image ===========
                     CircleAvatar(
-                      radius: 35.r,
+                      radius: 30.r,
                       backgroundImage: NetworkImage(
                         'https://wallpapers.com/images/featured/goku-super-saiyan-dm8zixw58guf3x1b.jpg', // Placeholder for Yasir
                       ),
@@ -65,24 +63,25 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
                         children: [
                           Text(
                             'Yasir Abed Rabbu',
-                            style: getRegularStyle20_500(
-                              fontWeight: FontWeight.bold,
-                              color: ColorManager.brown,
-                            ).copyWith(fontFamily: fontSerif),
+                            style: getSemiBoldStyle22(
+                              fontSize: 20,
+                              color: ColorManager.textPrimary,
+                            ),
                           ),
                           Text(
                             'yasirabedrabbu@gmail.com',
-                            style: getLightStyle14_400(
+                            style: getRegularStyle16_400(
+                              color: ColorManager.brown300,
                               fontSize: 14,
-                              color: ColorManager.brown,
-                            ).copyWith(fontFamily: fontSerif),
+                            ),
                           ),
                           SizedBox(height: 4.h),
                           Text(
                             'Member since January 2024',
-                            style: getLightStyle12_400(
+                            style: getRegularStyle16_400(
                               color: ColorManager.brown300,
-                            ).copyWith(fontFamily: fontSerif),
+                              fontSize: 12,
+                            ),
                           ),
                         ],
                       ),
@@ -106,7 +105,7 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
                 Navigator.pushNamed(context, RoutesName.aboutScreen);
               }),
 
-              SizedBox(height: 30.h),
+              SizedBox(height: 16.h),
 
               // Bottom Action Buttons
               Row(
@@ -120,7 +119,7 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
                       textColor: Colors.white,
                     ),
                   ),
-                  const SizedBox(width: 15),
+                  SizedBox(width: 12.w),
                   // Sign out Button
                   Expanded(
                     child: _buildActionButton(
@@ -143,29 +142,29 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
   // Helper Widget for Menu Tiles
   Widget _buildMenuTile(String icon, String title, VoidCallback onTap) {
     return Container(
+      padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: ColorManager.containerColor,
-        borderRadius: BorderRadius.circular(18.r),
-        border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+        color: ColorManager.secondaryBackGround,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: ColorManager.borderColor2),
       ),
-      child: ListTile(
-        leading: SvgPicture.asset(icon, width: 20.w, height: 20.h),
-        title: Text(
-          title,
-          style: getRegularStyle16_500(
-            color: ColorManager.brown.withValues(alpha: 0.8),
-          ),
-        ),
-        trailing: SvgPicture.asset(
-          IconManager.arrowIcon,
-          width: 20.w,
-          height: 20.h,
-        ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.r),
-        ),
+      child: InkWell(
         onTap: onTap,
+        child: Row(
+          children: [
+            SvgPicture.asset(icon, width: 20.w, height: 20.h),
+            SizedBox(width: 8.w),
+            Text(
+              title,
+              style: getMediumStyle18(
+                color: ColorManager.brown400,
+                fontSize: 16,
+              ),
+            ),
+            Spacer(),
+            SvgPicture.asset(IconManager.arrowIcon, width: 20.w, height: 20.h),
+          ],
+        ),
       ),
     );
   }
@@ -178,27 +177,24 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
     required Color textColor,
   }) {
     return Container(
-      height: 50.h,
+      padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 12.r),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(20.r),
+        borderRadius: BorderRadius.circular(16.r),
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(20.r),
+          borderRadius: BorderRadius.circular(16.r),
           onTap: () {},
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(icon, width: 20.w, height: 20.h),
-              SizedBox(width: 10.w),
+              SizedBox(width: 4.w),
               Text(
                 label,
-                style: getRegularStyle16_500(
-                  color: textColor,
-                  fontWeight: FontWeight.w500,
-                ).copyWith(fontFamily: fontSerif),
+                style: getMediumStyle18(color: textColor, fontSize: 14),
               ),
             ],
           ),

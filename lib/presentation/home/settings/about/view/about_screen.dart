@@ -1,4 +1,8 @@
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
@@ -18,53 +22,38 @@ class _AboutScreenState extends State<AboutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: EdgeInsets.symmetric(horizontal: 20.0.r, vertical: 32.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
               // Top Bar: Back Button + Title
               Row(
                 children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFEBE5D8), // Slightly darker beige
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.chevron_left,
-                        color: darkBrown,
-                        size: 24,
-                      ),
-                    ),
+                  customBackButton(
+                    context,
+                    borderColor: ColorManager.borderColor2,
                   ),
-                  const SizedBox(width: 20),
+                  SizedBox(width: 12.w),
                   Text(
                     'About',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontFamily: fontSerif,
-                      fontWeight: FontWeight.bold,
-                      color: darkBrown,
+                    style: getSemiBoldStyle22(
+                      color: ColorManager.textPrimary,
+                      fontSize: 24,
                     ),
                   ),
                 ],
               ),
 
-              const SizedBox(height: 40),
+              SizedBox(height: 24.h),
 
               // Menu Options
               _buildAboutTile(
                 "Terms of Service",
                 trailing: Icon(Icons.chevron_right, color: darkBrown),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               _buildAboutTile(
                 "Privacy Policy",
                 trailing: Icon(Icons.chevron_right, color: darkBrown),
@@ -74,11 +63,8 @@ class _AboutScreenState extends State<AboutScreen> {
                 "App Version",
                 trailing: Text(
                   "1.0.0",
-                  style: TextStyle(
-                    fontFamily: fontSerif,
-                    color: mutedBrown,
-                    fontSize: 18,
-                  ),
+                  style: 
+                  getRegularStyle16_400(color: ColorManager.brown300)
                 ),
               ),
             ],
@@ -92,23 +78,18 @@ class _AboutScreenState extends State<AboutScreen> {
   Widget _buildAboutTile(String title, {required Widget trailing}) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+      padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
       decoration: BoxDecoration(
-        color: cardBg,
+        color: ColorManager.secondaryBackGround,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.black.withOpacity(0.08)),
+        border: Border.all(color: ColorManager.brown.withValues(alpha: .5)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             title,
-            style: TextStyle(
-              fontSize: 18,
-              fontFamily: fontSerif,
-              color: darkBrown,
-              fontWeight: FontWeight.w500,
-            ),
+            style: getMediumStyle18(color: ColorManager.c201F2E, fontSize: 16),
           ),
           trailing,
         ],

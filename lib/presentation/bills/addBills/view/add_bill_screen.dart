@@ -18,12 +18,6 @@ class AddBillScreen extends StatefulWidget {
 }
 
 class _AddBillScreenState extends State<AddBillScreen> {
-  // Color Palette
-  final Color bgColor = const Color(0xFFF2EEE4);
-  final Color darkBrown = const Color(0xFF433428);
-  final Color mutedBrown = const Color(0xFF8C8071);
-  final Color inputBg = const Color(0xFFFAF8F3);
-  final String fontSerif = 'Serif'; // Recommended: 'DM Serif Display'
 
   bool _isRecurring = false;
   int _selectedFrequency = 0; // 0: Beginning, 1: Middle, 2: End
@@ -80,8 +74,8 @@ class _AddBillScreenState extends State<AddBillScreen> {
                     width: 24,
                     child: Checkbox(
                       value: _isRecurring,
-                      activeColor: darkBrown,
-                      side: BorderSide(color: mutedBrown, width: 1.5),
+                      activeColor: ColorManager.brown,
+                      side: BorderSide(color: ColorManager.brown, width: 1.5),
                       onChanged: (val) => setState(() => _isRecurring = val!),
                     ),
                   ),
@@ -207,7 +201,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 12.r),
       decoration: BoxDecoration(
-        color: inputBg,
+        color: ColorManager.secondaryBackGround,
         borderRadius: BorderRadius.circular(15),
         border: Border.all(color: ColorManager.borderColor2),
       ),
@@ -223,33 +217,6 @@ class _AddBillScreenState extends State<AddBillScreen> {
           ),
           SvgPicture.asset(IconManager.arrowDown),
         ],
-      ),
-    );
-  }
-
-  Widget _buildButton(String label, {bool isSecondary = false}) {
-    return SizedBox(
-      height: 60,
-      child: ElevatedButton(
-        onPressed: () {},
-        style: ElevatedButton.styleFrom(
-          backgroundColor: isSecondary ? inputBg : darkBrown,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: isSecondary
-                ? BorderSide(color: Colors.black.withOpacity(0.08))
-                : BorderSide.none,
-          ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSecondary ? darkBrown : Colors.white,
-            fontSize: 18,
-            fontFamily: fontSerif,
-          ),
-        ),
       ),
     );
   }
