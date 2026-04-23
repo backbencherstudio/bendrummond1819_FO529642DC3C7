@@ -12,12 +12,6 @@ class BillsScreen extends StatefulWidget {
 }
 
 class _BillsScreenState extends State<BillsScreen> {
-  // Color Palette - Matches your UI design
-  final Color bgColor = const Color(0xFFF2EEE4);
-  final Color darkBrown = const Color(0xFF433428);
-  final Color mutedBrown = const Color(0xFF8C8071);
-  final Color cardBg = const Color(0xFFFAF8F3);
-  final String fontSerif = 'Serif'; // Recommended: 'DM Serif Display'
 
   @override
   Widget build(BuildContext context) {

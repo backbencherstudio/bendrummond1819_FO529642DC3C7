@@ -1,6 +1,7 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,55 +15,43 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  final Color darkBrown = const Color(0xFF433428);
-  final Color mutedBrown = const Color(0xFF8C8071);
-  final Color inputBg = const Color(0xFFFAF8F3);
-  final String fontSerif = 'Serif';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorManager.secondaryBackGround,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24.0.w),
+          padding: EdgeInsets.symmetric(horizontal: 20.0.r, vertical: 32.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20.h),
               // ====== Back Button & Title ===========
               Row(
                 children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      padding: EdgeInsets.all(12.w),
-                      decoration: BoxDecoration(
-                        color: ColorManager.whiteColor,
-                        shape: BoxShape.circle,
-                      ),
-                      child: SvgPicture.asset(IconManager.leftArrowIcon),
-                    ),
+                  customBackButton(
+                    context,
+                    borderColor: ColorManager.borderColor2,
                   ),
-                  const SizedBox(width: 20),
+                  SizedBox(width: 20),
                   Text(
                     'Account',
-                    style: getBoldStyle24(
+                    style: getSemiBoldStyle22(
                       color: ColorManager.brown,
-                    ).copyWith(fontFamily: fontSerif),
+                      fontSize: 24,
+                    ),
                   ),
                 ],
               ),
 
-              SizedBox(height: 30.h),
+              SizedBox(height: 48.h),
 
               // Profile Image with Edit Icon
               Center(
                 child: Stack(
                   children: [
                     Container(
-                      width: 110.w,
-                      height: 110.h,
+                      width: 80.w,
+                      height: 80.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
@@ -97,33 +86,43 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
               ),
 
-              SizedBox(height: 40.h),
+              SizedBox(height: 32.h),
 
               // =========== Form Fields ============
               _buildLabel("Your full name"),
-              SizedBox(height: 8.h),
+              SizedBox(height: 6.h),
               CustomFromField(hintText: 'Yasir Abed Rabbu'),
-              SizedBox(height: 20.h),
-              CustomFromField(hintText: 'Email address'),
-              SizedBox(height: 8.h),
+              SizedBox(height: 12.h),
+
+              _buildLabel("Email address"),
+              SizedBox(height: 6.h),
               CustomFromField(hintText: 'yasir@gmail.com'),
-              SizedBox(height: 20.h),
-              CustomFromField(hintText: 'Password'),
-              SizedBox(height: 8.h),
-              CustomFromField(hintText: 'Your password'),
-              SizedBox(height: 20.h),
-              CustomFromField(hintText: 'Confirm Password'),
-              SizedBox(height: 8.h),
-              CustomFromField(hintText: 'Confirm your password'),
-              SizedBox(height: 20.h),
-              CustomFromField(hintText: 'Phone number'),
-              SizedBox(height: 8.h),
+              SizedBox(height: 12.h),
+
+              _buildLabel("Password"),
+              SizedBox(height: 6.h),
+              CustomFromField(
+                hintText: 'Your Password',
+                suffixIcon: Icon(Icons.remove_red_eye_outlined),
+              ),
+
+              SizedBox(height: 12.h),
+              _buildLabel("Confirm Password"),
+              SizedBox(height: 6.h),
+              CustomFromField(
+                hintText: 'Confirm your password',
+                suffixIcon: Icon(Icons.remove_red_eye_outlined),
+              ),
+
+              SizedBox(height: 12.h),
+              _buildLabel("Phone number"),
+              SizedBox(height: 6.h),
               CustomFromField(hintText: '(123) 456-7890'),
-              SizedBox(height: 20.h),
-              CustomFromField(hintText: 'Date of birth'),
+              SizedBox(height: 12.h),
+              _buildLabel("Date of birth"),
               SizedBox(height: 8.h),
               CustomFromField(hintText: 'MM/DD/YYYY'),
-              SizedBox(height: 40.h),
+              SizedBox(height: 32.h),
               // ========== Action Buttons ============
               Row(
                 children: [
@@ -144,7 +143,7 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget _buildLabel(String text) {
     return Text(
       text,
-      style: TextStyle(color: mutedBrown, fontSize: 15, fontFamily: fontSerif),
+      style: getRegularStyle16_400(color: ColorManager.brown300, fontSize: 14),
     );
   }
 
@@ -155,24 +154,19 @@ class _AccountScreenState extends State<AccountScreen> {
       child: ElevatedButton(
         onPressed: () {},
         style: ElevatedButton.styleFrom(
-          backgroundColor: isSecondary ? Colors.transparent : darkBrown,
+          backgroundColor: isSecondary ? Colors.transparent : ColorManager.brown,
           elevation: 0,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(12.r),
             side: isSecondary
-                ? BorderSide(color: Colors.black.withOpacity(0.1))
+                ? BorderSide(color: ColorManager.borderColor2)
                 : BorderSide.none,
           ),
         ),
         child: Text(
           label,
-          style: TextStyle(
-            color: isSecondary ? darkBrown : Colors.white,
-            fontSize: 17,
-            fontFamily: fontSerif,
-            fontWeight: FontWeight.w500,
-          ),
+          style: getMediumStyle18(color: isSecondary ?  ColorManager.brown : Colors.white,fontSize: 16)
         ),
       ),
     );
