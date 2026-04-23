@@ -10,22 +10,15 @@ import 'package:flutter_svg/svg.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  // Color Palette
-  final Color bgColor = ColorManager.background;
-  //final String fontSerif = 'Serif'; // Recommended: 'DM Serif Display'
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24.0.w),
+          padding: EdgeInsets.symmetric(horizontal: 20.r, vertical: 20.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 10.h),
-
               // =========== Header Section ===========
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -36,14 +29,10 @@ class HomeScreen extends StatelessWidget {
                       customLogoText(),
                       Text(
                         'Good evening, Yasir',
-                        style:
-                            getRegularStyle16_400(
-                              fontSize: 16,
-                              color: ColorManager.gold,
-                            ).copyWith(
-                             
-                              fontStyle: FontStyle.italic,
-                            ),
+                        style: getRegularStyle16_400(
+                          fontSize: 14,
+                          color: ColorManager.cA87B4D,
+                        ).copyWith(fontStyle: FontStyle.italic),
                       ),
                     ],
                   ),
@@ -53,28 +42,26 @@ class HomeScreen extends StatelessWidget {
                       RoutesName.homeSettingsScreen,
                     ),
                     child: Container(
+                      padding: EdgeInsets.all(12.r),
                       decoration: BoxDecoration(
+                        color: ColorManager.secondaryBackGround,
                         shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: ColorManager.brown300.withValues(alpha: 0.2),
-                            blurRadius: 10,
-                            spreadRadius: 2,
-                            offset: Offset(0, 1),
-                          ),
-                        ],
                       ),
-                      child: CircleAvatar(
-                        radius: 25.r,
-                        backgroundColor: ColorManager.whiteColor,
-                        child: SvgPicture.asset(IconManager.userIcon),
+                      child: SvgPicture.asset(
+                        IconManager.userIcon,
+                        colorFilter: ColorFilter.mode(
+                          ColorManager.primaryButton,
+                          BlendMode.srcIn,
+                        ),
+                        width: 24.w,
+                        height: 24.h,
                       ),
                     ),
                   ),
                 ],
               ),
 
-              SizedBox(height: 60.h),
+              SizedBox(height: 52.h),
 
               // --- Main "Safe to Spend" Section with Glow ---
               Stack(
@@ -92,7 +79,7 @@ class HomeScreen extends StatelessWidget {
                         colors: [
                           ColorManager.cE9D6A5,
                           ColorManager.cEADFC6,
-                          ColorManager.background,
+                          ColorManager.primaryLight,
                         ],
                         stops: const [0.0, 0.3648, 0.9737],
                       ),
@@ -105,18 +92,13 @@ class HomeScreen extends StatelessWidget {
                         style: getLightStyle14_400(
                           fontSize: 11,
                           color: ColorManager.gold,
-                          fontWeight: FontWeight.w500,
                         ).copyWith(letterSpacing: 1.5),
                       ),
                       Text(
                         '\$185',
-                        style: getLightStyle14_400(
+                        style: getMediumStyle18(
                           fontSize: 100,
-
-                          fontWeight: FontWeight.bold,
-                          color: ColorManager.backgroundDark.withValues(
-                            alpha: 0.9,
-                          ),
+                          color: ColorManager.c2E1606,
                         ),
                       ),
 
@@ -125,23 +107,23 @@ class HomeScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            width: 40.w,
+                            width: 32.w,
                             height: 1.h,
-                            color: ColorManager.gold,
+                            color: ColorManager.cACA49F,
                           ),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 10.w),
                             child: Text(
                               'October 1st paycheck',
                               style: getLightStyle14_400(
-                                color: ColorManager.gold,
+                                color: ColorManager.cA27E5D,
                               ),
                             ),
                           ),
                           Container(
-                            width: 40.w,
+                            width: 32.w,
                             height: 1.h,
-                            color: ColorManager.gold,
+                            color: ColorManager.cACA49F,
                           ),
                         ],
                       ),
@@ -150,27 +132,24 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
 
-              SizedBox(height: 100.h),
+              SizedBox(height: 110.h),
 
               // --- Payday Breakdown Section ---
               Text(
                 'Payday Breakdown',
                 style: getRegularStyle16_500(
-                  fontSize: 18.sp,
-                  color: const Color(0xFFA67C52),
+                  fontSize: 16.sp,
+                  color: ColorManager.cB8976A,
                 ),
               ),
-              SizedBox(height: 30.h),
+              SizedBox(height: 32.h),
 
               _buildBreakdownRow("Pay going to bills", "\$1,350"),
-              SizedBox(height: 15.h),
+              SizedBox(height: 16.h),
               _buildBreakdownRow("Bills (2)", "\$865"),
 
-              SizedBox(height: 15.h),
-              Divider(
-                color: ColorManager.gold.withValues(alpha: 0.3),
-                thickness: 1,
-              ),
+              SizedBox(height: 20.h),
+              Divider(color: ColorManager.cE0D4C2, thickness: 1),
               SizedBox(height: 10.h),
 
               // Total Row
@@ -179,17 +158,11 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Safe to Spend',
-                    style: getMediumStyle18(
-                      fontWeight: FontWeight.bold,
-                      color: ColorManager.backgroundDark,
-                    ),
+                    style: getMediumStyle18(color: ColorManager.c3B2208),
                   ),
                   Text(
                     '\$185',
-                    style: getMediumStyle18(
-                      fontWeight: FontWeight.bold,
-                      color: ColorManager.backgroundDark,
-                    ),
+                    style: getMediumStyle18(color: ColorManager.textPrimary),
                   ),
                 ],
               ),
@@ -205,24 +178,14 @@ class HomeScreen extends StatelessWidget {
   Widget _buildBreakdownRow(String label, String value) {
     return Row(
       children: [
-        Text(
-          label,
-          style: getRegularStyle16_400(
-            color: ColorManager.gold,
-          ),
-        ),
+        Text(label, style: getRegularStyle16_400(color: ColorManager.cA08060)),
         Expanded(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0.w),
             child: CustomPaint(painter: DottedLinePainter()),
           ),
         ),
-        Text(
-          value,
-          style: getRegularStyle16_400(
-            color: ColorManager.gold,
-          ),
-        ),
+        Text(value, style: getRegularStyle16_400(color: ColorManager.c7A5E38)),
       ],
     );
   }
@@ -234,7 +197,7 @@ class DottedLinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     double dashWidth = 2, dashSpace = 3, startX = 0;
     final paint = Paint()
-      ..color = Colors.black26
+      ..color = ColorManager.cA08060
       ..strokeWidth = 1;
     while (startX < size.width) {
       canvas.drawLine(

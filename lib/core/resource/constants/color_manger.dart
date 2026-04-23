@@ -104,4 +104,13 @@ class ColorManager {
   static const Color cE9D6A5 = Color(0xFFE9D6A5);
   static const Color cEADFC6 = Color(0xFFEADFC6);
   static const Color cF0EBE3 = Color(0xFFF0EBE3);
+  static const Color cA87B4D = Color(0xFFA87B4D);
+  static const Color c2E1606 = Color(0xFF2E1606);
+  static const Color cACA49F = Color(0xFFACA49F);
+  static const Color cA27E5D = Color(0xFFA27E5D);
+  static const Color cB8976A = Color(0xFFB8976A);
+  static const Color cA08060 = Color(0xFFA08060);
+  static const Color c7A5E38 = Color(0xFF7A5E38);
+  static const Color cE0D4C2 = Color(0xFFE0D4C2);
+  static const Color c3B2208 = Color(0xFF3B2208);
 }
