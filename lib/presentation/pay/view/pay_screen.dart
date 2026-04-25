@@ -87,7 +87,7 @@ class _PayScreenState extends State<PayScreen> {
               _buildLabel('Pay schedule'),
               SizedBox(height: 10.h),
               Wrap(
-                spacing: 6,
+                spacing: 4,
                 runSpacing: 6,
                 children: [
                   _buildChip('Weekly', isActive: true),
@@ -116,7 +116,7 @@ class _PayScreenState extends State<PayScreen> {
                 prefixIcon: SvgPicture.asset(IconManager.dollar),
               ),
 
-              SizedBox(height: 40.h),
+              SizedBox(height: 80.h),
 
               // ========== Save Changes Button ======
               PrimaryButton(title: 'Save changes', onTap: () {}),
@@ -139,7 +139,7 @@ class _PayScreenState extends State<PayScreen> {
   // ===== Helper widget for Schedule Chips ======
   Widget _buildChip(String label, {bool isActive = false}) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 8.r),
+      padding: EdgeInsets.symmetric(horizontal: 14.r, vertical: 8.r),
       decoration: BoxDecoration(
         color: isActive ? ColorManager.textPrimary : Colors.white,
         borderRadius: BorderRadius.circular(999.r),

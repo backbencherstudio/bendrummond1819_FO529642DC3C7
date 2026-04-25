@@ -61,7 +61,7 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
 
-              SizedBox(height: 52.h),
+              SizedBox(height: 32.h),
 
               // --- Main "Safe to Spend" Section with Glow ---
               Stack(
@@ -132,7 +132,7 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
 
-              SizedBox(height: 110.h),
+              SizedBox(height: 32.h),
 
               // --- Payday Breakdown Section ---
               Text(

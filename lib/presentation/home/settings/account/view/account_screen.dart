@@ -43,7 +43,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ],
               ),
 
-              SizedBox(height: 48.h),
+              SizedBox(height: 24.h),
 
               // Profile Image with Edit Icon
               Center(
