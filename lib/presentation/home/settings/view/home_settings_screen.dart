@@ -14,7 +14,6 @@ class HomeSettingsScreen extends StatefulWidget {
 }
 
 class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,6 +112,7 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
                   // Delete Button
                   Expanded(
                     child: _buildActionButton(
+                      onTap: () {},
                       label: "Account Delete",
                       icon: IconManager.deleteIcon,
                       color: ColorManager.redColor, // Red
@@ -123,6 +123,9 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
                   // Sign out Button
                   Expanded(
                     child: _buildActionButton(
+                      onTap: () {
+                        Navigator.pushNamed(context, RoutesName.signInRoute);
+                      },
                       label: "Sign out",
                       icon: IconManager.exitIcon,
                       color: ColorManager.greyColor, // Grey
@@ -175,6 +178,7 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
     required String icon,
     required Color color,
     required Color textColor,
+    required VoidCallback onTap,
   }) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 12.r),
@@ -186,7 +190,9 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(16.r),
-          onTap: () {},
+          onTap: () {
+            onTap();
+          },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

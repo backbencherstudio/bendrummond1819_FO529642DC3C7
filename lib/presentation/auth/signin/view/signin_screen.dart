@@ -1,4 +1,5 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/set_up/view/set_up_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -173,6 +174,16 @@ class _SigningScreenState extends State<SigningScreen> {
                       /// google sign in
                     },
                   ),
+
+                  //Just for testing Purpose added navigation to setUp screen with Primary Button
+                  SizedBox(height: 20.h,),
+                  PrimaryButton(title: "Setup Sceeen", onTap: (){
+                   Navigator.push(context, MaterialPageRoute(builder: (builder)=>SetUpScreen()));
+                  }),
+
+
+
+
                   SizedBox(height: 20.h),
                   customDivider(),
                   SizedBox(height: 20.h),
