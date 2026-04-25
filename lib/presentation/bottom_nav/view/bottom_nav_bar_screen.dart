@@ -7,6 +7,7 @@ import 'package:bendrummond1819_fo529642dc3c7/presentation/home/view/home_screen
 import 'package:bendrummond1819_fo529642dc3c7/presentation/pay/view/pay_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../viewmodel/bottom_nav_bar_viewmodel.dart';
 
@@ -36,47 +37,49 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
         children: [
           _screenList[selectedIndex],
           Positioned(
-            bottom: 30,
+            bottom: 1,
             left: 20,
             right: 20,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-              decoration: BoxDecoration(
-                color: ColorManager
-                    .bottomNavBackGround, // Slightly darker beige/cream bar
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildNavItem(0, IconManager.payIcon, "Pay", selectedIndex),
-                  _buildNavItem(
-                    1,
-                    IconManager.billsIcon,
-                    "Bills",
-                    selectedIndex,
-                  ),
-                  _buildNavItem(2, IconManager.homeIcon, "Home", selectedIndex),
-                  _buildNavItem(
-                    3,
-                    IconManager.balanceIcon,
-                    "Balances",
-                    selectedIndex,
-                  ),
-                  _buildNavItem(
-                    4,
-                    IconManager.goalsIcon,
-                    "Goals",
-                    selectedIndex,
-                  ),
-                ],
+            child: SafeArea(
+              child: Container(
+                padding:  EdgeInsets.symmetric(vertical: 6.r, horizontal: 10.r),
+                decoration: BoxDecoration(
+                  color: ColorManager
+                      .bottomNavBackGround, // Slightly darker beige/cream bar
+                  borderRadius: BorderRadius.circular(16.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildNavItem(0, IconManager.payIcon, "Pay", selectedIndex),
+                    _buildNavItem(
+                      1,
+                      IconManager.billsIcon,
+                      "Bills",
+                      selectedIndex,
+                    ),
+                    _buildNavItem(2, IconManager.homeIcon, "Home", selectedIndex),
+                    _buildNavItem(
+                      3,
+                      IconManager.balanceIcon,
+                      "Balances",
+                      selectedIndex,
+                    ),
+                    _buildNavItem(
+                      4,
+                      IconManager.goalsIcon,
+                      "Goals",
+                      selectedIndex,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -102,11 +105,13 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
     return GestureDetector(
       onTap: () => ref.read(bottomNavBarProvider.notifier).onItemTapped(index),
       child: AnimatedContainer(
+        height: 62.h,
+        width: 62.2.w,
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        padding:  EdgeInsets.symmetric(horizontal: 1.r, vertical: 10.r),
         decoration: BoxDecoration(
           color: isSelected ? activeBgColor : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12.r),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -114,18 +119,20 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
             SvgPicture.asset(
               icon,
               color: isSelected ? activeColor : inactiveColor,
+              width:20.w ,
+              height: 20.h,
             ),
             // Icon(
             //   icon,
             //   color: isSelected ? activeColor : inactiveColor,
             //   size: 24,
             // ),
-            const SizedBox(height: 4),
+             SizedBox(height: 4.h),
             Text(
               label,
               style: TextStyle(
                 color: isSelected ? activeColor : inactiveColor,
-                fontSize: 12,
+                fontSize: 12.sp,
                 fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
               ),
             ),

@@ -12,12 +12,6 @@ class AboutScreen extends StatefulWidget {
 }
 
 class _AboutScreenState extends State<AboutScreen> {
-  // Color Palette consistent with your other screens
-  final Color bgColor = const Color(0xFFF2EEE4);
-  final Color darkBrown = const Color(0xFF433428);
-  final Color mutedBrown = const Color(0xFF8C8071);
-  final Color cardBg = const Color(0xFFFAF8F3);
-  final String fontSerif = 'Serif'; // Ensure you use your serif font here
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +45,12 @@ class _AboutScreenState extends State<AboutScreen> {
               // Menu Options
               _buildAboutTile(
                 "Terms of Service",
-                trailing: Icon(Icons.chevron_right, color: darkBrown),
+                trailing: Icon(Icons.chevron_right, color: ColorManager.brown),
               ),
               SizedBox(height: 16),
               _buildAboutTile(
                 "Privacy Policy",
-                trailing: Icon(Icons.chevron_right, color: darkBrown),
+                trailing: Icon(Icons.chevron_right, color: ColorManager.brown),
               ),
               const SizedBox(height: 16),
               _buildAboutTile(
