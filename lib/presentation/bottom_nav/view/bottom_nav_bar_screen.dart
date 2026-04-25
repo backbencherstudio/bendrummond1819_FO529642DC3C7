@@ -97,10 +97,10 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
   ) {
     final isSelected = selectedIndex == index;
     final activeColor = const Color(
-      0xFFF2EEE4,
+      0xFFFFFFFF,
     ); // Light color for icons when active
-    final inactiveColor = const Color(0xFF8B7E6D);
-    final activeBgColor = const Color(0xFF2D1E12);
+    final inactiveColor = const Color(0xFF8C7055);
+    final activeBgColor = const Color(0xFF3B2208);
 
     return GestureDetector(
       onTap: () => ref.read(bottomNavBarProvider.notifier).onItemTapped(index),
