@@ -1,23 +1,27 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/pay/viewmodel/pay_riverpod.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../core/resource/constants/icon_manager.dart';
 
-class PayScreen extends StatefulWidget {
+class PayScreen extends ConsumerStatefulWidget {
   const PayScreen({super.key});
 
   @override
-  State<PayScreen> createState() => _PayScreenState();
+  ConsumerState<PayScreen> createState() => _PayScreenState();
 }
 
-class _PayScreenState extends State<PayScreen> {
+class _PayScreenState extends ConsumerState<PayScreen> {
   @override
   Widget build(BuildContext context) {
+    final isSchedule = ref.watch(payScheduleProvider);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -89,11 +93,11 @@ class _PayScreenState extends State<PayScreen> {
                 spacing: 4,
                 runSpacing: 6,
                 children: [
-                  _buildChip('Weekly', isActive: true),
-                  _buildChip('Every 2 weeks'),
-                  _buildChip('Monthly'),
-                  _buildChip('Twice a month'),
-                  _buildChip('It\'s inconsistent'),
+                  _buildChip('Weekly', isSchedule),
+                  _buildChip('Every 2 weeks', isSchedule),
+                  _buildChip('Monthly', isSchedule),
+                  _buildChip('Twice a month', isSchedule),
+                  _buildChip('It\'s inconsistent', isSchedule),
                 ],
               ),
               SizedBox(height: 12.h),
@@ -118,7 +122,15 @@ class _PayScreenState extends State<PayScreen> {
               SizedBox(height: 80.h),
 
               // ========== Save Changes Button ======
-              PrimaryButton(title: 'Save changes', onTap: () {}),
+              PrimaryButton(
+                title: 'Save changes',
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    RoutesName.chooseYourPlainScreen,
+                  );
+                },
+              ),
               SizedBox(height: 70.h),
             ],
           ),
@@ -131,28 +143,33 @@ class _PayScreenState extends State<PayScreen> {
   Widget _buildLabel(String text) {
     return Text(
       text,
-      style: getRegularStyle16_400(color: ColorManager.brown300, fontSize: 14),
+      style: getRegularStyle16_400(color: ColorManager.brown300),
     );
   }
 
   // ===== Helper widget for Schedule Chips ======
-  Widget _buildChip(String label, {bool isActive = false}) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 14.r, vertical: 8.r),
-      decoration: BoxDecoration(
-        color: isActive ? ColorManager.textPrimary : Colors.white,
-        borderRadius: BorderRadius.circular(999.r),
-        border: Border.all(
-          color: isActive
-              ? ColorManager.textPrimary
-              : ColorManager.borderE0D9D1,
+  Widget _buildChip(String label, String activeLabel) {
+    final bool isActive = label == activeLabel;
+    return InkWell(
+      onTap: () {
+        ref.read(payScheduleProvider.notifier).schedule(label);
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+        decoration: BoxDecoration(
+          color: isActive ? ColorManager.textPrimary : Colors.white,
+          borderRadius: BorderRadius.circular(999.r),
+          border: Border.all(
+            color: isActive
+                ? ColorManager.textPrimary
+                : ColorManager.borderE0D9D1,
+          ),
         ),
-      ),
-      child: Text(
-        label,
-        style: getRegularStyle16_400(
-          color: isActive ? ColorManager.whiteColor : ColorManager.brown400,
-          fontSize: 16,
+        child: Text(
+          label,
+          style: getRegularStyle16_400(
+            color: isActive ? ColorManager.whiteColor : ColorManager.brown400,
+          ),
         ),
       ),
     );

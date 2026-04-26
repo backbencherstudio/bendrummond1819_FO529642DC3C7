@@ -14,6 +14,7 @@ class PrimaryButton extends StatelessWidget {
   final Color? containerColor;
   final Border? border;
   final bool isLoading;
+  final bool isActive;
 
   const PrimaryButton({
     super.key,
@@ -27,6 +28,7 @@ class PrimaryButton extends StatelessWidget {
     this.containerColor,
     this.border,
     this.isLoading = false,
+    this.isActive = false,
   });
 
   @override
@@ -39,7 +41,7 @@ class PrimaryButton extends StatelessWidget {
         padding: padding ?? EdgeInsets.symmetric(horizontal: 16.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius ?? 12.r),
-          color: ColorManager.primaryButton,
+          color: isActive ? Color(0xFFFBF8F2) : ColorManager.primaryButton,
           border: border ?? Border.all(color: ColorManager.transparentColor),
         ),
         child: Center(

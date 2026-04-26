@@ -10,9 +10,12 @@ import 'package:bendrummond1819_fo529642dc3c7/presentation/home/settings/account
 import 'package:bendrummond1819_fo529642dc3c7/presentation/home/settings/notification/view/notification_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/home/settings/view/home_settings_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/pay/view/pay_screen.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/subscription/completePayment/view/complete_payment_screen.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/subscription/result/view/result_screen.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/subscription/view/choose_your_plan_screen.dart';
 import 'package:flutter/material.dart';
 import '../../presentation/auth/forget_password/otp/otp_screen.dart';
-import '../../presentation/bottom_nav/view/bottom_nav_bar_screen.dart';
+import '../../presentation/bottomNav/view/bottom_nav_bar_screen.dart';
 import '../../presentation/onboading/view/onboading_screen.dart';
 import '../../presentation/splash/view/splash_screen.dart';
 import '../resource/constants/strings_manager.dart';
@@ -24,7 +27,7 @@ class RouteGenerator {
       case RoutesName.splashRoute:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
 
-      /// ********************* auth ******************
+      /// ****************** auth ******************
       case RoutesName.signInRoute:
         return MaterialPageRoute(builder: (_) => SigningScreen());
       case RoutesName.signUpRoute:
@@ -55,7 +58,13 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => AboutScreen());
       case RoutesName.onBoardingRoute:
         return MaterialPageRoute(builder: (_) => OnboardingScreen());
-
+      // ================ Subscription ================
+      case RoutesName.chooseYourPlainScreen:
+        return MaterialPageRoute(builder: (_) => ChooseYourPlanScreen());
+      case RoutesName.completePaymentScreen:
+        return MaterialPageRoute(builder: (_) => CompletePaymentScreen());
+      case RoutesName.resultScreen:
+        return MaterialPageRoute(builder: (_) => ResultScreen());
       default:
         return unDefineRoute();
     }

@@ -5,7 +5,7 @@ final bottomNavBarProvider = StateNotifierProvider<BottomNavBarViewModel, int>(
 );
 
 class BottomNavBarViewModel extends StateNotifier<int> {
-  BottomNavBarViewModel() : super(0);
+  BottomNavBarViewModel() : super(2);
   void onItemTapped(int index) {
     state = index;
   }

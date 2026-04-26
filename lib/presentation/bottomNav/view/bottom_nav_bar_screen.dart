@@ -37,9 +37,9 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
         children: [
           _screenList[selectedIndex],
           Positioned(
-            bottom: 1,
-            left: 20,
-            right: 20,
+            bottom: 1.h,
+            left: 20.w,
+            right: 20.w,
             child: SafeArea(
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 6.r, horizontal: 10.r),

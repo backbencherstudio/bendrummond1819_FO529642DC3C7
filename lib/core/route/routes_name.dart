@@ -1,5 +1,5 @@
 class RoutesName {
-  /// ****************** auth *****************
+  /// ***************** auth *****************
   static const String splashRoute = "/";
   static const String onBoardingRoute = "/onBoardingRoute";
   static const String signInRoute = "/signIn";
@@ -7,7 +7,7 @@ class RoutesName {
   static const String forgotPasswordRoute = "/forgotPassword";
   static const String forgotPasswordOtpRoute = "/forgotPasswordOtpRoute";
   static const String resetNewPasswordRoute = "/resetNewPasswordRoute";
-  // ========== Bottom NavBar =================
+  // ============= Bottom NavBar =============
   static const String bottomNavRoute = "/bottomNav";
   static const String payScreen = "/payScreen";
   static const String addGoalScreen = "/addGoalScreen";
@@ -16,4 +16,8 @@ class RoutesName {
   static const String aboutScreen = "/aboutScreen";
   static const String notificationScreen = "/notificationScreen";
   static const String accountScreen = "/accountScreen";
+  // ============== Subscription ==============
+  static const String chooseYourPlainScreen = "/chooseYourPlan";
+  static const String completePaymentScreen = "/completePayment";
+  static const String resultScreen = "/result";
 }

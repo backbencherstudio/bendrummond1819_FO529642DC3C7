@@ -19,4 +19,5 @@ class IconManager {
   static String tikMark = '$baseUrl/tik_mark.svg';
   static String calendar = '$baseUrl/calendar.svg';
   static String arrowDown = '$baseUrl/arrow_down.svg';
+  static String correct = '$baseUrl/correct.svg';
 }
