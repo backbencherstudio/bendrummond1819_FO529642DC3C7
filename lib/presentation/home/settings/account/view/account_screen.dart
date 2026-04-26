@@ -15,7 +15,6 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,9 +125,11 @@ class _AccountScreenState extends State<AccountScreen> {
               // ========== Action Buttons ============
               Row(
                 children: [
-                  Expanded(child: _buildButton("Cancel",(){} , isSecondary: true)),
+                  Expanded(
+                    child: _buildButton("Cancel", () {}, isSecondary: true),
+                  ),
                   SizedBox(width: 15.w),
-                  Expanded(child: _buildButton("Save",(){},)),
+                  Expanded(child: _buildButton("Save", () {})),
                 ],
               ),
               SizedBox(height: 30.h),
@@ -148,7 +149,11 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   // ================= Bottom Buttons ==================
-  Widget _buildButton(String label, VoidCallback onTap, {bool isSecondary = false}) {
+  Widget _buildButton(
+    String label,
+    VoidCallback onTap, {
+    bool isSecondary = false,
+  }) {
     return SizedBox(
       height: 60,
       child: ElevatedButton(
@@ -156,7 +161,9 @@ class _AccountScreenState extends State<AccountScreen> {
           onTap();
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: isSecondary ? Colors.transparent : ColorManager.brown,
+          backgroundColor: isSecondary
+              ? Colors.transparent
+              : ColorManager.brown,
           elevation: 0,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
@@ -168,7 +175,10 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
         child: Text(
           label,
-          style: getMediumStyle18(color: isSecondary ?  ColorManager.brown : Colors.white,fontSize: 16)
+          style: getMediumStyle18(
+            color: isSecondary ? ColorManager.brown : Colors.white,
+            fontSize: 16,
+          ),
         ),
       ),
     );

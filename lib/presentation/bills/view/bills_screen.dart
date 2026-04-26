@@ -12,7 +12,6 @@ class BillsScreen extends StatefulWidget {
 }
 
 class _BillsScreenState extends State<BillsScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +60,7 @@ class _BillsScreenState extends State<BillsScreen> {
                 ],
               ),
 
-               SizedBox(height: 16.h),
+              SizedBox(height: 16.h),
 
               // Bills List
               Expanded(
@@ -69,11 +68,10 @@ class _BillsScreenState extends State<BillsScreen> {
                   padding: EdgeInsets.zero,
                   children: [
                     _buildBillCard("Car payment", "Monthly", "\$500"),
-                     SizedBox(height: 12.h),
+                    SizedBox(height: 12.h),
                     _buildBillCard("Rent", "Monthly", "\$500"),
-                   SizedBox(height: 12.h),
+                    SizedBox(height: 12.h),
                     _buildBillCard("Rent", "Due day 4", "\$100"),
-                    
                   ],
                 ),
               ),
@@ -88,11 +86,11 @@ class _BillsScreenState extends State<BillsScreen> {
   Widget _buildBillCard(String title, String subtitle, String amount) {
     return Container(
       width: double.infinity,
-      padding:  EdgeInsets.all(16.r),
+      padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
         color: ColorManager.secondaryBackGround,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color:ColorManager.borderE0D9D1,width: 2),
+        border: Border.all(color: ColorManager.borderE0D9D1, width: 2),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,19 +102,22 @@ class _BillsScreenState extends State<BillsScreen> {
               children: [
                 Text(
                   title,
-                  style: getMediumStyle18(color: ColorManager.brown500)
+                  style: getMediumStyle18(color: ColorManager.brown500),
                 ),
-                 SizedBox(height: 12.h),
+                SizedBox(height: 12.h),
                 Text(
                   subtitle,
-                  style: getRegularStyle16_400(color: ColorManager.black400,fontSize: 14)
+                  style: getRegularStyle16_400(
+                    color: ColorManager.black400,
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),
           ),
           Text(
             amount,
-            style: getMediumStyle18(color: ColorManager.textPrimary)
+            style: getMediumStyle18(color: ColorManager.textPrimary),
           ),
         ],
       ),

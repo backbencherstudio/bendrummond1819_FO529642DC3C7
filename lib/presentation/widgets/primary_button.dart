@@ -2,8 +2,6 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_mana
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/resource/constants/color_manger.dart';
-import '../../core/resource/utils.dart';
-
 
 class PrimaryButton extends StatelessWidget {
   final String title;
@@ -16,6 +14,7 @@ class PrimaryButton extends StatelessWidget {
   final Color? containerColor;
   final Border? border;
   final bool isLoading;
+  final bool isActive;
 
   const PrimaryButton({
     super.key,
@@ -29,11 +28,11 @@ class PrimaryButton extends StatelessWidget {
     this.containerColor,
     this.border,
     this.isLoading = false,
+    this.isActive = false,
   });
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: isLoading ? null : onTap,
       child: Container(
@@ -42,26 +41,31 @@ class PrimaryButton extends StatelessWidget {
         padding: padding ?? EdgeInsets.symmetric(horizontal: 16.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius ?? 12.r),
-          color: ColorManager.primaryButton,
+          color: isActive ? Color(0xFFFBF8F2) : ColorManager.primaryButton,
           border: border ?? Border.all(color: ColorManager.transparentColor),
         ),
         child: Center(
           child: isLoading
               ? SizedBox(
-            height: 24.r,
-            width: 24.r,
-            child: CircularProgressIndicator(
-              strokeWidth: 2.5,
-              color: ColorManager.whiteColor,
-            ),
-          )
+                  height: 24.r,
+                  width: 24.r,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.5,
+                    color: ColorManager.whiteColor,
+                  ),
+                )
               : FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              title,
-              style: textStyle ?? getRegularStyle20_500(color: ColorManager.whiteColor,fontSize: 18.sp),
-            ),
-          ),
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    title,
+                    style:
+                        textStyle ??
+                        getRegularStyle20_500(
+                          color: ColorManager.whiteColor,
+                          fontSize: 18.sp,
+                        ),
+                  ),
+                ),
         ),
       ),
     );

@@ -36,7 +36,7 @@ class OnboardingScreen extends StatelessWidget {
                   SafeArea(
                     child: Padding(
                       padding: EdgeInsets.only(left: 24.w, top: 20.h),
-                      child: customLogoText()
+                      child: customLogoText(),
                     ),
                   ),
                 ],
@@ -57,7 +57,7 @@ class OnboardingScreen extends StatelessWidget {
                     style: getBoldStyle24(
                       fontSize: 28.sp,
                       color: ColorManager.brown,
-                    ).copyWith( letterSpacing: -0.5,),
+                    ).copyWith(letterSpacing: -0.5),
                   ),
 
                   SizedBox(height: 15.h),
@@ -80,10 +80,12 @@ class OnboardingScreen extends StatelessWidget {
                   ),
 
                   SizedBox(height: 15.h),
+
                   /// ************ Get Started Button *****************
                   PrimaryButton(title: "Get Started", onTap: () {}),
 
                   SizedBox(height: 12.h),
+
                   /// ************ Sign in Button *****************
                   CustomOutlinedButton(
                     title: "Sign in to your account",

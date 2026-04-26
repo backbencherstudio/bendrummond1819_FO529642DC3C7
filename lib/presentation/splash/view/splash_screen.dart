@@ -1,4 +1,3 @@
-import 'package:bendrummond1819_fo529642dc3c7/presentation/bottom_nav/view/bottom_nav_bar_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';

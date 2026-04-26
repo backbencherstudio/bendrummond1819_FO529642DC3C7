@@ -13,7 +13,7 @@ class ColorManager {
 
   // ===== Background Colors =====
   static const Color background = Color(0xFFF5F5F5);
-  static const Color secondaryBackGround = Color(0xFFFBF8F2);
+  static const Color secondaryBackGround = Color(0xFFF7F3EB);
   static const Color bottomNavBackGround = Color(0xFFEDE6DB);
   static const Color backgroundDark = Color(0xFF121212);
   static const Color scaffoldLight = Color(0xFFF7F3EB);
@@ -65,7 +65,9 @@ class ColorManager {
 
   static const Color primaryButton = Color(0xFF5C473B);
   static const Color customOutlineButtonBorder = Color(0xFFDFE1E7);
+  static const Color black300 = Color(0xFF777980);
   static const Color black400 = Color(0xFF4A4C56);
+  static const Color black500 = Color(0xFF1D1F2C);
   static const Color formFieldColor = Color(0xFFFBF8F2);
   static const Color brown = Color(0xFF4A3A2F);
   static const Color brown300 = Color(0xFF867B74);
@@ -77,7 +79,8 @@ class ColorManager {
   static const Color gold = Color(0xFFA07848);
 
   static const Color gold2 = Color(0xFFD5BE90);
-
+  static const Color goldAccent = Color(0xFFD4C27D);
+  static const Color accentBrown = Color(0xFF5C473B);
   static const Color redColor = Color(0xFFE53935);
   static const Color greyColor = Color(0xFFCFD1D3);
 

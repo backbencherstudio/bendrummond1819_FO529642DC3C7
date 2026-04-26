@@ -12,7 +12,6 @@ class AboutScreen extends StatefulWidget {
 }
 
 class _AboutScreenState extends State<AboutScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,8 +56,7 @@ class _AboutScreenState extends State<AboutScreen> {
                 "App Version",
                 trailing: Text(
                   "1.0.0",
-                  style: 
-                  getRegularStyle16_400(color: ColorManager.brown300)
+                  style: getRegularStyle16_400(color: ColorManager.brown300),
                 ),
               ),
             ],

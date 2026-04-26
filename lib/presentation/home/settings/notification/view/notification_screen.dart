@@ -12,7 +12,6 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-
   // Switch States
   bool billReminders = true;
   bool notificationReminder = true;
@@ -23,24 +22,29 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 20.0.r,vertical: 32.r),
+          padding: EdgeInsets.symmetric(horizontal: 20.0.r, vertical: 32.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Top Bar: Back Button + Title
               Row(
                 children: [
-                  customBackButton(context,borderColor: ColorManager.borderColor2),
-                   SizedBox(width: 12.w),
+                  customBackButton(
+                    context,
+                    borderColor: ColorManager.borderColor2,
+                  ),
+                  SizedBox(width: 12.w),
                   Text(
                     'Notification',
-                    style: 
-                    getSemiBoldStyle22(color: ColorManager.textPrimary,fontSize: 24)
+                    style: getSemiBoldStyle22(
+                      color: ColorManager.textPrimary,
+                      fontSize: 24,
+                    ),
                   ),
                 ],
               ),
 
-               SizedBox(height: 24.h),
+              SizedBox(height: 24.h),
 
               // Notification List Items
               _buildNotificationTile(
@@ -74,7 +78,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     Function(bool) onChanged,
   ) {
     return Container(
-      padding:  EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
+      padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16.r),
       decoration: BoxDecoration(
         color: ColorManager.secondaryBackGround,
         borderRadius: BorderRadius.circular(16.r),
@@ -85,8 +89,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         children: [
           Text(
             title,
-            style: 
-            getMediumStyle18(color: ColorManager.c201F2E,fontSize: 16)
+            style: getMediumStyle18(color: ColorManager.c201F2E, fontSize: 16),
           ),
           // Custom Styled Switch
           Switch(

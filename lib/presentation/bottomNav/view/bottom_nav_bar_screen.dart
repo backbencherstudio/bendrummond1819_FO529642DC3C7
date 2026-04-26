@@ -37,12 +37,12 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
         children: [
           _screenList[selectedIndex],
           Positioned(
-            bottom: 1,
-            left: 20,
-            right: 20,
+            bottom: 1.h,
+            left: 20.w,
+            right: 20.w,
             child: SafeArea(
               child: Container(
-                padding:  EdgeInsets.symmetric(vertical: 6.r, horizontal: 10.r),
+                padding: EdgeInsets.symmetric(vertical: 6.r, horizontal: 10.r),
                 decoration: BoxDecoration(
                   color: ColorManager
                       .bottomNavBackGround, // Slightly darker beige/cream bar
@@ -65,7 +65,12 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
                       "Bills",
                       selectedIndex,
                     ),
-                    _buildNavItem(2, IconManager.homeIcon, "Home", selectedIndex),
+                    _buildNavItem(
+                      2,
+                      IconManager.homeIcon,
+                      "Home",
+                      selectedIndex,
+                    ),
                     _buildNavItem(
                       3,
                       IconManager.balanceIcon,
@@ -108,7 +113,7 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
         height: 62.h,
         width: 62.2.w,
         duration: const Duration(milliseconds: 200),
-        padding:  EdgeInsets.symmetric(horizontal: 1.r, vertical: 10.r),
+        padding: EdgeInsets.symmetric(horizontal: 1.r, vertical: 10.r),
         decoration: BoxDecoration(
           color: isSelected ? activeBgColor : Colors.transparent,
           borderRadius: BorderRadius.circular(12.r),
@@ -119,7 +124,7 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
             SvgPicture.asset(
               icon,
               color: isSelected ? activeColor : inactiveColor,
-              width:20.w ,
+              width: 20.w,
               height: 20.h,
             ),
             // Icon(
@@ -127,7 +132,7 @@ class _BottomNavBarScreenState extends ConsumerState<BottomNavBarScreen> {
             //   color: isSelected ? activeColor : inactiveColor,
             //   size: 24,
             // ),
-             SizedBox(height: 4.h),
+            SizedBox(height: 4.h),
             Text(
               label,
               style: TextStyle(

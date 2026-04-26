@@ -12,19 +12,15 @@ class GoalsScreen extends StatefulWidget {
 }
 
 class _GoalsScreenState extends State<GoalsScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding:  EdgeInsets.symmetric(horizontal: 20.0,vertical: 32.r),
+          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 32.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-             
-
               // Header: Goals
               Text(
                 'Goals',
@@ -32,10 +28,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
                   color: ColorManager.textPrimary,
                   fontSize: 32.sp,
                 ),
-
               ),
 
-               SizedBox(height: 24.h),
+              SizedBox(height: 24.h),
 
               // Sub-header Row: "Your future goals" + Add Button
               Row(
@@ -44,7 +39,6 @@ class _GoalsScreenState extends State<GoalsScreen> {
                   Text(
                     'Your future goals',
                     style: getRegularStyle16_400(color: ColorManager.brown400),
-           
                   ),
                   // Small circular plus button
                   InkWell(
@@ -66,11 +60,11 @@ class _GoalsScreenState extends State<GoalsScreen> {
                 ],
               ),
 
-              SizedBox(height: 16.h,),
+              SizedBox(height: 16.h),
 
               // Goals List
               _buildGoalCard("Buy a Iphone 17 Pro", "\$60/monthly"),
-               SizedBox(height: 12.h),
+              SizedBox(height: 12.h),
               _buildGoalCard("Emergency fund", "\$30/monthly"),
             ],
           ),

@@ -18,7 +18,6 @@ class AddBillScreen extends StatefulWidget {
 }
 
 class _AddBillScreenState extends State<AddBillScreen> {
-
   bool _isRecurring = false;
   int _selectedFrequency = 0; // 0: Beginning, 1: Middle, 2: End
 
@@ -125,7 +124,6 @@ class _AddBillScreenState extends State<AddBillScreen> {
                   ),
                 ],
               ),
-              
             ],
           ),
         ),
@@ -139,8 +137,6 @@ class _AddBillScreenState extends State<AddBillScreen> {
       style: getRegularStyle16_400(color: ColorManager.brown300, fontSize: 14),
     );
   }
-
-
 
   Widget _buildFrequencyCard(int index, String title, String subtitle) {
     bool isSelected = _selectedFrequency == index;

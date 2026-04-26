@@ -29,20 +29,18 @@ class CustomPinCodeField extends StatelessWidget {
         fontWeight: FontWeight.w400,
       ),
       decoration: BoxDecoration(
-        color: Colors.transparent, // ব্যাকগ্রাউন্ড স্বচ্ছ রাখতে পারেন
+        color: Colors.transparent,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: ColorManager.brown.withOpacity(0.2)), // হালকা বর্ডার
+        border: Border.all(color: ColorManager.brown.withOpacity(0.2)),
       ),
     );
 
-    // ফোকাসড থিম (যখন ইউজার টাইপ করবে)
     final focusedPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration?.copyWith(
         border: Border.all(color: ColorManager.brown, width: 1.5),
       ),
     );
 
-    // যখন ভ্যালু থাকবে (Submitted/Following)
     final submittedPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration?.copyWith(
         border: Border.all(color: ColorManager.brown.withOpacity(0.2)),

@@ -13,21 +13,19 @@ class BalancesScreen extends StatefulWidget {
 }
 
 class _BalancesScreenState extends State<BalancesScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.0.r,vertical: 32.r),
+          padding: EdgeInsets.symmetric(horizontal: 20.0.r, vertical: 32.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-        
               // Header
               Text(
                 'Balances',
-                style: getSemiBoldStyle22(color: ColorManager.textPrimary)
+                style: getSemiBoldStyle22(color: ColorManager.textPrimary),
               ),
               SizedBox(height: 24.h),
 
@@ -37,7 +35,10 @@ class _BalancesScreenState extends State<BalancesScreen> {
                 decoration: BoxDecoration(
                   color: ColorManager.secondaryBackGround,
                   borderRadius: BorderRadius.circular(16.r),
-                  border: Border.all(color:ColorManager.borderE0D9D1,width: 2),
+                  border: Border.all(
+                    color: ColorManager.borderE0D9D1,
+                    width: 2,
+                  ),
                 ),
                 child: Row(
                   children: [
@@ -47,24 +48,35 @@ class _BalancesScreenState extends State<BalancesScreen> {
                         children: [
                           Text(
                             'Credit card',
-                            style: 
-                            getRegularStyle16_400(color: ColorManager.brown400,fontSize: 18)
+                            style: getRegularStyle16_400(
+                              color: ColorManager.brown400,
+                              fontSize: 18,
+                            ),
                           ),
                           SizedBox(height: 8.h),
                           Text(
                             'Due day 6',
-                            style: getRegularStyle16_400(color: ColorManager.brown400,fontSize: 14)
+                            style: getRegularStyle16_400(
+                              color: ColorManager.brown400,
+                              fontSize: 14,
+                            ),
                           ),
                         ],
                       ),
                     ),
                     Text(
                       '\$25',
-                      style: 
-                      getRegularStyle16_400(color: ColorManager.brown400,fontSize: 18)
+                      style: getRegularStyle16_400(
+                        color: ColorManager.brown400,
+                        fontSize: 18,
+                      ),
                     ),
                     SizedBox(width: 18.w),
-                    Icon(Icons.close, color: ColorManager.primaryButton, size: 20.sp),
+                    Icon(
+                      Icons.close,
+                      color: ColorManager.primaryButton,
+                      size: 20.sp,
+                    ),
                   ],
                 ),
               ),
@@ -86,16 +98,22 @@ class _BalancesScreenState extends State<BalancesScreen> {
                       Container(
                         padding: EdgeInsets.all(8.w),
                         decoration: BoxDecoration(
-                          color:  ColorManager.backButtonColor,
+                          color: ColorManager.backButtonColor,
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(Icons.add, color: ColorManager.primaryButton, size: 20.sp),
+                        child: Icon(
+                          Icons.add,
+                          color: ColorManager.primaryButton,
+                          size: 20.sp,
+                        ),
                       ),
                       SizedBox(width: 15.w),
                       Text(
                         'Add a debt payment',
-                        style: 
-                       getRegularStyle16_400(color: ColorManager.brown400,fontSize: 18)
+                        style: getRegularStyle16_400(
+                          color: ColorManager.brown400,
+                          fontSize: 18,
+                        ),
                       ),
                     ],
                   ),
@@ -118,7 +136,7 @@ class DashedRectPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     double dashWidth = 5, dashSpace = 3, startX = 0;
     final paint = Paint()
-      ..color = color.withOpacity(0.5)
+      ..color = color.withValues(alpha: 0.5)
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 

@@ -62,26 +62,36 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                 ],
               ),
 
-               SizedBox(height: 12.h),
+              SizedBox(height: 12.h),
 
               // ===================== Amount ========================
               _buildLabel("Amount"),
-               SizedBox(height: 6.h),
-              CustomFromField(hintText: '60',prefixIcon:SvgPicture.asset(IconManager.dollar) ,),
+              SizedBox(height: 6.h),
+              CustomFromField(
+                hintText: '60',
+                prefixIcon: SvgPicture.asset(IconManager.dollar),
+              ),
 
-               SizedBox(height: 12.h),
+              SizedBox(height: 12.h),
 
               // ================ Frequency Section ===================
               _buildLabel("Frequency"),
-               SizedBox(height: 6.h,),
+              SizedBox(height: 6.h),
               _buildDropdownField("Per month"),
-               SizedBox(height: 24.h),
+              SizedBox(height: 24.h),
               // ================ Add Goal Button =====================
-              PrimaryButton(title: 'Add Goal', onTap: () {
-                 Navigator.pop(context);
-                      Utils.showToast(message: "Goal Added", backgroundColor: ColorManager.successColor, textColor: ColorManager.whiteColor);
-              }),
-               SizedBox(height: 20),
+              PrimaryButton(
+                title: 'Add Goal',
+                onTap: () {
+                  Navigator.pop(context);
+                  Utils.showToast(
+                    message: "Goal Added",
+                    backgroundColor: ColorManager.successColor,
+                    textColor: ColorManager.whiteColor,
+                  );
+                },
+              ),
+              SizedBox(height: 20),
             ],
           ),
         ),
@@ -138,7 +148,13 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
           isExpanded: true,
           style: getRegularStyle16_400(color: ColorManager.brown400),
           items: [value].map((String val) {
-            return DropdownMenuItem<String>(value: val, child: Text(val,style: getRegularStyle16_400(color: ColorManager.brown400),));
+            return DropdownMenuItem<String>(
+              value: val,
+              child: Text(
+                val,
+                style: getRegularStyle16_400(color: ColorManager.brown400),
+              ),
+            );
           }).toList(),
           onChanged: (_) {},
         ),
