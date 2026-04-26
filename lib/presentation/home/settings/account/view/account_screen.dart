@@ -161,7 +161,7 @@ class _AccountScreenState extends State<AccountScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
             side: isSecondary
-                ? BorderSide(color: Colors.black.withOpacity(0.1))
+                ? BorderSide(color: Colors.black.withValues(alpha: 0.1))
                 : BorderSide.none,
           ),
         ),

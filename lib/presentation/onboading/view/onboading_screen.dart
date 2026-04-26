@@ -66,7 +66,7 @@ class OnboardingScreen extends StatelessWidget {
                   Text(
                     "See what money comes in and goes out. Know what's actually safe to spend.",
                     style: getRegularStyle16_400(
-                      color: ColorManager.whiteColor
+                      color: ColorManager.whiteColor,
                     ),
                   ),
 
@@ -78,9 +78,8 @@ class OnboardingScreen extends StatelessWidget {
                   SizedBox(height: 10.h),
                   _buildFeatureRow("Really simple"),
 
-                  SizedBox(height: 50.h), // স্পেসারের বদলে ফিক্সড গ্যাপ
+                  SizedBox(height: 50.h),
 
-                  // বাটন সেকশন
                   SizedBox(
                     width: double.infinity,
                     height: 56.h,
@@ -95,7 +94,10 @@ class OnboardingScreen extends StatelessWidget {
                       ),
                       child: Text(
                         "Get Started",
-                        style: getMediumStyle18(fontSize: 16.sp, color: Colors.white),
+                        style: getMediumStyle18(
+                          fontSize: 16.sp,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -108,19 +110,24 @@ class OnboardingScreen extends StatelessWidget {
                     child: OutlinedButton(
                       onPressed: () {},
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: ColorManager.customOutlineButtonBorder),
-                        backgroundColor: Colors.white.withOpacity(0.3),
+                        side: const BorderSide(
+                          color: ColorManager.customOutlineButtonBorder,
+                        ),
+                        backgroundColor: Colors.white.withValues(alpha: 0.3),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.r),
                         ),
                       ),
                       child: Text(
                         "Sign in to your account",
-                        style: getMediumStyle18(fontSize: 16.sp, color: ColorManager.brown500),
+                        style: getMediumStyle18(
+                          fontSize: 16.sp,
+                          color: ColorManager.brown500,
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 40.h), // নিচের গ্যাপ
+                  SizedBox(height: 40.h),
                 ],
               ),
             ),
@@ -146,8 +153,8 @@ class OnboardingScreen extends StatelessWidget {
         Text(
           text,
           style: getRegularStyle16_400(
-              fontSize: 14.sp,
-              color: ColorManager.subtitleText.withOpacity(0.8)
+            fontSize: 14.sp,
+            color: ColorManager.subtitleText.withValues(alpha: 0.8),
           ),
         ),
       ],

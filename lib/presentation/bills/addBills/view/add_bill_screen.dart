@@ -151,7 +151,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
       decoration: BoxDecoration(
         color: inputBg,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.black.withOpacity(0.08)),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
       ),
       child: TextField(
         style: TextStyle(fontFamily: fontSerif, color: darkBrown, fontSize: 18),
@@ -194,7 +194,9 @@ class _AddBillScreenState extends State<AddBillScreen> {
           color: inputBg,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
-            color: isSelected ? darkBrown : Colors.black.withOpacity(0.08),
+            color: isSelected
+                ? darkBrown
+                : Colors.black.withValues(alpha: 0.08),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -236,7 +238,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
       decoration: BoxDecoration(
         color: inputBg,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.black.withOpacity(0.08)),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
       ),
       child: Row(
         children: [
@@ -269,7 +271,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
             side: isSecondary
-                ? BorderSide(color: Colors.black.withOpacity(0.08))
+                ? BorderSide(color: Colors.black.withValues(alpha: 0.08))
                 : BorderSide.none,
           ),
         ),

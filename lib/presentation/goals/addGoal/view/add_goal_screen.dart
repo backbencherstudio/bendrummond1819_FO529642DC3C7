@@ -142,7 +142,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
       decoration: BoxDecoration(
         color: inputBg,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.black.withOpacity(0.08)),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(

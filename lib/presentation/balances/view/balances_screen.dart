@@ -48,7 +48,9 @@ class _BalancesScreenState extends State<BalancesScreen> {
                 decoration: BoxDecoration(
                   color: ColorManager.background,
                   borderRadius: BorderRadius.circular(20.r),
-                  border: Border.all(color: Colors.black.withOpacity(0.08)),
+                  border: Border.all(
+                    color: Colors.black.withValues(alpha: 0.08),
+                  ),
                 ),
                 child: Row(
                   children: [
@@ -61,7 +63,7 @@ class _BalancesScreenState extends State<BalancesScreen> {
                             style: TextStyle(
                               fontSize: 20,
                               fontFamily: fontSerif,
-                              color: darkBrown.withOpacity(0.8),
+                              color: darkBrown.withValues(alpha: 0.8),
                             ),
                           ),
                           SizedBox(height: 8.h),
@@ -142,7 +144,7 @@ class DashedRectPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     double dashWidth = 5, dashSpace = 3, startX = 0;
     final paint = Paint()
-      ..color = color.withOpacity(0.5)
+      ..color = color.withValues(alpha: 0.5)
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 

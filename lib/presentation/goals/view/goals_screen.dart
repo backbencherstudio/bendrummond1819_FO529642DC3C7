@@ -91,7 +91,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
       decoration: BoxDecoration(
         color: cardBg,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.black.withOpacity(0.08)),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -105,7 +105,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
                   style: TextStyle(
                     fontSize: 20,
                     fontFamily: fontSerif,
-                    color: darkBrown.withOpacity(0.8),
+                    color: darkBrown.withValues(alpha: 0.8),
                   ),
                 ),
                 const SizedBox(height: 8),
