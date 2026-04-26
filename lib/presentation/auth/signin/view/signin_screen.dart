@@ -1,5 +1,4 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/set_up/view/set_up_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import '../../../../core/resource/constants/color_manger.dart';
 import '../../../../core/resource/constants/image_manager.dart';
 import '../../../../core/resource/constants/style_manager.dart';
 import '../../../../core/route/routes_name.dart';
+import '../../../setUp/view/set_up_screen.dart';
 import '../../../widgets/custom_back_button.dart';
 import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/outline_button.dart';
@@ -160,9 +160,12 @@ class _SigningScreenState extends State<SigningScreen> {
                   SizedBox(height: 25.h),
 
                   /// ************ Sign in Button *****************
-                  PrimaryButton(title: "Sign In", onTap: () {
-                    Navigator.pushNamed(context, RoutesName.bottomNavRoute);
-                  }),
+                  PrimaryButton(
+                    title: "Sign In",
+                    onTap: () {
+                      Navigator.pushNamed(context, RoutesName.bottomNavRoute);
+                    },
+                  ),
 
                   SizedBox(height: 12.h),
 
@@ -176,13 +179,16 @@ class _SigningScreenState extends State<SigningScreen> {
                   ),
 
                   //Just for testing Purpose added navigation to setUp screen with Primary Button
-                  SizedBox(height: 20.h,),
-                  PrimaryButton(title: "Setup Sceeen", onTap: (){
-                   Navigator.push(context, MaterialPageRoute(builder: (builder)=>SetUpScreen()));
-                  }),
-
-
-
+                  SizedBox(height: 20.h),
+                  PrimaryButton(
+                    title: "Setup Screeen",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (builder) => SetUpScreen()),
+                      );
+                    },
+                  ),
 
                   SizedBox(height: 20.h),
                   customDivider(),
@@ -229,8 +235,6 @@ class _SigningScreenState extends State<SigningScreen> {
       ),
     );
   }
-
-
 
   /// ************* custom widget **************
   Widget customDivider() {
