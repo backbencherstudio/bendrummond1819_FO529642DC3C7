@@ -6,7 +6,6 @@ import '../../../../core/resource/constants/color_manger.dart';
 import '../../../../core/resource/constants/style_manager.dart';
 import '../../../../core/route/routes_name.dart';
 import '../../../widgets/custom_back_button.dart';
-import '../../../widgets/custom_from_field.dart';
 import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/custom_otp_field.dart';
 import '../../../widgets/primary_button.dart';
@@ -15,7 +14,8 @@ class ForgotPasswordOtpScreen extends StatefulWidget {
   const ForgotPasswordOtpScreen({super.key});
 
   @override
-  State<ForgotPasswordOtpScreen> createState() => _ForgotPasswordOtpScreenState();
+  State<ForgotPasswordOtpScreen> createState() =>
+      _ForgotPasswordOtpScreenState();
 }
 
 class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
@@ -36,7 +36,6 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
         child: Column(
           children: [
-
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -50,6 +49,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                     ).copyWith(letterSpacing: -0.45),
                   ),
                   SizedBox(height: 15.h),
+
                   /// ************ otp Field *****************
                   CustomPinCodeField(),
                 ],
@@ -58,12 +58,12 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
 
             /// *************** send btn *******************
             PrimaryButton(
-                title: "Verify",
-                onTap: () {
-                  Navigator.pushNamed(context, RoutesName.forgotPasswordOtpRoute);
-                }
+              title: "Verify",
+              onTap: () {
+                Navigator.pushNamed(context, RoutesName.forgotPasswordOtpRoute);
+              },
             ),
-            SizedBox(height: 15.h,),
+            SizedBox(height: 15.h),
             customDivider(),
             SizedBox(height: 15.h),
 
@@ -80,19 +80,16 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                     TextSpan(
                       text: "Resend",
                       style:
-                      getRegularStyle16_500(
-                        color: ColorManager.brown,
-                        fontSize: 14.sp,
-                      ).copyWith(
-                        decoration: TextDecoration.underline,
-                        decorationColor: ColorManager.brown,
-                      ),
+                          getRegularStyle16_500(
+                            color: ColorManager.brown,
+                            fontSize: 14.sp,
+                          ).copyWith(
+                            decoration: TextDecoration.underline,
+                            decorationColor: ColorManager.brown,
+                          ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          Navigator.pushNamed(
-                            context,
-                            RoutesName.signUpRoute,
-                          );
+                          Navigator.pushNamed(context, RoutesName.signUpRoute);
                         },
                     ),
                   ],
@@ -105,6 +102,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
       ),
     );
   }
+
   /// ************* custom widget **************
   Widget customDivider() {
     return Row(
