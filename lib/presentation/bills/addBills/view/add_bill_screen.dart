@@ -1,4 +1,14 @@
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/outline_button.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../../../../core/resource/constants/icon_manager.dart';
 
 class AddBillScreen extends StatefulWidget {
   const AddBillScreen({super.key});
@@ -8,72 +18,52 @@ class AddBillScreen extends StatefulWidget {
 }
 
 class _AddBillScreenState extends State<AddBillScreen> {
-  // Color Palette
-  final Color bgColor = const Color(0xFFF2EEE4);
-  final Color darkBrown = const Color(0xFF433428);
-  final Color mutedBrown = const Color(0xFF8C8071);
-  final Color inputBg = const Color(0xFFFAF8F3);
-  final String fontSerif = 'Serif'; // Recommended: 'DM Serif Display'
-
   bool _isRecurring = false;
   int _selectedFrequency = 0; // 0: Beginning, 1: Middle, 2: End
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: EdgeInsets.symmetric(horizontal: 20.0.r, vertical: 32.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
-
               // Top Bar: Back Button + Title
               Row(
                 children: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFEBE5D8),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.chevron_left,
-                        color: darkBrown,
-                        size: 24,
-                      ),
-                    ),
+                  customBackButton(
+                    context,
+                    borderColor: ColorManager.borderColor2,
                   ),
-                  const SizedBox(width: 20),
+                  SizedBox(width: 12.w),
                   Text(
                     'Add bill',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontFamily: fontSerif,
-                      fontWeight: FontWeight.bold,
-                      color: darkBrown,
+                    style: getSemiBoldStyle22(
+                      color: ColorManager.textPrimary,
+                      fontSize: 24,
                     ),
                   ),
                 ],
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: 32.h),
 
               _buildLabel("Bill Name"),
-              const SizedBox(height: 8),
-              _buildTextField(hint: "Electricity bill"),
+              SizedBox(height: 6.h),
+              CustomFromField(hintText: "Electricity Bill"),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 12.h),
 
               _buildLabel("Amount"),
-              const SizedBox(height: 8),
-              _buildTextField(hint: "100", isAmount: true),
+              SizedBox(height: 6.h),
+              CustomFromField(
+                hintText: '60',
+                prefixIcon: SvgPicture.asset(IconManager.dollar),
+              ),
 
-              const SizedBox(height: 15),
+              SizedBox(height: 6.h),
 
               // Checkbox Row
               Row(
@@ -83,55 +73,57 @@ class _AddBillScreenState extends State<AddBillScreen> {
                     width: 24,
                     child: Checkbox(
                       value: _isRecurring,
-                      activeColor: darkBrown,
-                      side: BorderSide(color: mutedBrown, width: 1.5),
+                      activeColor: ColorManager.brown,
+                      side: BorderSide(color: ColorManager.brown, width: 1.5),
                       onChanged: (val) => setState(() => _isRecurring = val!),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 6.w),
                   Text(
                     "Set as Weekly/Monthly Payment",
-                    style: TextStyle(
-                      fontFamily: fontSerif,
-                      color: darkBrown,
-                      fontSize: 16,
+                    style: getRegularStyle16_400(
+                      color: ColorManager.textPrimary,
+                      fontSize: 14,
                     ),
                   ),
                 ],
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 12.h),
               _buildLabel("Frequency"),
-              const SizedBox(height: 10),
+              SizedBox(height: 6.h),
 
               // Frequency Selection Cards
-              _buildFrequencyCard(0, "Beginning of month", "1st – 10th"),
-              const SizedBox(height: 12),
-              _buildFrequencyCard(1, "Middle of month", "11th – 20th"),
-              const SizedBox(height: 12),
-              _buildFrequencyCard(2, "End of month", "21st – 31st"),
+              _buildFrequencyCard(0, "Beginning of month", "1st - 10th"),
+              SizedBox(height: 16.h),
+              _buildFrequencyCard(1, "Middle of month", "11th - 20th"),
+              SizedBox(height: 16.h),
+              _buildFrequencyCard(2, "End of month", "21st - 31st"),
 
-              const SizedBox(height: 12),
+              SizedBox(height: 6.h),
 
               // Custom Date Dropdown
               _buildCustomDateDropdown(),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 12.h),
               _buildLabel("Due day"),
-              const SizedBox(height: 8),
-              _buildTextField(hint: "4"),
+              SizedBox(height: 6.h),
+              CustomFromField(hintText: "4 "),
 
-              const SizedBox(height: 40),
+              SizedBox(height: 24.h),
 
               // Bottom Buttons
               Row(
                 children: [
-                  Expanded(child: _buildButton("Delete", isSecondary: true)),
-                  const SizedBox(width: 15),
-                  Expanded(child: _buildButton("Add bill")),
+                  Expanded(
+                    child: CustomOutlinedButton(title: "Delete", onTap: () {}),
+                  ),
+                  SizedBox(width: 12.w),
+                  Expanded(
+                    child: PrimaryButton(title: "Add Bill", onTap: () {}),
+                  ),
                 ],
               ),
-              const SizedBox(height: 30),
             ],
           ),
         ),
@@ -142,45 +134,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
   Widget _buildLabel(String text) {
     return Text(
       text,
-      style: TextStyle(color: mutedBrown, fontSize: 16, fontFamily: fontSerif),
-    );
-  }
-
-  Widget _buildTextField({required String hint, bool isAmount = false}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: inputBg,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
-      ),
-      child: TextField(
-        style: TextStyle(fontFamily: fontSerif, color: darkBrown, fontSize: 18),
-        decoration: InputDecoration(
-          hintText: hint,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 18,
-          ),
-          border: InputBorder.none,
-          prefixIcon: isAmount
-              ? Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 8),
-                  child: Text(
-                    '\$',
-                    style: TextStyle(
-                      color: darkBrown,
-                      fontSize: 18,
-                      fontFamily: fontSerif,
-                    ),
-                  ),
-                )
-              : null,
-          prefixIconConstraints: const BoxConstraints(
-            minWidth: 0,
-            minHeight: 0,
-          ),
-        ),
-      ),
+      style: getRegularStyle16_400(color: ColorManager.brown300, fontSize: 14),
     );
   }
 
@@ -189,14 +143,14 @@ class _AddBillScreenState extends State<AddBillScreen> {
     return GestureDetector(
       onTap: () => setState(() => _selectedFrequency = index),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(12.r),
         decoration: BoxDecoration(
-          color: inputBg,
+          color: ColorManager.secondaryBackGround,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
             color: isSelected
-                ? darkBrown
-                : Colors.black.withValues(alpha: 0.08),
+                ? ColorManager.brown500
+                : ColorManager.borderColor2,
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -208,24 +162,31 @@ class _AddBillScreenState extends State<AddBillScreen> {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontFamily: fontSerif,
-                    fontSize: 18,
-                    color: darkBrown,
-                  ),
+                  style: getMediumStyle18(color: ColorManager.black400),
                 ),
                 Text(
                   subtitle,
-                  style: TextStyle(
-                    fontFamily: fontSerif,
-                    fontSize: 14,
-                    color: mutedBrown,
+                  style: getMediumStyle18(
+                    color: ColorManager.brown300,
+                    fontSize: 12,
                   ),
                 ),
               ],
             ),
+            //tik mark on selected
             if (isSelected)
-              Icon(Icons.check_circle, color: darkBrown, size: 20),
+              Container(
+                padding: EdgeInsets.all(6.r),
+                decoration: BoxDecoration(
+                  color: ColorManager.primaryButton,
+                  shape: BoxShape.circle,
+                ),
+                child: SvgPicture.asset(
+                  IconManager.tikMark,
+                  width: 8.w,
+                  height: 8.h,
+                ),
+              ),
           ],
         ),
       ),
@@ -234,55 +195,24 @@ class _AddBillScreenState extends State<AddBillScreen> {
 
   Widget _buildCustomDateDropdown() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+      padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 12.r),
       decoration: BoxDecoration(
-        color: inputBg,
+        color: ColorManager.secondaryBackGround,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
+        border: Border.all(color: ColorManager.borderColor2),
       ),
       child: Row(
         children: [
-          Icon(Icons.calendar_today_outlined, color: darkBrown, size: 20),
-          const SizedBox(width: 15),
+          SvgPicture.asset(IconManager.calendar),
+          SizedBox(width: 15),
           Expanded(
             child: Text(
               "Custom date",
-              style: TextStyle(
-                fontFamily: fontSerif,
-                fontSize: 18,
-                color: darkBrown,
-              ),
+              style: getRegularStyle16_400(color: ColorManager.brown400),
             ),
           ),
-          Icon(Icons.keyboard_arrow_down, color: mutedBrown),
+          SvgPicture.asset(IconManager.arrowDown),
         ],
-      ),
-    );
-  }
-
-  Widget _buildButton(String label, {bool isSecondary = false}) {
-    return SizedBox(
-      height: 60,
-      child: ElevatedButton(
-        onPressed: () {},
-        style: ElevatedButton.styleFrom(
-          backgroundColor: isSecondary ? inputBg : darkBrown,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: isSecondary
-                ? BorderSide(color: Colors.black.withValues(alpha: 0.08))
-                : BorderSide.none,
-          ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isSecondary ? darkBrown : Colors.white,
-            fontSize: 18,
-            fontFamily: fontSerif,
-          ),
-        ),
       ),
     );
   }

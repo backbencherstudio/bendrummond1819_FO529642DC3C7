@@ -45,6 +45,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.2.3
   video_player: ^2.8.1
+  pinput: ^6.0.2
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +72,15 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/fonts/
+
+  fonts:
+    - family: Lora
+      fonts:
+        - asset: assets/fonts/lora-regular.ttf
+          weight: 600
+        - asset: assets/fonts/lora-regular-2.ttf
+          weight: 600
 
   # To add assets to your application, add an assets section, like this:
   # assets:

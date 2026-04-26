@@ -1,5 +1,8 @@
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BillsScreen extends StatefulWidget {
   const BillsScreen({super.key});
@@ -9,37 +12,25 @@ class BillsScreen extends StatefulWidget {
 }
 
 class _BillsScreenState extends State<BillsScreen> {
-  // Color Palette - Matches your UI design
-  final Color bgColor = const Color(0xFFF2EEE4);
-  final Color darkBrown = const Color(0xFF433428);
-  final Color mutedBrown = const Color(0xFF8C8071);
-  final Color cardBg = const Color(0xFFFAF8F3);
-  final String fontSerif = 'Serif'; // Recommended: 'DM Serif Display'
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: EdgeInsets.symmetric(horizontal: 20.0.r, vertical: 32.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
-
               // Header: Bills
               Text(
                 'Bills',
-                style: TextStyle(
-                  fontSize: 40,
-                  fontFamily: fontSerif,
-                  fontWeight: FontWeight.bold,
-                  color: darkBrown,
+                style: getSemiBoldStyle22(
+                  color: ColorManager.textPrimary,
+                  fontSize: 32,
                 ),
               ),
 
-              const SizedBox(height: 10),
+              SizedBox(height: 24.h),
 
               // Sub-header Row: Total per month + Add Button
               Row(
@@ -47,29 +38,29 @@ class _BillsScreenState extends State<BillsScreen> {
                 children: [
                   Text(
                     '\$1,100/month',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: fontSerif,
-                      color: mutedBrown,
-                    ),
+                    style: getRegularStyle16_400(color: ColorManager.brown400),
                   ),
                   // Small circular plus button
                   InkWell(
                     onTap: () =>
                         Navigator.pushNamed(context, RoutesName.addBillScreen),
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: EdgeInsets.all(6.r),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFEBE5D8), // Slightly darker beige
+                        color: ColorManager.backButtonColor,
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(Icons.add, color: darkBrown, size: 20),
+                      child: Icon(
+                        Icons.add,
+                        color: ColorManager.primaryButton,
+                        size: 20.sp,
+                      ),
                     ),
                   ),
                 ],
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: 16.h),
 
               // Bills List
               Expanded(
@@ -77,11 +68,10 @@ class _BillsScreenState extends State<BillsScreen> {
                   padding: EdgeInsets.zero,
                   children: [
                     _buildBillCard("Car payment", "Monthly", "\$500"),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 12.h),
                     _buildBillCard("Rent", "Monthly", "\$500"),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 12.h),
                     _buildBillCard("Rent", "Due day 4", "\$100"),
-                    const SizedBox(height: 100), // Space for Bottom Nav
                   ],
                 ),
               ),
@@ -96,14 +86,15 @@ class _BillsScreenState extends State<BillsScreen> {
   Widget _buildBillCard(String title, String subtitle, String amount) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(22),
+      padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: cardBg,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
+        color: ColorManager.secondaryBackGround,
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: ColorManager.borderE0D9D1, width: 2),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Column(
@@ -111,20 +102,14 @@ class _BillsScreenState extends State<BillsScreen> {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontFamily: fontSerif,
-                    fontWeight: FontWeight.w600,
-                    color: darkBrown,
-                  ),
+                  style: getMediumStyle18(color: ColorManager.brown500),
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: 12.h),
                 Text(
                   subtitle,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: fontSerif,
-                    color: mutedBrown,
+                  style: getRegularStyle16_400(
+                    color: ColorManager.black400,
+                    fontSize: 14,
                   ),
                 ),
               ],
@@ -132,12 +117,7 @@ class _BillsScreenState extends State<BillsScreen> {
           ),
           Text(
             amount,
-            style: TextStyle(
-              fontSize: 20,
-              fontFamily: fontSerif,
-              fontWeight: FontWeight.w600,
-              color: darkBrown,
-            ),
+            style: getMediumStyle18(color: ColorManager.textPrimary),
           ),
         ],
       ),

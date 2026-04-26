@@ -6,15 +6,16 @@ Padding customBackButton(
     BuildContext context, {
       VoidCallback? onPressed,
       Color? color,
+      Color? borderColor,
     }) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
-      height: 48.h,
-      width: 48.w,
+      height: 38.h,
+      width: 38.w,
       decoration: BoxDecoration(
         color: color ?? ColorManager.backButtonColor,
-        border: Border.all(color: ColorManager.borderColor3, width: 0.5.w),
+        border: Border.all(color: borderColor ?? ColorManager.borderColor3, width: 0.5.w),
         shape: BoxShape.circle,
       ),
       child: IconButton(

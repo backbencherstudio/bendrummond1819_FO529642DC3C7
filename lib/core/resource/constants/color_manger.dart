@@ -16,15 +16,18 @@ class ColorManager {
   static const Color secondaryBackGround = Color(0xFFFBF8F2);
   static const Color bottomNavBackGround = Color(0xFFEDE6DB);
   static const Color backgroundDark = Color(0xFF121212);
-  static const Color scaffoldLight = Color(0xFFFFFFFF);
+  static const Color scaffoldLight = Color(0xFFF7F3EB);
   static const Color scaffoldDark = Color(0xFF1E1E1E);
+  static const Color backgroudNormal = Color(0xFFF6F8FA);
 
   // ===== Text Colors =====
-  static const Color textPrimary = Color(0xFF212121);
+  static const Color textPrimary = Color(0xFF4A3A2F);
   static const Color textSecondary = Color(0xFF757575);
   static const Color titleText = Color(0xFF2F3131);
   static const Color titleText1 = Color(0xFF535353);
-  static const Color subtitleText = Color(0xFF686868);
+  static const Color subtitleText = Color(0xFFF0EBE3);
+
+  ///
   static const Color subtitleText1 = Color(0xFF60655C);
   static const Color mediumText = Color(0xFF363A33);
 
@@ -42,6 +45,7 @@ class ColorManager {
   static const Color borderColor1 = Color(0xFFE0D9D1);
   static const Color borderColor2 = Color(0xFFDFE1E7);
   static const Color borderColor3 = Color(0xFFC4A06A);
+  static const Color borderE0D9D1 = Color(0xFFE0D9D1);
 
   // ===== Container & Fill Colors =====
   static const Color containerColor = Color(0xFFEFEFEF);
@@ -67,9 +71,13 @@ class ColorManager {
   static const Color brown300 = Color(0xFF867B74);
   static const Color brown400 = Color(0xFF6E6159);
   static const Color brown500 = Color(0xFF4A3A2F);
+  static const Color brown200 = Color(0xFFE0D9D1);
   static const Color backButtonColor = Color(0xFFEDE6DB);
   static const Color navicons = Color(0xFF8C7055);
   static const Color gold = Color(0xFFA07848);
+
+  static const Color gold2 = Color(0xFFD5BE90);
+
   static const Color redColor = Color(0xFFE53935);
   static const Color greyColor = Color(0xFFCFD1D3);
 
@@ -85,8 +93,25 @@ class ColorManager {
       Color(0xFFB08A70),
     ],
   );
+
+  static const LinearGradient linearGradientColor2 = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF7C5638), Color(0xFFCA9C79)],
+  );
+
   //
   static const Color cE9D6A5 = Color(0xFFE9D6A5);
   static const Color cEADFC6 = Color(0xFFEADFC6);
   static const Color cF0EBE3 = Color(0xFFF0EBE3);
+  static const Color cA87B4D = Color(0xFFA87B4D);
+  static const Color c2E1606 = Color(0xFF2E1606);
+  static const Color cACA49F = Color(0xFFACA49F);
+  static const Color cA27E5D = Color(0xFFA27E5D);
+  static const Color cB8976A = Color(0xFFB8976A);
+  static const Color cA08060 = Color(0xFFA08060);
+  static const Color c7A5E38 = Color(0xFF7A5E38);
+  static const Color cE0D4C2 = Color(0xFFE0D4C2);
+  static const Color c3B2208 = Color(0xFF3B2208);
+  static const Color c201F2E = Color(0xFF201F2E);
 }

@@ -1,8 +1,12 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../../../core/resource/constants/icon_manager.dart';
 
 class PayScreen extends StatefulWidget {
   const PayScreen({super.key});
@@ -12,45 +16,33 @@ class PayScreen extends StatefulWidget {
 }
 
 class _PayScreenState extends State<PayScreen> {
-  final Color bgColor = const Color(0xFFF2EEE4);
-  final Color darkBrown = const Color(0xFF433428);
-  final Color mutedBrown = const Color(0xFF8C8071);
-  final Color inputBg = const Color(0xFFFAF8F3);
-  final String fontSerif = 'Serif';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorManager.secondaryBackGround,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24.0.w),
+          padding: EdgeInsets.symmetric(horizontal: 20.0.r, vertical: 32.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20.h),
               //========= Header Section ==========
               Text(
                 'Pay & Income',
-                style: TextStyle(
-                  fontSize: 32.sp,
-                  fontFamily: fontSerif,
-                  fontWeight: FontWeight.bold,
-                  color: darkBrown,
+                style: getSemiBoldStyle22(
+                  color: ColorManager.textPrimary,
+                  fontSize: 32,
                 ),
               ),
-              SizedBox(height: 25.h),
+              SizedBox(height: 24.h),
 
               // ======= Safe to spend Card =========
               Container(
-                width: double.infinity.w,
-                padding: EdgeInsets.all(20.w),
+                width: double.infinity,
+                padding: EdgeInsets.all(16.r),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16.r),
-                  border: Border.all(
-                    color: Colors.black.withValues(alpha: 0.05),
-                  ),
+                  border: Border.all(color: ColorManager.borderColor2),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -60,16 +52,17 @@ class _PayScreenState extends State<PayScreen> {
                       children: [
                         Text(
                           'Safe to spend',
-                          style: TextStyle(color: mutedBrown, fontSize: 16.sp),
+                          style: getRegularStyle16_400(
+                            color: ColorManager.brown300,
+                            fontSize: 14,
+                          ),
                         ),
-                        SizedBox(height: 8.h),
+                        SizedBox(height: 20.h),
                         Text(
                           '\$185',
-                          style: TextStyle(
-                            fontSize: 24.sp,
-                            fontFamily: fontSerif,
-                            color: darkBrown,
-                            fontWeight: FontWeight.bold,
+                          style: getMediumStyle18(
+                            color: ColorManager.textPrimary,
+                            fontSize: 18,
                           ),
                         ),
                       ],
@@ -78,24 +71,23 @@ class _PayScreenState extends State<PayScreen> {
                       child: Text(
                         'Updates when you save',
                         textAlign: TextAlign.right,
-                        style: TextStyle(
-                          color: mutedBrown,
-                          fontFamily: fontSerif,
-                          fontStyle: FontStyle.italic,
+                        style: getRegularStyle16_400(
+                          color: ColorManager.brown300,
+                          fontSize: 14,
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 25.h),
+              SizedBox(height: 16.h),
 
               // ========= Pay schedule section =========
               _buildLabel('Pay schedule'),
               SizedBox(height: 10.h),
               Wrap(
-                spacing: 8,
-                runSpacing: 10,
+                spacing: 4,
+                runSpacing: 6,
                 children: [
                   _buildChip('Weekly', isActive: true),
                   _buildChip('Every 2 weeks'),
@@ -104,24 +96,30 @@ class _PayScreenState extends State<PayScreen> {
                   _buildChip('It\'s inconsistent'),
                 ],
               ),
-              SizedBox(height: 25.h),
+              SizedBox(height: 12.h),
 
               // ======== One paycheck amount ==========
               _buildLabel('One paycheck amount'),
-              SizedBox(height: 10.h),
-              CustomFromField(hintText: '\$ 1400'),
-              SizedBox(height: 25.h),
+              SizedBox(height: 6.h),
+              CustomFromField(
+                hintText: '1400',
+                prefixIcon: SvgPicture.asset(IconManager.dollar),
+              ),
+              SizedBox(height: 12.h),
 
               // ======== Rent / mortgage ============
               _buildLabel('Rent / mortgage (monthly)'),
-              SizedBox(height: 10.h),
-              CustomFromField(hintText: '\$ 500'),
+              SizedBox(height: 6.h),
+              CustomFromField(
+                hintText: '60',
+                prefixIcon: SvgPicture.asset(IconManager.dollar),
+              ),
 
-              SizedBox(height: 40.h),
+              SizedBox(height: 80.h),
 
               // ========== Save Changes Button ======
               PrimaryButton(title: 'Save changes', onTap: () {}),
-              SizedBox(height: 120.h),
+              SizedBox(height: 70.h),
             ],
           ),
         ),
@@ -133,25 +131,28 @@ class _PayScreenState extends State<PayScreen> {
   Widget _buildLabel(String text) {
     return Text(
       text,
-      style: TextStyle(color: mutedBrown, fontSize: 16, fontFamily: fontSerif),
+      style: getRegularStyle16_400(color: ColorManager.brown300, fontSize: 14),
     );
   }
 
   // ===== Helper widget for Schedule Chips ======
   Widget _buildChip(String label, {bool isActive = false}) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 14.r, vertical: 8.r),
       decoration: BoxDecoration(
-        color: isActive ? darkBrown : Colors.white,
-        borderRadius: BorderRadius.circular(30.r),
-        border: Border.all(color: isActive ? darkBrown : Colors.black12),
+        color: isActive ? ColorManager.textPrimary : Colors.white,
+        borderRadius: BorderRadius.circular(999.r),
+        border: Border.all(
+          color: isActive
+              ? ColorManager.textPrimary
+              : ColorManager.borderE0D9D1,
+        ),
       ),
       child: Text(
         label,
-        style: TextStyle(
-          color: isActive ? Colors.white : darkBrown,
+        style: getRegularStyle16_400(
+          color: isActive ? ColorManager.whiteColor : ColorManager.brown400,
           fontSize: 16,
-          fontFamily: fontSerif,
         ),
       ),
     );

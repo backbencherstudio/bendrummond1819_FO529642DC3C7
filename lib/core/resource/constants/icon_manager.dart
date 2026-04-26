@@ -15,4 +15,8 @@ class IconManager {
   static String eyeIcon = '$baseUrl/eye.svg';
   static String editIcon = '$baseUrl/edit.svg';
   static String leftArrowIcon = '$baseUrl/leftArrow.svg';
+  static String dollar = '$baseUrl/dollar.svg';
+  static String tikMark = '$baseUrl/tik_mark.svg';
+  static String calendar = '$baseUrl/calendar.svg';
+  static String arrowDown = '$baseUrl/arrow_down.svg';
 }

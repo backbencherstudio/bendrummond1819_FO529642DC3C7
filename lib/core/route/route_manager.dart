@@ -1,3 +1,8 @@
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/forget_password/set_new_password/set_new_password_screen.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/forget_password/view/forgot_password.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signin/view/signin_screen.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/view/signup_screen.dart';
+
 import 'package:bendrummond1819_fo529642dc3c7/presentation/bills/addBills/view/add_bill_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/goals/addGoal/view/add_goal_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/home/settings/about/view/about_screen.dart';
@@ -6,6 +11,7 @@ import 'package:bendrummond1819_fo529642dc3c7/presentation/home/settings/notific
 import 'package:bendrummond1819_fo529642dc3c7/presentation/home/settings/view/home_settings_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/pay/view/pay_screen.dart';
 import 'package:flutter/material.dart';
+import '../../presentation/auth/forget_password/otp/otp_screen.dart';
 import '../../presentation/bottom_nav/view/bottom_nav_bar_screen.dart';
 import '../../presentation/onboading/view/onboading_screen.dart';
 import '../../presentation/splash/view/splash_screen.dart';
@@ -17,6 +23,20 @@ class RouteGenerator {
     switch (routeSettings.name) {
       case RoutesName.splashRoute:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
+
+      /// ********************* auth ******************
+      case RoutesName.signInRoute:
+        return MaterialPageRoute(builder: (_) => SigningScreen());
+      case RoutesName.signUpRoute:
+        return MaterialPageRoute(builder: (_) => SignupScreen());
+      case RoutesName.forgotPasswordRoute:
+        return MaterialPageRoute(builder: (_) => ForgotPassword());
+      case RoutesName.forgotPasswordOtpRoute:
+        return MaterialPageRoute(builder: (_) => ForgotPasswordOtpScreen());
+      case RoutesName.resetNewPasswordRoute:
+        return MaterialPageRoute(builder: (_) => SetNewPasswordScreen());
+
+      /// *************** bottom nav ****************
       case RoutesName.bottomNavRoute:
         return MaterialPageRoute(builder: (_) => BottomNavBarScreen());
       case RoutesName.payScreen:

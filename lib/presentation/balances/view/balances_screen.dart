@@ -1,4 +1,5 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
@@ -12,44 +13,31 @@ class BalancesScreen extends StatefulWidget {
 }
 
 class _BalancesScreenState extends State<BalancesScreen> {
-  // Color Palette
-  final Color bgColor = const Color(0xFFF2EEE4);
-  final Color darkBrown = const Color(0xFF433428);
-  final Color mutedBrown = const Color(0xFF8C8071);
-  final Color cardBg = const Color(0xFFFAF8F3);
-  final String fontSerif = 'Serif'; // Recommended: 'DM Serif Display'
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorManager.secondaryBackGround,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0.w),
+          padding: EdgeInsets.symmetric(horizontal: 20.0.r, vertical: 32.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 40.h),
               // Header
               Text(
                 'Balances',
-                style: TextStyle(
-                  fontSize: 36.sp,
-                  fontFamily: fontSerif,
-                  fontWeight: FontWeight.bold,
-                  color: darkBrown,
-                ),
+                style: getSemiBoldStyle22(color: ColorManager.textPrimary),
               ),
-              SizedBox(height: 30.h),
+              SizedBox(height: 24.h),
 
               // Credit Card Card
               Container(
                 padding: EdgeInsets.all(20.w),
                 decoration: BoxDecoration(
-                  color: ColorManager.background,
-                  borderRadius: BorderRadius.circular(20.r),
+                  color: ColorManager.secondaryBackGround,
+                  borderRadius: BorderRadius.circular(16.r),
                   border: Border.all(
-                    color: Colors.black.withValues(alpha: 0.08),
+                    color: ColorManager.borderE0D9D1,
+                    width: 2,
                   ),
                 ),
                 child: Row(
@@ -60,19 +48,17 @@ class _BalancesScreenState extends State<BalancesScreen> {
                         children: [
                           Text(
                             'Credit card',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: fontSerif,
-                              color: darkBrown.withValues(alpha: 0.8),
+                            style: getRegularStyle16_400(
+                              color: ColorManager.brown400,
+                              fontSize: 18,
                             ),
                           ),
                           SizedBox(height: 8.h),
                           Text(
                             'Due day 6',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: fontSerif,
-                              color: mutedBrown,
+                            style: getRegularStyle16_400(
+                              color: ColorManager.brown400,
+                              fontSize: 14,
                             ),
                           ),
                         ],
@@ -80,14 +66,17 @@ class _BalancesScreenState extends State<BalancesScreen> {
                     ),
                     Text(
                       '\$25',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: fontSerif,
-                        color: mutedBrown,
+                      style: getRegularStyle16_400(
+                        color: ColorManager.brown400,
+                        fontSize: 18,
                       ),
                     ),
-                    SizedBox(width: 15.w),
-                    Icon(Icons.close, color: darkBrown, size: 24),
+                    SizedBox(width: 18.w),
+                    Icon(
+                      Icons.close,
+                      color: ColorManager.primaryButton,
+                      size: 20.sp,
+                    ),
                   ],
                 ),
               ),
@@ -96,11 +85,11 @@ class _BalancesScreenState extends State<BalancesScreen> {
 
               // Add a debt payment (Dashed Border)
               CustomPaint(
-                painter: DashedRectPainter(color: mutedBrown),
+                painter: DashedRectPainter(color: ColorManager.primaryButton),
                 child: Container(
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(
-                    vertical: 16.h,
+                    vertical: 12.h,
                     horizontal: 16.w,
                   ),
                   child: Row(
@@ -109,18 +98,21 @@ class _BalancesScreenState extends State<BalancesScreen> {
                       Container(
                         padding: EdgeInsets.all(8.w),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFEBE5D8),
+                          color: ColorManager.backButtonColor,
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(Icons.add, color: darkBrown, size: 20),
+                        child: Icon(
+                          Icons.add,
+                          color: ColorManager.primaryButton,
+                          size: 20.sp,
+                        ),
                       ),
                       SizedBox(width: 15.w),
                       Text(
                         'Add a debt payment',
-                        style: TextStyle(
+                        style: getRegularStyle16_400(
+                          color: ColorManager.brown400,
                           fontSize: 18,
-                          fontFamily: fontSerif,
-                          color: mutedBrown,
                         ),
                       ),
                     ],

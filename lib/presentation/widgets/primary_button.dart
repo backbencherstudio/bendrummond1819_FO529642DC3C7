@@ -58,7 +58,10 @@ class PrimaryButton extends StatelessWidget {
                     title,
                     style:
                         textStyle ??
-                        getSemiBoldStyle22(color: ColorManager.whiteColor),
+                        getRegularStyle20_500(
+                          color: ColorManager.whiteColor,
+                          fontSize: 18.sp,
+                        ),
                   ),
                 ),
         ),
