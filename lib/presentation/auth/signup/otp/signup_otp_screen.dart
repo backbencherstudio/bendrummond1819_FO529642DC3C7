@@ -9,14 +9,15 @@ import '../../../widgets/custom_back_button.dart';
 import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/custom_otp_field.dart';
 import '../../../widgets/primary_button.dart';
-class ForgotPasswordOtpScreen extends StatefulWidget {
-  const ForgotPasswordOtpScreen({super.key});
+
+class SignupOtpScreen extends StatefulWidget {
+  const SignupOtpScreen({super.key});
+
   @override
-  State<ForgotPasswordOtpScreen> createState() =>
-      _ForgotPasswordOtpScreenState();
+  State<SignupOtpScreen> createState() => _SignupOtpScreenState();
 }
 
-class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
+class _SignupOtpScreenState extends State<SignupOtpScreen> {
   final _emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -41,9 +42,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                 children: [
                   Text(
                     "Enter OTP Code",
-                    style: getBoldStyle32(
-                      color: ColorManager.brown,
-                    ).copyWith(letterSpacing: -0.45),
+                    style: getBoldStyle32(color: ColorManager.textPrimary),
                   ),
                   SizedBox(height: 15.h),
 
@@ -57,7 +56,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
             PrimaryButton(
               title: "Verify",
               onTap: () {
-                Navigator.pushNamed(context, RoutesName.resetNewPasswordRoute);
+                Navigator.pushNamed(context, RoutesName.setUpScreen);
               },
             ),
             SizedBox(height: 15.h),
@@ -68,17 +67,13 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
             Center(
               child: RichText(
                 text: TextSpan(
-                  style: getRegularStyle14_400(
-                    color: ColorManager.brown300,
-                  ),
+                  style: getRegularStyle14_400(color: ColorManager.brown300),
                   children: [
                     TextSpan(text: "Didn't get the OTP? "),
                     TextSpan(
                       text: "Resend",
-                      style:
-                          getRegularStyle14_500(
-                            color: ColorManager.brown,
-                          ).copyWith(
+                      style: getRegularStyle14_500(color: ColorManager.brown)
+                          .copyWith(
                             decoration: TextDecoration.underline,
                             decorationColor: ColorManager.brown,
                           ),

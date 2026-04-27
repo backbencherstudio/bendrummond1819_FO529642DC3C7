@@ -1,5 +1,8 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/image_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/outline_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,11 +15,6 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> {
-  // Theme Colors
-  final Color bgColor = const Color(0xFFFBF7EF);
-  final Color primaryDark = const Color(0xFF4D3D33);
-  final Color accentGold = const Color(0xFFD4C18E);
-  final Color secondaryText = const Color(0xFF8B7E74);
 
   @override
   Widget build(BuildContext context) {
@@ -25,51 +23,14 @@ class _ResultScreenState extends State<ResultScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            //  Header Image with Gradient Fade
-            Stack(
-              children: [
-                Container(
-                  height: 300,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Color(0xFF9E774B), Color(0xFF63422B)],
-                    ),
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 40.0),
-                      // Replace with your actual asset image
-                      child: Image.network(
-                        'https://cdn-icons-png.flaticon.com/512/924/924514.png',
-                        height: 180,
-                        color: bgColor.withOpacity(0.9),
-                        colorBlendMode: BlendMode.modulate,
-                      ),
-                    ),
-                  ),
-                ),
-                // The fade effect at the bottom of the image
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    height: 100,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [bgColor.withOpacity(0), bgColor],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            Container(
+              width: double.infinity,
+              height: 380.h,
+              child: Image.asset(
+                ImageManager.teaCup,
+                fit: BoxFit.fill,
+              ),
             ),
-
             //  Main Content
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 12.h),
@@ -78,10 +39,8 @@ class _ResultScreenState extends State<ResultScreen> {
                 children: [
                   Text(
                     "Your Personalized",
-                    style: getLightStyle14_400(
+                    style: getRegularStyle16_400(
                       color: ColorManager.goldAccent,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   SizedBox(height: 12.h),
@@ -89,10 +48,8 @@ class _ResultScreenState extends State<ResultScreen> {
                     "Stability profile.",
                     style: getBoldStyle24(
                       color: ColorManager.brown400,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: 16.h),
                   Text(
                     "\$185",
                     style: getRegularStyle16_600(
@@ -100,7 +57,7 @@ class _ResultScreenState extends State<ResultScreen> {
                       fontSize: 56.sp,
                     ),
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 12.h),
                   Text(
                     "safe to spend every week",
                     style: getLightStyle14_400(color: ColorManager.brown300),
@@ -114,7 +71,7 @@ class _ResultScreenState extends State<ResultScreen> {
                       vertical: 6.h,
                     ),
                     decoration: BoxDecoration(
-                      color: Color(0xFFFBF8F2),
+                      color: ColorManager.backgroundSecondary,
                       borderRadius: BorderRadius.circular(999.r),
                     ),
                     child: Row(
@@ -190,23 +147,13 @@ class _ResultScreenState extends State<ResultScreen> {
                   PrimaryButton(
                     title: 'Start tracking',
                     onTap: () {
-                      print('click');
+                     Navigator.pushNamedAndRemoveUntil(context, RoutesName.bottomNavRoute, (predicate)=> false);
                     },
                   ),
                   SizedBox(height: 12.h),
-                  PrimaryButton(
+                  CustomOutlinedButton(
                     title: 'Adjust something',
                     onTap: () {},
-                    textStyle: getMediumStyle18(
-                      color: ColorManager.grayBlack400,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    isActive: true,
-                    border: Border.all(
-                      color: Color(0xFFDFE1E7),
-                      width: 1.w,
-                      style: BorderStyle.solid,
-                    ),
                   ),
                   SizedBox(height: 20.h),
                 ],
