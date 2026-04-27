@@ -5,10 +5,8 @@ import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_b
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_logo_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../widgets/custom_from_field.dart';
 import '../../../widgets/primary_button.dart';
-
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
 
@@ -42,8 +40,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 children: [
                   Text(
                     "Forgot Password",
-                    style: getBoldStyle24(
-                      fontSize: 32.sp,
+                    style: getBoldStyle32(
                       color: ColorManager.brown,
                     ).copyWith(letterSpacing: -0.45),
                   ),
@@ -51,9 +48,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   /// ************ Email Field *****************
                   Text(
                     "Email",
-                    style: getRegularStyle16_400(
+                    style: getRegularStyle14_400(
                       color: ColorManager.brown300,
-                      fontSize: 14.sp,
                     ),
                   ),
                   SizedBox(height: 10.h),

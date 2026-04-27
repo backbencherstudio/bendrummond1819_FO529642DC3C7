@@ -90,9 +90,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   /// ************ name Field *****************
                   Text(
                     "Your full name",
-                    style: getRegularStyle16_400(
+                    style: getRegularStyle14_400(
                       color: ColorManager.brown300,
-                      fontSize: 14.sp,
                     ),
                   ),
                   SizedBox(height: 5.h),
@@ -106,9 +105,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   /// ************ email Field *****************
                   Text(
                     "Email address",
-                    style: getRegularStyle16_400(
+                    style: getRegularStyle14_400(
                       color: ColorManager.brown300,
-                      fontSize: 14.sp,
                     ),
                   ),
                   SizedBox(height: 5.h),
@@ -123,9 +121,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   /// ***************** password field ****************
                   Text(
                     "Password",
-                    style: getRegularStyle16_400(
+                    style: getRegularStyle14_400(
                       color: ColorManager.brown300,
-                      fontSize: 14.sp,
                     ),
                   ),
                   SizedBox(height: 5.h),
@@ -144,9 +141,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   /// ************ phone Field *****************
                   Text(
                     "Phone number",
-                    style: getRegularStyle16_400(
+                    style: getRegularStyle14_400(
                       color: ColorManager.brown300,
-                      fontSize: 14.sp,
                     ),
                   ),
                   SizedBox(height: 5.h),
@@ -161,9 +157,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   /// ************ dob Field *****************
                   Text(
                     "Date of birth",
-                    style: getRegularStyle16_400(
+                    style: getRegularStyle14_400(
                       color: ColorManager.brown300,
-                      fontSize: 14.sp,
                     ),
                   ),
                   SizedBox(height: 5.h),
@@ -179,7 +174,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   PrimaryButton(
                     title: "Create account",
                     onTap: () {
-                      Navigator.pushNamed(context, RoutesName.signInRoute);
+                      Navigator.pushNamed(context, RoutesName.signupOtpScreen);
                     },
                   ),
 
@@ -201,18 +196,16 @@ class _SignupScreenState extends State<SignupScreen> {
                   Center(
                     child: RichText(
                       text: TextSpan(
-                        style: getRegularStyle16_400(
+                        style: getRegularStyle14_400(
                           color: ColorManager.brown300,
-                          fontSize: 14.sp,
                         ),
                         children: [
                           TextSpan(text: "Already have an account? "),
                           TextSpan(
                             text: "Sign in",
                             style:
-                                getRegularStyle16_500(
+                                getRegularStyle14_500(
                                   color: ColorManager.brown,
-                                  fontSize: 14.sp,
                                 ).copyWith(
                                   decoration: TextDecoration.underline,
                                   decorationColor: ColorManager.brown,
