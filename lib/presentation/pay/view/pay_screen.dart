@@ -151,6 +151,7 @@ class _PayScreenState extends ConsumerState<PayScreen> {
   Widget _buildChip(String label, String activeLabel) {
     final bool isActive = label == activeLabel;
     return InkWell(
+      borderRadius: BorderRadius.circular(999.r),
       onTap: () {
         ref.read(payScheduleProvider.notifier).schedule(label);
       },
