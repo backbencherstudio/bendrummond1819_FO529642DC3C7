@@ -9,10 +9,8 @@ import '../../../widgets/custom_back_button.dart';
 import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/custom_otp_field.dart';
 import '../../../widgets/primary_button.dart';
-
 class ForgotPasswordOtpScreen extends StatefulWidget {
   const ForgotPasswordOtpScreen({super.key});
-
   @override
   State<ForgotPasswordOtpScreen> createState() =>
       _ForgotPasswordOtpScreenState();
@@ -43,8 +41,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                 children: [
                   Text(
                     "Enter OTP Code",
-                    style: getBoldStyle24(
-                      fontSize: 32.sp,
+                    style: getBoldStyle32(
                       color: ColorManager.brown,
                     ).copyWith(letterSpacing: -0.45),
                   ),
@@ -60,7 +57,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
             PrimaryButton(
               title: "Verify",
               onTap: () {
-                Navigator.pushNamed(context, RoutesName.forgotPasswordOtpRoute);
+                Navigator.pushNamed(context, RoutesName.resetNewPasswordRoute);
               },
             ),
             SizedBox(height: 15.h),
@@ -71,18 +68,16 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
             Center(
               child: RichText(
                 text: TextSpan(
-                  style: getRegularStyle16_400(
+                  style: getRegularStyle14_400(
                     color: ColorManager.brown300,
-                    fontSize: 14.sp,
                   ),
                   children: [
                     TextSpan(text: "Didn't get the OTP? "),
                     TextSpan(
                       text: "Resend",
                       style:
-                          getRegularStyle16_500(
+                          getRegularStyle14_500(
                             color: ColorManager.brown,
-                            fontSize: 14.sp,
                           ).copyWith(
                             decoration: TextDecoration.underline,
                             decorationColor: ColorManager.brown,

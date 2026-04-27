@@ -1,3 +1,4 @@
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
@@ -22,16 +23,11 @@ class CustomPinCodeField extends StatelessWidget {
     final defaultPinTheme = PinTheme(
       width: 74.w,
       height: 64.h,
-      textStyle: TextStyle(
-        fontSize: 24.sp,
-        color: ColorManager.brown,
-        fontFamily: "Serif",
-        fontWeight: FontWeight.w400,
-      ),
+      textStyle: getRegularStyle20_500(color: ColorManager.brown400),
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: ColorManager.brown.withOpacity(0.2)),
+        border: Border.all(color: ColorManager.brown200,width: 1.5.w),
       ),
     );
 
@@ -43,7 +39,7 @@ class CustomPinCodeField extends StatelessWidget {
 
     final submittedPinTheme = defaultPinTheme.copyWith(
       decoration: defaultPinTheme.decoration?.copyWith(
-        border: Border.all(color: ColorManager.brown.withOpacity(0.2)),
+        border: Border.all(color: ColorManager.brown),
       ),
     );
 
@@ -54,12 +50,9 @@ class CustomPinCodeField extends StatelessWidget {
       focusedPinTheme: focusedPinTheme,
       submittedPinTheme: submittedPinTheme,
       validator: validator,
-      // খালি ঘরে হাইফেন দেখানোর জন্য
       preFilledWidget: Text(
         "-",
-        style: defaultPinTheme.textStyle?.copyWith(
-          color: ColorManager.brown.withOpacity(0.3),
-        ),
+        style: defaultPinTheme.textStyle?.copyWith(color: ColorManager.brown),
       ),
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       onCompleted: onCompleted,

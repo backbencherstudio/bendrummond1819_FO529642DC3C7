@@ -20,4 +20,6 @@ class RoutesName {
   static const String chooseYourPlainScreen = "/chooseYourPlan";
   static const String completePaymentScreen = "/completePayment";
   static const String resultScreen = "/result";
+  static const String signupOtpScreen = "/signupOtpScreen";
+  static const String setUpScreen = "/setUpScreen";
 }

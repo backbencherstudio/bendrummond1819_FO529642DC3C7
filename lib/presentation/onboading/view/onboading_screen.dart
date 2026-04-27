@@ -54,10 +54,9 @@ class OnboardingScreen extends StatelessWidget {
 
                   Text(
                     "Win back confidence over spending.",
-                    style: getBoldStyle24(
-                      fontSize: 28.sp,
+                    style: getBoldStyle32(
                       color: ColorManager.brown,
-                    ).copyWith(letterSpacing: -0.5),
+                    ).copyWith(letterSpacing: -0.1),
                   ),
 
                   SizedBox(height: 15.h),
