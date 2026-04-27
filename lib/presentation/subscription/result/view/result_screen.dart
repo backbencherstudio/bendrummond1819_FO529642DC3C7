@@ -13,12 +13,6 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> {
-  // Theme Colors
-  final Color bgColor = const Color(0xFFFBF7EF);
-  final Color primaryDark = const Color(0xFF4D3D33);
-  final Color accentGold = const Color(0xFFD4C18E);
-  final Color secondaryText = const Color(0xFF8B7E74);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,52 +26,7 @@ class _ResultScreenState extends State<ResultScreen> {
               width: double.infinity,
               child: Image.asset(ImageManager.teaCup, fit: BoxFit.cover),
             ),
-            // Stack(
-            //   children: [
-            //     Container(
-            //       height: 300,
-            //       width: double.infinity,
-            //       decoration: const BoxDecoration(
-            //         gradient: LinearGradient(
-            //           begin: Alignment.topCenter,
-            //           end: Alignment.bottomCenter,
-            //           colors: [Color(0xFF9E774B), Color(0xFF63422B)],
-            //         ),
-            //       ),
-            //       child: Center(
-            //         child: Padding(
-            //           padding: EdgeInsets.only(bottom: 40.0.h),
-            //           child: Image.asset(ImageManager.teaCup),
 
-            //           // child: Image.network(
-            //           //   'https://cdn-icons-png.flaticon.com/512/924/924514.png',
-            //           //   height: 180,
-            //           //   color: bgColor.withOpacity(0.9),
-            //           //   colorBlendMode: BlendMode.modulate,
-            //           // ),
-            //         ),
-            //       ),
-            //     ),
-            //     // The fade effect at the bottom of the image
-            //     Positioned(
-            //       bottom: 0,
-            //       left: 0,
-            //       right: 0,
-            //       child: Container(
-            //         height: 100,
-            //         decoration: BoxDecoration(
-            //           gradient: LinearGradient(
-            //             begin: Alignment.topCenter,
-            //             end: Alignment.bottomCenter,
-            //             colors: [bgColor.withOpacity(0), bgColor],
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-
-            //  Main Content
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 12.h),
               child: Column(
