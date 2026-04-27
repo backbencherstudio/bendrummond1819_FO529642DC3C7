@@ -26,7 +26,7 @@ class _AboutScreenState extends State<AboutScreen> {
                 children: [
                   customBackButton(
                     context,
-                    borderColor: ColorManager.borderColor2,
+                    borderColor: ColorManager.backgroundPressed100,
                   ),
                   SizedBox(width: 12.w),
                   Text(

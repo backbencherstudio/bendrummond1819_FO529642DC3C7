@@ -20,4 +20,7 @@ class IconManager {
   static String calendar = '$baseUrl/calendar.svg';
   static String arrowDown = '$baseUrl/arrow_down.svg';
   static String correct = '$baseUrl/correct.svg';
+  static String graphIcon = '$baseUrl/graph_icon.svg';
+  static String tradingicon = '$baseUrl/trading_icon.svg';
+  static String shuffleRoundedIcon = '$baseUrl/shuffle_rounded_icon.svg';
 }

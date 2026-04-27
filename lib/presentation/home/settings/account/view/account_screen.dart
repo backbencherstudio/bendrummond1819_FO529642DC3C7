@@ -29,7 +29,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 children: [
                   customBackButton(
                     context,
-                    borderColor: ColorManager.borderColor2,
+                    borderColor: ColorManager.backgroundPressed100,
                   ),
                   SizedBox(width: 20),
                   Text(
@@ -74,7 +74,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           color: ColorManager.brown,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: ColorManager.black400,
+                            color: ColorManager.grayBlack400,
                             width: 2,
                           ),
                         ),
@@ -169,7 +169,7 @@ class _AccountScreenState extends State<AccountScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.r),
             side: isSecondary
-                ? BorderSide(color: ColorManager.borderColor2)
+                ? BorderSide(color: ColorManager.backgroundPressed100)
                 : BorderSide.none,
           ),
         ),

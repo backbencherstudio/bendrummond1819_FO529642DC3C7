@@ -14,7 +14,7 @@ Padding customBackButton(
       height: 38.h,
       width: 38.w,
       decoration: BoxDecoration(
-        color: color ?? ColorManager.backButtonColor,
+        color: color ?? ColorManager.backgroundCard,
         border: Border.all(color: borderColor ?? ColorManager.borderColor3, width: 0.5.w),
         shape: BoxShape.circle,
       ),

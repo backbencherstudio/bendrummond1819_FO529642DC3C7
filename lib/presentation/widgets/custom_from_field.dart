@@ -22,7 +22,7 @@ class CustomFromField extends StatelessWidget {
   final VoidCallback? onTap;
   final bool readOnly;
   final BoxConstraints? suffixIconConstraints;
-  final BoxConstraints? prefixIconConstraints; // prefix এর জন্য constraints যোগ করা হয়েছে
+  final BoxConstraints? prefixIconConstraints;
   final int? maxLines;
 
   const CustomFromField({
@@ -65,7 +65,7 @@ class CustomFromField extends StatelessWidget {
         contentPadding: contentPadding ??
             EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         filled: filled ?? true,
-        fillColor: fillColor ?? ColorManager.formFieldColor,
+        fillColor: fillColor ?? ColorManager.backgroundSecondary,
         hintText: hintText,
         labelText: labelText,
         hintStyle: style ?? getRegularStyle16_400(color: ColorManager.brown400),

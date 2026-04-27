@@ -35,7 +35,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
                 children: [
                   customBackButton(
                     context,
-                    borderColor: ColorManager.borderColor2,
+                    borderColor: ColorManager.backgroundPressed100,
                   ),
                   SizedBox(width: 12.w),
                   Text(
@@ -150,7 +150,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
           border: Border.all(
             color: isSelected
                 ? ColorManager.brown500
-                : ColorManager.borderColor2,
+                : ColorManager.backgroundPressed100,
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -162,7 +162,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
               children: [
                 Text(
                   title,
-                  style: getMediumStyle18(color: ColorManager.black400),
+                  style: getMediumStyle18(color: ColorManager.grayBlack400),
                 ),
                 Text(
                   subtitle,
@@ -199,7 +199,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
       decoration: BoxDecoration(
         color: ColorManager.secondaryBackGround,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: ColorManager.borderColor2),
+        border: Border.all(color: ColorManager.backgroundPressed100),
       ),
       child: Row(
         children: [

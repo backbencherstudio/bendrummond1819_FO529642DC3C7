@@ -30,7 +30,7 @@ class CustomOutlinedButton extends StatelessWidget {
         height: 56.h,
         padding: EdgeInsets.all(14.h),
         decoration: BoxDecoration(
-          color: fillColor ?? ColorManager.formFieldColor,
+          color: fillColor ?? ColorManager.backgroundSecondary,
           border: Border.all(
             color: ColorManager.customOutlineButtonBorder,
             width: 1.w,
@@ -53,7 +53,7 @@ class CustomOutlinedButton extends StatelessWidget {
             ],
             Text(
               title,
-              style: textStyle ?? getRegularStyle20_500(color: ColorManager.black400,fontSize: 18.sp),
+              style: textStyle ?? getRegularStyle20_500(color: ColorManager.grayBlack400,fontSize: 18.sp),
             ),
           ],
         ),

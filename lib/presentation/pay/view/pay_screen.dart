@@ -46,7 +46,7 @@ class _PayScreenState extends ConsumerState<PayScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16.r),
-                  border: Border.all(color: ColorManager.borderColor2),
+                  border: Border.all(color: ColorManager.backgroundPressed100),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

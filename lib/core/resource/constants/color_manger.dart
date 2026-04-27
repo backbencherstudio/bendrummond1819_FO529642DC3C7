@@ -43,7 +43,7 @@ class ColorManager {
   // ===== Border Colors =====
   static const Color borderColor = Color(0xFFFBF8F2);
   static const Color borderColor1 = Color(0xFFE0D9D1);
-  static const Color borderColor2 = Color(0xFFDFE1E7);
+  static const Color backgroundPressed100 = Color(0xFFDFE1E7);
   static const Color borderColor3 = Color(0xFFC4A06A);
   static const Color borderE0D9D1 = Color(0xFFE0D9D1);
 
@@ -66,15 +66,15 @@ class ColorManager {
   static const Color primaryButton = Color(0xFF5C473B);
   static const Color customOutlineButtonBorder = Color(0xFFDFE1E7);
   static const Color black300 = Color(0xFF777980);
-  static const Color black400 = Color(0xFF4A4C56);
+  static const Color grayBlack400 = Color(0xFF4A4C56);
   static const Color black500 = Color(0xFF1D1F2C);
-  static const Color formFieldColor = Color(0xFFFBF8F2);
+  static const Color backgroundSecondary = Color(0xFFFBF8F2);
   static const Color brown = Color(0xFF4A3A2F);
   static const Color brown300 = Color(0xFF867B74);
   static const Color brown400 = Color(0xFF6E6159);
   static const Color brown500 = Color(0xFF4A3A2F);
   static const Color brown200 = Color(0xFFE0D9D1);
-  static const Color backButtonColor = Color(0xFFEDE6DB);
+  static const Color backgroundCard = Color(0xFFEDE6DB);
   static const Color navicons = Color(0xFF8C7055);
   static const Color gold = Color(0xFFA07848);
 

@@ -47,7 +47,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
                     child: Container(
                       padding: EdgeInsets.all(6.r),
                       decoration: BoxDecoration(
-                        color: ColorManager.backButtonColor,
+                        color: ColorManager.backgroundCard,
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -98,7 +98,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
                 Text(
                   subtitle,
                   style: getRegularStyle16_400(
-                    color: ColorManager.black400,
+                    color: ColorManager.grayBlack400,
                     fontSize: 14.sp,
                   ),
                 ),

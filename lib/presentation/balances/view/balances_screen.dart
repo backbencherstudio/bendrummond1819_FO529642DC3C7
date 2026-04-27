@@ -98,7 +98,7 @@ class _BalancesScreenState extends State<BalancesScreen> {
                       Container(
                         padding: EdgeInsets.all(8.w),
                         decoration: BoxDecoration(
-                          color: ColorManager.backButtonColor,
+                          color: ColorManager.backgroundCard,
                           shape: BoxShape.circle,
                         ),
                         child: Icon(

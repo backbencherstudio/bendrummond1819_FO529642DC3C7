@@ -31,7 +31,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 children: [
                   customBackButton(
                     context,
-                    borderColor: ColorManager.borderColor2,
+                    borderColor: ColorManager.backgroundPressed100,
                   ),
                   SizedBox(width: 12.w),
                   Text(

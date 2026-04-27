@@ -99,7 +99,7 @@ class _CompletePaymentScreenState extends State<CompletePaymentScreen> {
                     SizedBox(width: 8.w),
                     Text(
                       "Save Card Informations",
-                      style: getLightStyle14_500(color: ColorManager.black400),
+                      style: getLightStyle14_500(color: ColorManager.grayBlack400),
                     ),
                   ],
                 ),
@@ -117,7 +117,7 @@ class _CompletePaymentScreenState extends State<CompletePaymentScreen> {
                 child: Text(
                   "You'll receive a digital invoice to your mail after successful payment",
                   textAlign: TextAlign.center,
-                  style: getLightStyle14_500(color: ColorManager.black400),
+                  style: getLightStyle14_500(color: ColorManager.grayBlack400),
                 ),
               ),
             ],

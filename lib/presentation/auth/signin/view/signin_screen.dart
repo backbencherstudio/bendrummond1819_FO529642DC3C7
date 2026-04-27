@@ -9,7 +9,7 @@ import '../../../../core/resource/constants/color_manger.dart';
 import '../../../../core/resource/constants/image_manager.dart';
 import '../../../../core/resource/constants/style_manager.dart';
 import '../../../../core/route/routes_name.dart';
-import '../../../setUp/view/set_up_screen.dart';
+import '../../signup/setup/setup_screen/set_up_screen.dart';
 import '../../../widgets/custom_back_button.dart';
 import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/outline_button.dart';

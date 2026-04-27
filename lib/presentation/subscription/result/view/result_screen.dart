@@ -162,7 +162,7 @@ class _ResultScreenState extends State<ResultScreen> {
                     child: Column(
                       children: [
                         _buildCardRow1("Take-home pay", "+\$1400"),
-                        Divider(thickness: 1, color: ColorManager.borderColor2),
+                        Divider(thickness: 1, color: ColorManager.backgroundPressed100),
                         _buildCardRow2("Rent / mortgage", "-\$500"),
                         SizedBox(height: 12),
                         _buildCardRow2("Car payment", "-\$500"),
@@ -170,7 +170,7 @@ class _ResultScreenState extends State<ResultScreen> {
                         _buildCardRow2("Bills (2)", "-\$125"),
                         SizedBox(height: 12),
                         _buildCardRow2("Savings goals (2)", "-\$90"),
-                        Divider(thickness: 1, color: ColorManager.borderColor2),
+                        Divider(thickness: 1, color: ColorManager.backgroundPressed100),
                         _buildCardRow1("Safe to spend", "\$185"),
                       ],
                     ),
@@ -198,7 +198,7 @@ class _ResultScreenState extends State<ResultScreen> {
                     title: 'Adjust something',
                     onTap: () {},
                     textStyle: getMediumStyle18(
-                      color: ColorManager.black400,
+                      color: ColorManager.grayBlack400,
                       fontWeight: FontWeight.w500,
                     ),
                     isActive: true,

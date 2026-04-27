@@ -149,7 +149,7 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
       decoration: BoxDecoration(
         color: ColorManager.secondaryBackGround,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: ColorManager.borderColor2),
+        border: Border.all(color: ColorManager.backgroundPressed100),
       ),
       child: InkWell(
         onTap: onTap,

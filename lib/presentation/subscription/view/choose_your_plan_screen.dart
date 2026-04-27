@@ -167,7 +167,7 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
           child: Text(
             label,
             style: getLightStyle14_400(
-              color: isActive ? ColorManager.whiteColor : ColorManager.black400,
+              color: isActive ? ColorManager.whiteColor : ColorManager.grayBlack400,
             ),
           ),
         ),
@@ -225,7 +225,7 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
                   SizedBox(height: 12.h),
                   Text(
                     isMonthly ? '/month' : '/year',
-                    style: getRegularStyle16_400(color: ColorManager.black400),
+                    style: getRegularStyle16_400(color: ColorManager.grayBlack400),
                   ),
                 ],
               ),
