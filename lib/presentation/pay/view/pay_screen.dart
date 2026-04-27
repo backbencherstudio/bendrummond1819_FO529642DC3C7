@@ -107,7 +107,7 @@ class _PayScreenState extends ConsumerState<PayScreen> {
               SizedBox(height: 6.h),
               CustomFromField(
                 hintText: '1400',
-                prefixIcon: SvgPicture.asset(IconManager.dollar),
+                prefixIcon: SvgPicture.asset(IconManager.dollar,width: 20.w,height: 20.h,),
               ),
               SizedBox(height: 12.h),
 
@@ -116,7 +116,7 @@ class _PayScreenState extends ConsumerState<PayScreen> {
               SizedBox(height: 6.h),
               CustomFromField(
                 hintText: '60',
-                prefixIcon: SvgPicture.asset(IconManager.dollar),
+                prefixIcon: SvgPicture.asset(IconManager.dollar,width: 20.w,height: 20.h,),
               ),
 
               SizedBox(height: 80.h),
@@ -151,6 +151,7 @@ class _PayScreenState extends ConsumerState<PayScreen> {
   Widget _buildChip(String label, String activeLabel) {
     final bool isActive = label == activeLabel;
     return InkWell(
+      borderRadius: BorderRadius.circular(999.r),
       onTap: () {
         ref.read(payScheduleProvider.notifier).schedule(label);
       },
