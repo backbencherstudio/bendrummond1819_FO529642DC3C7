@@ -19,14 +19,6 @@ class ChooseYourPlanScreen extends ConsumerStatefulWidget {
 }
 
 class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
-  bool isMonthly = true;
-
-  // Custom Colors from the image
-  final Color backgroundColor = const Color(0xFFFBF7EF);
-  final Color primaryDark = const Color(0xFF4D3D33);
-  final Color accentGold = const Color(0xFFD4C18E);
-  final Color cardBorderColor = const Color(0xFFE5E1D9);
-
   @override
   Widget build(BuildContext context) {
     final isMonthlyState = ref.watch(planToggleProvider);
@@ -160,7 +152,9 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
         child: Container(
           margin: EdgeInsets.all(4.w),
           decoration: BoxDecoration(
-            color: isActive ? primaryDark : Colors.transparent,
+            color: isActive
+                ? ColorManager.textPrimary
+                : ColorManager.transparentColor,
             borderRadius: BorderRadius.circular(8.r),
           ),
           alignment: Alignment.center,

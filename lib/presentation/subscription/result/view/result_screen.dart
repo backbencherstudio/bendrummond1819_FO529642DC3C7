@@ -13,12 +13,6 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> {
-  // Theme Colors
-  final Color bgColor = const Color(0xFFFBF7EF);
-  final Color primaryDark = const Color(0xFF4D3D33);
-  final Color accentGold = const Color(0xFFD4C18E);
-  final Color secondaryText = const Color(0xFF8B7E74);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
