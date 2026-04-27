@@ -16,6 +16,9 @@ class ColorManager {
   static const Color secondaryBackGround = Color(0xFFF7F3EB);
   static const Color bottomNavBackGround = Color(0xFFEDE6DB);
   static const Color backgroundDark = Color(0xFF121212);
+  static const Color backGroundSecondary = Color(0xFFFBF8F2);
+  static const Color backGroundCard = Color(0xFFEDE6DB);
+
   static const Color scaffoldLight = Color(0xFFF7F3EB);
   static const Color scaffoldDark = Color(0xFF1E1E1E);
   static const Color backgroudNormal = Color(0xFFF6F8FA);

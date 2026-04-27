@@ -1,4 +1,5 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/image_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
@@ -26,49 +27,55 @@ class _ResultScreenState extends State<ResultScreen> {
         child: Column(
           children: [
             //  Header Image with Gradient Fade
-            Stack(
-              children: [
-                Container(
-                  height: 300,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Color(0xFF9E774B), Color(0xFF63422B)],
-                    ),
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 40.0),
-                      // Replace with your actual asset image
-                      child: Image.network(
-                        'https://cdn-icons-png.flaticon.com/512/924/924514.png',
-                        height: 180,
-                        color: bgColor.withOpacity(0.9),
-                        colorBlendMode: BlendMode.modulate,
-                      ),
-                    ),
-                  ),
-                ),
-                // The fade effect at the bottom of the image
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    height: 100,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [bgColor.withOpacity(0), bgColor],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            SizedBox(
+              height: 330.882.h,
+              width: double.infinity,
+              child: Image.asset(ImageManager.teaCup, fit: BoxFit.cover),
             ),
+            // Stack(
+            //   children: [
+            //     Container(
+            //       height: 300,
+            //       width: double.infinity,
+            //       decoration: const BoxDecoration(
+            //         gradient: LinearGradient(
+            //           begin: Alignment.topCenter,
+            //           end: Alignment.bottomCenter,
+            //           colors: [Color(0xFF9E774B), Color(0xFF63422B)],
+            //         ),
+            //       ),
+            //       child: Center(
+            //         child: Padding(
+            //           padding: EdgeInsets.only(bottom: 40.0.h),
+            //           child: Image.asset(ImageManager.teaCup),
+
+            //           // child: Image.network(
+            //           //   'https://cdn-icons-png.flaticon.com/512/924/924514.png',
+            //           //   height: 180,
+            //           //   color: bgColor.withOpacity(0.9),
+            //           //   colorBlendMode: BlendMode.modulate,
+            //           // ),
+            //         ),
+            //       ),
+            //     ),
+            //     // The fade effect at the bottom of the image
+            //     Positioned(
+            //       bottom: 0,
+            //       left: 0,
+            //       right: 0,
+            //       child: Container(
+            //         height: 100,
+            //         decoration: BoxDecoration(
+            //           gradient: LinearGradient(
+            //             begin: Alignment.topCenter,
+            //             end: Alignment.bottomCenter,
+            //             colors: [bgColor.withOpacity(0), bgColor],
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
 
             //  Main Content
             Padding(
