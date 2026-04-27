@@ -1,3 +1,4 @@
+import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/outline_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,9 +47,7 @@ class _SetUpMainViewState extends ConsumerState<SetUpScreen> {
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
-    } else {
-      /// Navigate to Home
-    }
+    } else {}
   }
 
   void _onBack() {
@@ -162,7 +161,15 @@ class _SetUpMainViewState extends ConsumerState<SetUpScreen> {
                     ),
                   ],
                   if (currentStep == 8) ...[
-                    PrimaryButton(title: "Skip for now", onTap: () {}),
+                    PrimaryButton(
+                      title: "Continue",
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          RoutesName.chooseYourPlainScreen,
+                        );
+                      },
+                    ),
                   ],
                 ],
               ),
