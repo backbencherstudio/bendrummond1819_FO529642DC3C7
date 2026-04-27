@@ -7,9 +7,9 @@ import '../../core/resource/constants/style_manager.dart';
 Widget customLogoText() {
   return Text(
     "STABILITY",
-    style: getRegularStyle16_400(
-      fontSize: 20.sp,
+    style: getSemiBoldStyle22(
       color: ColorManager.brown500,
+      fontSize: 24.sp
     ).copyWith(letterSpacing: 6),
   );
 }

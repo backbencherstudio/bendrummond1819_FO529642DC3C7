@@ -192,12 +192,10 @@ class _SplashScreenState extends State<SplashScreen>
   Widget _buildText(Color color) {
     return Text(
       "STABILITY",
-      style: TextStyle(
+      style: getBoldStyle32(
+        color: ColorManager.brown500,
         fontSize: 42.sp,
-        fontWeight: FontWeight.bold,
-        letterSpacing: 10,
-        color: color,
-      ),
+      ).copyWith(letterSpacing: 8),
     );
   }
 }
