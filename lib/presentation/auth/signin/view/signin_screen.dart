@@ -70,8 +70,7 @@ class _SigningScreenState extends State<SigningScreen> {
 
                   Text(
                     "Welcome back",
-                    style: getBoldStyle24(
-                      fontSize: 32.sp,
+                    style: getBoldStyle32(
                       color: ColorManager.brown,
                     ).copyWith(height: 1.1, letterSpacing: -0.5),
                   ),
@@ -86,11 +85,9 @@ class _SigningScreenState extends State<SigningScreen> {
                   SizedBox(height: 25.h),
                   Text(
                     "Email",
-                    style: getRegularStyle16_400(
-                      color: ColorManager.brown300,
-                      fontSize: 14.sp,
-                    ),
+                    style: getRegularStyle14_400(color: ColorManager.brown300),
                   ),
+                  SizedBox(height: 10.h),
 
                   /// ************ Email Field *****************
                   CustomFromField(
@@ -104,9 +101,8 @@ class _SigningScreenState extends State<SigningScreen> {
                     children: [
                       Text(
                         "Password",
-                        style: getRegularStyle16_400(
+                        style: getRegularStyle14_400(
                           color: ColorManager.brown300,
-                          fontSize: 14.sp,
                         ),
                       ),
 
@@ -121,9 +117,8 @@ class _SigningScreenState extends State<SigningScreen> {
                         child: Text(
                           "Forgot password?",
                           style:
-                              getRegularStyle16_500(
-                                color: ColorManager.brown,
-                                fontSize: 14.sp,
+                              getRegularStyle14_500(
+                                color: ColorManager.brown500,
                               ).copyWith(
                                 decoration: TextDecoration.underline,
                                 decorationColor: ColorManager.brown,
@@ -178,42 +173,28 @@ class _SigningScreenState extends State<SigningScreen> {
                     },
                   ),
 
-                  //Just for testing Purpose added navigation to setUp screen with Primary Button
-                  SizedBox(height: 20.h),
-                  PrimaryButton(
-                    title: "Setup Screeen",
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (builder) => SetUpScreen()),
-                      );
-                    },
-                  ),
-
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 10.h),
                   customDivider(),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 10.h),
 
                   /// ************ rich text ******************
                   Center(
                     child: RichText(
                       text: TextSpan(
-                        style: getRegularStyle16_400(
+                        style: getRegularStyle14_400(
                           color: ColorManager.brown300,
-                          fontSize: 14.sp,
                         ),
                         children: [
                           TextSpan(text: "New to stability? "),
                           TextSpan(
                             text: "Create an account.",
                             style:
-                                getRegularStyle16_500(
-                                  color: ColorManager.brown,
-                                  fontSize: 14.sp,
-                                ).copyWith(
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: ColorManager.brown,
-                                ),
+                            getRegularStyle14_500(
+                              color: ColorManager.brown,
+                            ).copyWith(
+                              decoration: TextDecoration.underline,
+                              decorationColor: ColorManager.brown,
+                            ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 Navigator.pushNamed(
