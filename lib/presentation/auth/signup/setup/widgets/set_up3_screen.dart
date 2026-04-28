@@ -38,7 +38,7 @@ class _SetUp3ScreenState extends ConsumerState<SetUp3Screen> {
                     // --- Title Section ---
                     Text(
                       "About how much do you bring in?",
-                      style: getBoldStyle32(color: ColorManager.textPrimary),
+                      style: getSemiBoldStyle32(color: ColorManager.textPrimary),
                     ),
                     SizedBox(height: 12.h),
                     Text(

@@ -53,7 +53,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: Padding(
                       padding: EdgeInsets.all(8.h),
                       child: Row(
-                        children: [customBackButton(context), customLogoText()],
+                        children: [customBackButton(context,borderColor: ColorManager.backgroundPressed100), customLogoText()],
                       ),
                     ),
                   ),

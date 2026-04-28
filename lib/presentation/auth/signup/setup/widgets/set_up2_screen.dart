@@ -43,7 +43,7 @@ class _SetUp2ScreenState extends ConsumerState<SetUp2Screen> {
                     // --- Title ---
                     Text(
                       "How often do you usually get paid?",
-                      style: getBoldStyle32(
+                      style: getSemiBoldStyle32(
                         color: ColorManager.textPrimary,
                       ),
                     ),

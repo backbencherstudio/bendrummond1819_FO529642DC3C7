@@ -35,7 +35,7 @@ class _SetUp5ScreenState extends ConsumerState<SetUp5Screen> {
               // --- Title ---
               Text(
                 "Any car payment?",
-                style: getBoldStyle32(color: ColorManager.textPrimary),
+                style: getSemiBoldStyle32(color: ColorManager.textPrimary),
               ),
                SizedBox(height: 15.h),
 

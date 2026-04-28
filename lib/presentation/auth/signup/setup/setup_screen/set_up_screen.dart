@@ -79,8 +79,8 @@ class _SetUpMainViewState extends ConsumerState<SetUpScreen> {
                   customBackButton(
                     context,
                     onPressed: _onBack,
-                    color: ColorManager.borderColor,
-                    borderColor: ColorManager.backgroundPressed100,
+                    color: ColorManager.backGroundCard,
+                    borderColor: ColorManager.borderColor3,
                   ),
                   SizedBox(width: 16.w),
                   Expanded(

@@ -29,7 +29,7 @@ class _SetUp4ScreenState extends ConsumerState<SetUp4Screen> {
             children: [
               Text(
                 "What's your rent or mortgage?",
-                style: getBoldStyle32(color: ColorManager.textPrimary),
+                style: getSemiBoldStyle32(color: ColorManager.textPrimary),
               ),
               SizedBox(height: 15.h),
               Text(
@@ -83,18 +83,15 @@ class _SetUp4ScreenState extends ConsumerState<SetUp4Screen> {
               // --- Info Box ---
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(22.h),
+                padding: EdgeInsets.all(16.r),
                 decoration: BoxDecoration(
                   color: ColorManager.backgroundCard,
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Text(
                   "Your biggest bill first. Everything else gets smaller from here.",
-                  style: TextStyle(
-                    color: ColorManager.brown400,
-                    fontSize: 17,
-                    height: 1.3,
-                  ),
+                  style:
+                 getRegularStyle16_400(color:   ColorManager.brown400)
                 ),
               ),
             ],
