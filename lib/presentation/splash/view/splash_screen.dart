@@ -193,7 +193,7 @@ class _SplashScreenState extends State<SplashScreen>
     return Text(
       "STABILITY",
       style: getBoldStyle32(
-        color: ColorManager.brown500,
+        color:color,
         fontSize: 42.sp,
       ).copyWith(letterSpacing: 8),
     );

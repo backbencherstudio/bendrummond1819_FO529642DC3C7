@@ -130,6 +130,13 @@ TextStyle getSemiBoldStyle22({
 }) {
   return _getTextStyle(fontSize, FontConstants.fontFamily, fontWeight, color);
 }
+TextStyle getSemiBoldStyle32({
+  double fontSize = FontSize.s32,
+  FontWeight fontWeight = FontWeightManager.semiBold600,
+  required Color color,
+}) {
+  return _getTextStyle(fontSize, FontConstants.fontFamily, fontWeight, color);
+}
 
 // ===== Bold Style =====
 TextStyle getBoldStyle24({

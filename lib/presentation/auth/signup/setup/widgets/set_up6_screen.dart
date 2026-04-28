@@ -58,7 +58,7 @@ class _SetUp6ScreenState extends ConsumerState<SetUp6Screen> {
             children: [
               Text(
                 "Any other regular bills?",
-                style: getBoldStyle32(color: ColorManager.textPrimary),
+                style: getSemiBoldStyle32(color: ColorManager.textPrimary),
               ),
               SizedBox(height: 15.h),
               Text(

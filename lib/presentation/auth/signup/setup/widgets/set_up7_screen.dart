@@ -63,7 +63,7 @@ class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
             children: [
               Text(
                 "Any debts to account for?",
-                style: getBoldStyle32(color: ColorManager.textPrimary),
+                style: getSemiBoldStyle32(color: ColorManager.textPrimary),
               ),
               SizedBox(height: 15.h),
               Text(

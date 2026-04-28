@@ -58,7 +58,7 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
             children: [
               Text(
                 "Saving for anything?",
-                style: getBoldStyle32(color: ColorManager.textPrimary),
+                style: getSemiBoldStyle32(color: ColorManager.textPrimary),
               ),
               SizedBox(height: 15.h),
               Text(

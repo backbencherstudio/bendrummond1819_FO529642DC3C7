@@ -51,7 +51,7 @@ class _SigningScreenState extends State<SigningScreen> {
                     child: Padding(
                       padding: EdgeInsets.all(8.h),
                       child: Row(
-                        children: [customBackButton(context), customLogoText()],
+                        children: [customBackButton(context,borderColor: ColorManager.backgroundPressed100), customLogoText()],
                       ),
                     ),
                   ),
@@ -207,7 +207,7 @@ class _SigningScreenState extends State<SigningScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 60.h),
                 ],
               ),
             ),

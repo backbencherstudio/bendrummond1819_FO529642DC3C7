@@ -44,7 +44,7 @@ class _SetUp1ScreenState extends State<SetUp1Screen> {
           children: [
             Text(
               "How does your income usually come in?",
-              style: getBoldStyle32(color: ColorManager.textPrimary),
+              style: getSemiBoldStyle32(color: ColorManager.textPrimary),
             ),
             SizedBox(height: 12.h),
             Text(
