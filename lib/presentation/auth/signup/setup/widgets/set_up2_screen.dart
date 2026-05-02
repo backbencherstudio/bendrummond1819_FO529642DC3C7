@@ -113,14 +113,7 @@ class _SetUp2ScreenState extends ConsumerState<SetUp2Screen> {
               ),
             ),
             if (isSelected)
-              Container(
-                padding: EdgeInsets.all(4.h),
-                decoration: BoxDecoration(
-                  color: ColorManager.textPrimary,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(Icons.check, color: Colors.white, size: 10.sp),
-              ),
+            Icon(Icons.check_circle, color: ColorManager.textPrimary),
           ],
         ),
       ),

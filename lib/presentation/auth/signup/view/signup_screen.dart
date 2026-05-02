@@ -51,9 +51,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   SafeArea(
                     child: Padding(
-                      padding: EdgeInsets.all(8.h),
+                      padding: EdgeInsets.all(20.w),
                       child: Row(
-                        children: [customBackButton(context,borderColor: ColorManager.backgroundPressed100), customLogoText()],
+                        children: [customBackButton(context,borderColor: ColorManager.backgroundPressed100), SizedBox(width: 12,), customLogoText()],
                       ),
                     ),
                   ),
@@ -63,12 +63,12 @@ class _SignupScreenState extends State<SignupScreen> {
 
             Container(
               width: double.infinity,
-              color: ColorManager.secondary,
+              color: ColorManager.cF0EBE3,
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 30.h),
+                  SizedBox(height: 10.h),
 
                   Text(
                     "Take control of your finances",
@@ -222,7 +222,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 60.h),
                 ],
               ),
             ),

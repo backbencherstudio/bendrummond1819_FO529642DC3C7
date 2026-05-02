@@ -38,7 +38,7 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
                   customBackButton(
                     context,
                     color: ColorManager.borderColor,
-                    borderColor: ColorManager.backgroundPressed100,
+                    borderColor: ColorManager.borderColor3,
                   ),
                   SizedBox(width: 12.w),
                   Text(
