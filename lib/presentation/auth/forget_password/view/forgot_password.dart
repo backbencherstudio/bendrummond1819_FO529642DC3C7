@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../widgets/custom_from_field.dart';
 import '../../../widgets/primary_button.dart';
+
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
 
@@ -20,56 +21,57 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.secondary,
-      appBar: AppBar(
-        backgroundColor: ColorManager.secondary,
-        leading: customBackButton(
-          context,
-          borderColor: ColorManager.borderColor,
-        ),
-        title: customLogoText(),
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-        child: Column(
-          children: [
-
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 32.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  Text(
-                    "Forgot Password",
-                    style: getBoldStyle32(
-                      color: ColorManager.brown,
-                    ).copyWith(letterSpacing: -0.45),
-                  ),
-                  SizedBox(height: 15.h),
-                  /// ************ Email Field *****************
-                  Text(
-                    "Email",
-                    style: getRegularStyle14_400(
-                      color: ColorManager.brown300,
-                    ),
-                  ),
-                  SizedBox(height: 10.h),
-                  CustomFromField(
-                    hintText: "you@example.com",
-                    controller: _emailController,
-                  ),
+                  customBackButton(context, borderColor: ColorManager.borderColor),
+                  SizedBox(width: 12.w,),
+                  customLogoText()
                 ],
               ),
-            ),
-
-            /// *************** send btn *******************
-            PrimaryButton(
+        
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Forgot Password",
+                      style: getBoldStyle32(
+                        color: ColorManager.brown,
+                      ).copyWith(letterSpacing: -0.45),
+                    ),
+                    SizedBox(height: 15.h),
+        
+                    /// ************ Email Field *****************
+                    Text(
+                      "Email",
+                      style: getRegularStyle14_400(color: ColorManager.brown300),
+                    ),
+                    SizedBox(height: 10.h),
+                    CustomFromField(
+                      hintText: "you@example.com",
+                      controller: _emailController,
+                    ),
+                  ],
+                ),
+              ),
+        
+              /// *************** send btn *******************
+              PrimaryButton(
                 title: "Send",
                 onTap: () {
                   Navigator.pushNamed(context, RoutesName.forgotPasswordOtpRoute);
-                }
-            ),
-            SizedBox(height: 20.h,)
-          ],
+                },
+              ),
+              SizedBox(height: 20.h),
+            ],
+          ),
         ),
       ),
     );

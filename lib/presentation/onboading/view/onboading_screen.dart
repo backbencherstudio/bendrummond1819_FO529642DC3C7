@@ -45,12 +45,12 @@ class OnboardingScreen extends StatelessWidget {
 
             Container(
               width: double.infinity,
-              color: ColorManager.secondary,
+              color: ColorManager.cF0EBE3,
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 30.h),
+                  SizedBox(height: 10.h),
 
                   Text(
                     "Win back confidence over spending.",
@@ -59,7 +59,7 @@ class OnboardingScreen extends StatelessWidget {
                     ).copyWith(letterSpacing: -0.1),
                   ),
 
-                  SizedBox(height: 15.h),
+                  SizedBox(height: 16.h),
 
                   Text(
                     "See what money comes in and goes out. Know what's actually safe to spend.",
@@ -78,7 +78,7 @@ class OnboardingScreen extends StatelessWidget {
                     ],
                   ),
 
-                  SizedBox(height: 15.h),
+                  SizedBox(height: 32.h),
 
                   /// ************ Get Started Button *****************
                   PrimaryButton(title: "Get Started", onTap: () {}),

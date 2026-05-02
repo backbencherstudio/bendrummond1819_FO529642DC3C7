@@ -9,7 +9,6 @@ import '../../../../core/resource/constants/color_manger.dart';
 import '../../../../core/resource/constants/image_manager.dart';
 import '../../../../core/resource/constants/style_manager.dart';
 import '../../../../core/route/routes_name.dart';
-import '../../signup/setup/setup_screen/set_up_screen.dart';
 import '../../../widgets/custom_back_button.dart';
 import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/outline_button.dart';
@@ -49,9 +48,9 @@ class _SigningScreenState extends State<SigningScreen> {
                   ),
                   SafeArea(
                     child: Padding(
-                      padding: EdgeInsets.all(8.h),
+                      padding: EdgeInsets.all(20.w),
                       child: Row(
-                        children: [customBackButton(context,borderColor: ColorManager.backgroundPressed100), customLogoText()],
+                        children: [customBackButton(context,borderColor: ColorManager.backgroundPressed100), SizedBox(width: 12,), customLogoText()],
                       ),
                     ),
                   ),
@@ -61,12 +60,12 @@ class _SigningScreenState extends State<SigningScreen> {
 
             Container(
               width: double.infinity,
-              color: ColorManager.secondary,
+              color: ColorManager.cF0EBE3,
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 30.h),
+                  SizedBox(height: 10.h),
 
                   Text(
                     "Welcome back",
@@ -87,7 +86,7 @@ class _SigningScreenState extends State<SigningScreen> {
                     "Email",
                     style: getRegularStyle14_400(color: ColorManager.brown300),
                   ),
-                  SizedBox(height: 10.h),
+                  SizedBox(height: 12.h),
 
                   /// ************ Email Field *****************
                   CustomFromField(
@@ -162,7 +161,7 @@ class _SigningScreenState extends State<SigningScreen> {
                     },
                   ),
 
-                  SizedBox(height: 12.h),
+                  SizedBox(height: 16.h),
 
                   /// ************ google sign in Button *****************
                   CustomOutlinedButton(
@@ -185,7 +184,7 @@ class _SigningScreenState extends State<SigningScreen> {
                           color: ColorManager.brown300,
                         ),
                         children: [
-                          TextSpan(text: "New to stability? "),
+                          TextSpan(text: "New to Stability? "),
                           TextSpan(
                             text: "Create an account.",
                             style:
