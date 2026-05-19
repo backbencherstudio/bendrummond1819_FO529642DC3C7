@@ -38,7 +38,9 @@ class _SetUp3ScreenState extends ConsumerState<SetUp3Screen> {
                     // --- Title Section ---
                     Text(
                       "About how much do you bring in?",
-                      style: getSemiBoldStyle32(color: ColorManager.textPrimary),
+                      style: getSemiBoldStyle32(
+                        color: ColorManager.textPrimary,
+                      ),
                     ),
                     SizedBox(height: 12.h),
                     Text(
@@ -52,7 +54,16 @@ class _SetUp3ScreenState extends ConsumerState<SetUp3Screen> {
                     // --- Custom Amount Input Field ---
                     CustomFromField(
                       hintText: "1400",
-                      prefixIcon: SvgPicture.asset(IconManager.dollar),
+                      prefixIcon: SizedBox(
+                        width: 24.w,
+                        height: 24.h,
+                        child: SvgPicture.asset(
+                          IconManager.dollar,
+                          width: 20.w,
+                          height: 20.h,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
                       controller: _amountController,
                     ),
 

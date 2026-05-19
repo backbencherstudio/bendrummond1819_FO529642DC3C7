@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../widgets/custom_date_picker_field.dart';
 import '../../../../core/resource/constants/color_manger.dart';
 import '../../../../core/resource/constants/image_manager.dart';
 import '../../../../core/resource/constants/style_manager.dart';
@@ -24,6 +25,8 @@ class SigningScreen extends StatefulWidget {
 class _SigningScreenState extends State<SigningScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final frequentlyController = TextEditingController();
+  var selectedFrequency = "";
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -50,7 +53,14 @@ class _SigningScreenState extends State<SigningScreen> {
                     child: Padding(
                       padding: EdgeInsets.all(20.w),
                       child: Row(
-                        children: [customBackButton(context,borderColor: ColorManager.backgroundPressed100), SizedBox(width: 12,), customLogoText()],
+                        children: [
+                          customBackButton(
+                            context,
+                            borderColor: ColorManager.backgroundPressed100,
+                          ),
+                          SizedBox(width: 12),
+                          customLogoText(),
+                        ],
                       ),
                     ),
                   ),
@@ -188,12 +198,12 @@ class _SigningScreenState extends State<SigningScreen> {
                           TextSpan(
                             text: "Create an account.",
                             style:
-                            getRegularStyle14_500(
-                              color: ColorManager.brown,
-                            ).copyWith(
-                              decoration: TextDecoration.underline,
-                              decorationColor: ColorManager.brown,
-                            ),
+                                getRegularStyle14_500(
+                                  color: ColorManager.brown,
+                                ).copyWith(
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: ColorManager.brown,
+                                ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 Navigator.pushNamed(

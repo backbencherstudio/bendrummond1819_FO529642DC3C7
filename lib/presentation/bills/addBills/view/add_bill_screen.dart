@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../core/resource/constants/icon_manager.dart';
+import '../../../widgets/custom_date_picker_field.dart';
 
 class AddBillScreen extends StatefulWidget {
   const AddBillScreen({super.key});
@@ -20,6 +21,9 @@ class AddBillScreen extends StatefulWidget {
 class _AddBillScreenState extends State<AddBillScreen> {
   bool _isRecurring = false;
   int _selectedFrequency = 0; // 0: Beginning, 1: Middle, 2: End
+  String selectedFrequency="";
+  bool isFrequencyExpanded=false;
+  TextEditingController frequentlyController=TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +107,25 @@ class _AddBillScreenState extends State<AddBillScreen> {
               SizedBox(height: 6.h),
 
               // Custom Date Dropdown
-              _buildCustomDateDropdown(),
+              //_buildCustomDateDropdown(),
+              CustomDatePickerField(
+  hintText: "Select Frequency Date",
+  controller: frequentlyController,
+  // Optional: If you need to update other variables in your screen when the date changes
+  onDateSelected: () {
+    setState(() {
+      selectedFrequency = frequentlyController.text;
+      isFrequencyExpanded = false;
+    });
+  },
+  // Optional: Integrates perfectly with Flutter Form validation
+  validator: (value) {
+    if (value == null || value.isEmpty) {
+      return 'Please pick a date';
+    }
+    return null;
+  },
+),
 
               SizedBox(height: 12.h),
               _buildLabel("Due day"),
