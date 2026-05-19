@@ -61,14 +61,14 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Yasir Abed Rabbu',
+                            'Md. Tajemul Islam',
                             style: getSemiBoldStyle22(
                               fontSize: 20,
                               color: ColorManager.textPrimary,
                             ),
                           ),
                           Text(
-                            'yasirabedrabbu@gmail.com',
+                            'tajemulislamgames@gmail.com',
                             style: getRegularStyle16_400(
                               color: ColorManager.brown300,
                               fontSize: 14,

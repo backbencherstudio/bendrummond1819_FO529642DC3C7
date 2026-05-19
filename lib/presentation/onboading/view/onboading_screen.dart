@@ -2,6 +2,7 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_mang
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/image_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/view/signup_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_logo_text.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/outline_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
@@ -81,7 +82,15 @@ class OnboardingScreen extends StatelessWidget {
                   SizedBox(height: 32.h),
 
                   /// ************ Get Started Button *****************
-                  PrimaryButton(title: "Get Started", onTap: () {}),
+                  PrimaryButton(
+                    title: "Get Started",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (builder) => SignupScreen()),
+                      );
+                    },
+                  ),
 
                   SizedBox(height: 12.h),
 

@@ -90,12 +90,12 @@ class _AccountScreenState extends State<AccountScreen> {
               // =========== Form Fields ============
               _buildLabel("Your full name"),
               SizedBox(height: 6.h),
-              CustomFromField(hintText: 'Yasir Abed Rabbu'),
+              CustomFromField(hintText: 'Md. Tajemul Islam'),
               SizedBox(height: 12.h),
 
               _buildLabel("Email address"),
               SizedBox(height: 6.h),
-              CustomFromField(hintText: 'yasir@gmail.com'),
+              CustomFromField(hintText: 'tajemulislamgames@gmail.com'),
               SizedBox(height: 12.h),
 
               _buildLabel("Password"),
