@@ -17,6 +17,14 @@ class AddGoalScreen extends StatefulWidget {
 }
 
 class _AddGoalScreenState extends State<AddGoalScreen> {
+  final savingNameController = TextEditingController();
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    savingNameController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +53,10 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
               // ========== Saving for Section ================
               _buildLabel("What are you saving for?"),
               SizedBox(height: 6.h),
-              CustomFromField(hintText: 'Buy a Iphone 17 Pro'),
+              CustomFromField(
+                hintText: 'Buy a Iphone 17 Pro',
+                controller: savingNameController,
+              ),
 
               SizedBox(height: 6.h),
 
@@ -109,15 +120,23 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
 
   // ======= Suggestion Chip ==========
   Widget _buildSuggestionChip(String label) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 6.r),
-      decoration: BoxDecoration(
-        color: ColorManager.backgroudNormal,
-        borderRadius: BorderRadius.circular(999.r),
-      ),
-      child: Text(
-        label,
-        style: getMediumStyle18(color: ColorManager.brown300, fontSize: 14),
+    return InkWell(
+      borderRadius: BorderRadius.circular(999.r),
+      onTap: () {
+        setState(() {
+          savingNameController.text = label;
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 6.r),
+        decoration: BoxDecoration(
+          color: ColorManager.backgroudNormal,
+          borderRadius: BorderRadius.circular(999.r),
+        ),
+        child: Text(
+          label,
+          style: getMediumStyle18(color: ColorManager.brown300, fontSize: 14),
+        ),
       ),
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
@@ -107,7 +109,11 @@ class _PayScreenState extends ConsumerState<PayScreen> {
               SizedBox(height: 6.h),
               CustomFromField(
                 hintText: '1400',
-                prefixIcon: SvgPicture.asset(IconManager.dollar,width: 20.w,height: 20.h,),
+                prefixIcon: SvgPicture.asset(
+                  IconManager.dollar,
+                  width: 20.w,
+                  height: 20.h,
+                ),
               ),
               SizedBox(height: 12.h),
 
@@ -116,7 +122,11 @@ class _PayScreenState extends ConsumerState<PayScreen> {
               SizedBox(height: 6.h),
               CustomFromField(
                 hintText: '60',
-                prefixIcon: SvgPicture.asset(IconManager.dollar,width: 20.w,height: 20.h,),
+                prefixIcon: SvgPicture.asset(
+                  IconManager.dollar,
+                  width: 20.w,
+                  height: 20.h,
+                ),
               ),
 
               SizedBox(height: 80.h),
@@ -125,10 +135,11 @@ class _PayScreenState extends ConsumerState<PayScreen> {
               PrimaryButton(
                 title: 'Save changes',
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    RoutesName.chooseYourPlainScreen,
-                  );
+                  log("Save change button clicked");
+                  // Navigator.pushNamed(
+                  //   context,
+                  //   RoutesName.chooseYourPlainScreen,
+                  // );
                 },
               ),
               SizedBox(height: 70.h),
