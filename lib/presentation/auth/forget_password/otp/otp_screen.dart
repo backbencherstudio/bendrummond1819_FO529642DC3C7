@@ -9,6 +9,7 @@ import '../../../widgets/custom_back_button.dart';
 import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/custom_otp_field.dart';
 import '../../../widgets/primary_button.dart';
+
 class ForgotPasswordOtpScreen extends StatefulWidget {
   const ForgotPasswordOtpScreen({super.key});
   @override
@@ -27,11 +28,14 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 32.h),
           child: Column(
             children: [
-               Row(
+              Row(
                 children: [
-                  customBackButton(context, borderColor: ColorManager.borderColor),
-                  SizedBox(width: 12.w,),
-                  customLogoText()
+                  customBackButton(
+                    context,
+                    borderColor: ColorManager.borderColor,
+                  ),
+                  SizedBox(width: 12.w),
+                  customLogoText(),
                 ],
               ),
               Expanded(
@@ -46,45 +50,47 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                       ).copyWith(letterSpacing: -0.45),
                     ),
                     SizedBox(height: 15.h),
-        
+
                     /// ************ otp Field *****************
                     CustomPinCodeField(),
                   ],
                 ),
               ),
-        
+
               /// *************** send btn *******************
               PrimaryButton(
                 title: "Verify",
                 onTap: () {
-                  Navigator.pushNamed(context, RoutesName.resetNewPasswordRoute);
+                  Navigator.pushNamed(
+                    context,
+                    RoutesName.resetNewPasswordRoute,
+                  );
                 },
               ),
               SizedBox(height: 15.h),
               customDivider(),
               SizedBox(height: 15.h),
-        
+
               /// ************ rich text ******************
               Center(
                 child: RichText(
                   text: TextSpan(
-                    style: getRegularStyle14_400(
-                      color: ColorManager.brown300,
-                    ),
+                    style: getRegularStyle14_400(color: ColorManager.brown300),
                     children: [
                       TextSpan(text: "Didn't get the OTP? "),
                       TextSpan(
                         text: "Resend",
-                        style:
-                            getRegularStyle14_500(
-                              color: ColorManager.brown,
-                            ).copyWith(
+                        style: getRegularStyle14_500(color: ColorManager.brown)
+                            .copyWith(
                               decoration: TextDecoration.underline,
                               decorationColor: ColorManager.brown,
                             ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            Navigator.pushNamed(context, RoutesName.signUpRoute);
+                            Navigator.pushNamed(
+                              context,
+                              RoutesName.signUpRoute,
+                            );
                           },
                       ),
                     ],

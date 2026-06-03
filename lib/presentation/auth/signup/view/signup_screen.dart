@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -13,20 +14,46 @@ import '../../../widgets/custom_from_field.dart';
 import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/outline_button.dart';
 import '../../../widgets/primary_button.dart';
+import '../viewmodel/signup_viewmodel.dart';
 
-class SignupScreen extends StatefulWidget {
+class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _fullNameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _dobController = TextEditingController();
+
+  Future<void> _handleRegister() async {
+    final success = await ref
+        .read(signUpViewModelProvider.notifier)
+        .register(
+          name: _fullNameController.text.trim(),
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+          phone: _phoneController.text.trim(),
+          dob: _dobController.text.trim(),
+        );
+    if (success && mounted) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        RoutesName.signInRoute,
+        (route) => false,
+      );
+    } else if (!success && mounted) {
+      final state = ref.read(signUpViewModelProvider);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(state.errorMessage ?? "Registration failed")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -53,7 +80,14 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: Padding(
                       padding: EdgeInsets.all(20.w),
                       child: Row(
-                        children: [customBackButton(context,borderColor: ColorManager.backgroundPressed100), SizedBox(width: 12,), customLogoText()],
+                        children: [
+                          customBackButton(
+                            context,
+                            borderColor: ColorManager.backgroundPressed100,
+                          ),
+                          SizedBox(width: 12),
+                          customLogoText(),
+                        ],
                       ),
                     ),
                   ),
@@ -90,9 +124,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   /// ************ name Field *****************
                   Text(
                     "Your full name",
-                    style: getRegularStyle14_400(
-                      color: ColorManager.brown300,
-                    ),
+                    style: getRegularStyle14_400(color: ColorManager.brown300),
                   ),
                   SizedBox(height: 5.h),
                   CustomFromField(
@@ -105,9 +137,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   /// ************ email Field *****************
                   Text(
                     "Email address",
-                    style: getRegularStyle14_400(
-                      color: ColorManager.brown300,
-                    ),
+                    style: getRegularStyle14_400(color: ColorManager.brown300),
                   ),
                   SizedBox(height: 5.h),
 
@@ -121,9 +151,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   /// ***************** password field ****************
                   Text(
                     "Password",
-                    style: getRegularStyle14_400(
-                      color: ColorManager.brown300,
-                    ),
+                    style: getRegularStyle14_400(color: ColorManager.brown300),
                   ),
                   SizedBox(height: 5.h),
 
@@ -141,9 +169,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   /// ************ phone Field *****************
                   Text(
                     "Phone number",
-                    style: getRegularStyle14_400(
-                      color: ColorManager.brown300,
-                    ),
+                    style: getRegularStyle14_400(color: ColorManager.brown300),
                   ),
                   SizedBox(height: 5.h),
 
@@ -157,9 +183,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   /// ************ dob Field *****************
                   Text(
                     "Date of birth",
-                    style: getRegularStyle14_400(
-                      color: ColorManager.brown300,
-                    ),
+                    style: getRegularStyle14_400(color: ColorManager.brown300),
                   ),
                   SizedBox(height: 5.h),
 
@@ -170,12 +194,11 @@ class _SignupScreenState extends State<SignupScreen> {
 
                   SizedBox(height: 25.h),
 
-                  /// ************ Sign in Button *****************
+                  /// ************ Sign up Button *****************
                   PrimaryButton(
                     title: "Create account",
-                    onTap: () {
-                      Navigator.pushNamed(context, RoutesName.signupOtpScreen);
-                    },
+                    isLoading: ref.watch(signUpViewModelProvider).isLoading,
+                    onTap: () => _handleRegister(),
                   ),
 
                   SizedBox(height: 12.h),
