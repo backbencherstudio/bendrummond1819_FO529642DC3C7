@@ -2,10 +2,10 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manag
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../widgets/custom_date_picker_field.dart';
 import '../../../../core/resource/constants/color_manger.dart';
 import '../../../../core/resource/constants/image_manager.dart';
 import '../../../../core/resource/constants/style_manager.dart';
@@ -14,21 +14,44 @@ import '../../../widgets/custom_back_button.dart';
 import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/outline_button.dart';
 import '../../../widgets/primary_button.dart';
+import '../viewmodel/signin_viewmodel.dart';
 
-class SigningScreen extends StatefulWidget {
+class SigningScreen extends ConsumerStatefulWidget {
   const SigningScreen({super.key});
 
   @override
-  State<SigningScreen> createState() => _SigningScreenState();
+  ConsumerState<SigningScreen> createState() => _SigningScreenState();
 }
 
-class _SigningScreenState extends State<SigningScreen> {
+class _SigningScreenState extends ConsumerState<SigningScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final frequentlyController = TextEditingController();
-  var selectedFrequency = "";
+
+  Future<void> handleSignIn() async {
+    final success = await ref
+        .read(signInViewModelProvider.notifier)
+        .signIn(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
+
+    if (success && mounted) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        RoutesName.setUpScreen,
+        (route) => false,
+      );
+    } else if (mounted) {
+      final state = ref.read(signInViewModelProvider);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(state.errorMessage ?? "Login failed")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final signInState = ref.watch(signInViewModelProvider);
     final double screenHeight = MediaQuery.of(context).size.height;
     final double imageSectionHeight = screenHeight * 0.58;
 
@@ -147,28 +170,13 @@ class _SigningScreenState extends State<SigningScreen> {
                     ),
                   ),
 
-                  // Align(
-                  //   alignment: Alignment.centerRight,
-                  //   child: TextButton(
-                  //     onPressed: () {},
-                  //     child: Text(
-                  //       "Forgot password?",
-                  //       style: getRegularStyle16_500(color: ColorManager.brown)
-                  //           .copyWith(
-                  //             decoration: TextDecoration.underline,
-                  //             decorationColor: ColorManager.brown,
-                  //           ),
-                  //     ),
-                  //   ),
-                  // ),
                   SizedBox(height: 25.h),
 
                   /// ************ Sign in Button *****************
                   PrimaryButton(
                     title: "Sign In",
-                    onTap: () {
-                      Navigator.pushNamed(context, RoutesName.bottomNavRoute);
-                    },
+                    isLoading: signInState.isLoading,
+                    onTap: () => handleSignIn(),
                   ),
 
                   SizedBox(height: 16.h),
@@ -240,7 +248,6 @@ class _SigningScreenState extends State<SigningScreen> {
             decoration: BoxDecoration(
               color: ColorManager.gold2,
               borderRadius: BorderRadius.circular(999.r),
-              //shape: BoxShape.circle,
             ),
           ),
         ),

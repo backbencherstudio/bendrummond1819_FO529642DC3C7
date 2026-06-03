@@ -50,16 +50,27 @@ class AuthApiService {
         body: body,
         endpoints: ApiEndpoints.login,
       );
-      if (response['success'] == true) {
-        await SharedPreferenceData.setToken(
-          response['authorization']['access_token'],
-        );
-        final token = await SharedPreferenceData.getToken();
-        log("$token");
-        return true;
-      } else {
-        return false;
+
+      if (response == null) return false;
+
+      log("Login response: $response");
+
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          return false;
+        }
+
+        try {
+          final token = response['authorization']?['access_token'];
+          if (token != null) {
+            await SharedPreferenceData.setToken(token);
+          }
+        } catch (_) {
+          log("Failed to save token");
+        }
       }
+
+      return true;
     } catch (error) {
       rethrow;
     }
