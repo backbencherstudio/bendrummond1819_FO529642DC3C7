@@ -4,21 +4,60 @@ import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_logo_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../widgets/custom_from_field.dart';
 import '../../../widgets/primary_button.dart';
+import '../viewmodel/forgot_password_viewmodel.dart';
 
-class ForgotPassword extends StatefulWidget {
+class ForgotPassword extends ConsumerStatefulWidget {
   const ForgotPassword({super.key});
 
   @override
-  State<ForgotPassword> createState() => _ForgotPasswordState();
+  ConsumerState<ForgotPassword> createState() => _ForgotPasswordState();
 }
 
-class _ForgotPasswordState extends State<ForgotPassword> {
+class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
   final _emailController = TextEditingController();
+
+  Future<void> handForgotPassword() async {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please enter your email")),
+      );
+      return;
+    }
+
+    final success = await ref
+        .read(forgotPasswordViewModelProvider.notifier)
+        .forgotPassword(email: email);
+
+    if (success && mounted) {
+      Navigator.pushNamed(
+        context,
+        RoutesName.forgotPasswordOtpRoute,
+        arguments: email,
+      );
+    } else if (mounted) {
+      final state = ref.read(forgotPasswordViewModelProvider);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(state.errorMessage ?? "Request failed")),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(forgotPasswordViewModelProvider);
+
     return Scaffold(
       backgroundColor: ColorManager.secondary,
       body: SafeArea(
@@ -29,12 +68,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             children: [
               Row(
                 children: [
-                  customBackButton(context, borderColor: ColorManager.borderColor),
-                  SizedBox(width: 12.w,),
-                  customLogoText()
+                  customBackButton(
+                    context,
+                    borderColor: ColorManager.borderColor,
+                  ),
+                  SizedBox(width: 12.w),
+                  customLogoText(),
                 ],
               ),
-        
+
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -47,11 +89,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       ).copyWith(letterSpacing: -0.45),
                     ),
                     SizedBox(height: 15.h),
-        
-                    /// ************ Email Field *****************
+
                     Text(
                       "Email",
-                      style: getRegularStyle14_400(color: ColorManager.brown300),
+                      style: getRegularStyle14_400(
+                        color: ColorManager.brown300,
+                      ),
                     ),
                     SizedBox(height: 10.h),
                     CustomFromField(
@@ -61,13 +104,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   ],
                 ),
               ),
-        
-              /// *************** send btn *******************
+
               PrimaryButton(
                 title: "Send",
-                onTap: () {
-                  Navigator.pushNamed(context, RoutesName.forgotPasswordOtpRoute);
-                },
+                isLoading: state.isLoading,
+                onTap: () => handForgotPassword(),
               ),
               SizedBox(height: 20.h),
             ],

@@ -10,5 +10,7 @@ class ApiEndpoints {
   static const String loadUser = 'api/auth/me';
   static const String updateProfile = 'api/auth/update-profile';
   static const String forgetPassword = 'api/auth/forgot-password';
+  static const String verifyResetOtp = 'api/auth/verify-email';
+  static const String resetPassword = 'api/auth/reset-password';
   static const String createAndagetJob = 'api/jobs';
 }

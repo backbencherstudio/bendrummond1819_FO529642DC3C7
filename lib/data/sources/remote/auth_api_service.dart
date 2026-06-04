@@ -6,6 +6,7 @@ import '../local/shared_preference/shared_preference.dart';
 class AuthApiService {
   final ApiClient apiClient;
   AuthApiService({required this.apiClient});
+  //register
   Future<bool> register({
     required String name,
     required String email,
@@ -43,6 +44,7 @@ class AuthApiService {
     }
   }
 
+  //login
   Future<bool> login({required String email, required String password}) async {
     try {
       final body = {"email": email, "password": password};
@@ -70,6 +72,80 @@ class AuthApiService {
         }
       }
 
+      return true;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //forgotpassord
+  Future<bool> forgotPassword({required String email}) async {
+    try {
+      final body = {"email": email};
+      final dynamic response = await apiClient.postRequest(
+        endpoints: ApiEndpoints.forgetPassword,
+        body: body,
+      );
+      if (response == null) return false;
+      log("Forgot Password response: $response");
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          return false;
+        }
+      }
+      return true;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //verify reset otp
+  Future<bool> verifyResetOtp({
+    required String email,
+    required String otp,
+  }) async {
+    try {
+      final body = {"email": email, "token": otp};
+      final dynamic response = await apiClient.postRequest(
+        endpoints: ApiEndpoints.verifyResetOtp,
+        body: body,
+      );
+      if (response == null) return false;
+      log("Verify Reset OTP response: $response");
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          return false;
+        }
+      }
+      return true;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //reset password
+  Future<bool> resetPassword({
+    required String email,
+    required String password,
+    required String passwordConfirmation,
+  }) async {
+    try {
+      final body = {
+        "email": email,
+        "password": password,
+        "password_confirmation": passwordConfirmation,
+      };
+      final dynamic response = await apiClient.postRequest(
+        endpoints: ApiEndpoints.resetPassword,
+        body: body,
+      );
+      if (response == null) return false;
+      log("Reset Password response: $response");
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          return false;
+        }
+      }
       return true;
     } catch (error) {
       rethrow;

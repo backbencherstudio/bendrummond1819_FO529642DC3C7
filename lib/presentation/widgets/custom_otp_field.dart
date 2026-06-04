@@ -5,14 +5,14 @@ import 'package:pinput/pinput.dart';
 import '../../core/resource/constants/color_manger.dart';
 
 class CustomPinCodeField extends StatelessWidget {
-  final int length;
+  final int length; 
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final void Function(String)? onCompleted;
 
   const CustomPinCodeField({
     super.key,
-    this.length = 4,
+    this.length = 6,
     this.controller,
     this.validator,
     this.onCompleted,
