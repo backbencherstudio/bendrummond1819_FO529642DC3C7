@@ -38,7 +38,7 @@ class ForgotPasswordView extends StateNotifier<ForgotPasswordState> {
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
       final success = await repository.verifyResetOtp(email: email, otp: otp);
-      state = state.copyWith(isLoading: false, isSuccess: success);
+      state = state.copyWith(isLoading: false, isSuccess: success, resetToken: otp);
       return success;
     } catch (e) {
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
@@ -51,7 +51,9 @@ class ForgotPasswordView extends StateNotifier<ForgotPasswordState> {
     required String passwordConfirmation,
   }) async {
     final email = state.email;
+    final token = state.resetToken;
     if (email == null || email.isEmpty) return false;
+    if (token == null || token.isEmpty) return false;
 
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
@@ -59,6 +61,7 @@ class ForgotPasswordView extends StateNotifier<ForgotPasswordState> {
         email: email,
         password: password,
         passwordConfirmation: passwordConfirmation,
+        token: token,
       );
       state = state.copyWith(isLoading: false, isSuccess: success);
       return success;
@@ -74,12 +77,14 @@ class ForgotPasswordState {
   final bool isSuccess;
   final String? errorMessage;
   final String? email;
+  final String? resetToken;
 
   const ForgotPasswordState({
     required this.isLoading,
     this.isSuccess = false,
     this.errorMessage,
     this.email,
+    this.resetToken,
   });
 
   ForgotPasswordState copyWith({
@@ -87,12 +92,14 @@ class ForgotPasswordState {
     bool? isSuccess,
     String? errorMessage,
     String? email,
+    String? resetToken,
   }) {
     return ForgotPasswordState(
       isLoading: isLoading ?? this.isLoading,
       isSuccess: isSuccess ?? this.isSuccess,
       errorMessage: errorMessage,
       email: email ?? this.email,
+      resetToken: resetToken ?? this.resetToken,
     );
   }
 }

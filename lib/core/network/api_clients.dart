@@ -20,14 +20,12 @@ class ApiClient {
   );
   static Map<String, String>? headers;
 
-  static Future <void> headerSet(String? token) async {
-    final tokn = await SharedPreferenceData.getToken();
-    log(token ?? 'token');
-    log(tokn ?? 'tokn');
+  static Future<void> headerSet() async {
+    final token = await SharedPreferenceData.getToken();
+    log(token ?? 'no token found');
     headers = {
       'Content-Type': 'application/json',
-      if (token != null) 'Authorization': 'Bearer $token',
-      if (tokn != null) 'Authorization': 'Bearer $tokn',
+      if (token != null && token.isNotEmpty) 'Authorization': 'Bearer $token',
     };
   }
 

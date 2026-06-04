@@ -66,6 +66,7 @@ class AuthApiService {
           final token = response['authorization']?['access_token'];
           if (token != null) {
             await SharedPreferenceData.setToken(token);
+            await ApiClient.headerSet();
           }
         } catch (_) {
           log("Failed to save token");
@@ -128,12 +129,14 @@ class AuthApiService {
     required String email,
     required String password,
     required String passwordConfirmation,
+    required String token,
   }) async {
     try {
       final body = {
         "email": email,
         "password": password,
         "password_confirmation": passwordConfirmation,
+        "token": token,
       };
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.resetPassword,

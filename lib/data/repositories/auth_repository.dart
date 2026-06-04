@@ -40,11 +40,13 @@ class AuthRepository {
     required String email,
     required String password,
     required String passwordConfirmation,
+    required String token,
   }) async {
     return await remoteSource.resetPassword(
       email: email,
       password: password,
       passwordConfirmation: passwordConfirmation,
+      token: token,
     );
   }
 }
