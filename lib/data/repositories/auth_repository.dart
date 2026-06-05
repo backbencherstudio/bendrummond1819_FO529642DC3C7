@@ -1,3 +1,4 @@
+import '../models/user_model.dart';
 import '../sources/remote/auth_api_service.dart';
 
 class AuthRepository {
@@ -23,6 +24,36 @@ class AuthRepository {
 
   Future<bool> login({required String email, required String password}) async {
     return await remoteSource.login(email: email, password: password);
+  }
+
+  Future<UserModel?> loadUser() async {
+    return await remoteSource.loadUser();
+  }
+
+  Future<UserModel?> updateProfile({
+    String? name,
+    String? avatar,
+    String? address,
+    String? phoneNumber,
+    bool? billRemainders,
+    bool? notificationRemainder,
+    String? gender,
+    String? dateOfBirth,
+  }) async {
+    return await remoteSource.updateProfile(
+      name: name,
+      avatar: avatar,
+      address: address,
+      phoneNumber: phoneNumber,
+      billRemainders: billRemainders,
+      notificationRemainder: notificationRemainder,
+      gender: gender,
+      dateOfBirth: dateOfBirth,
+    );
+  }
+
+  Future<bool> logout() async {
+    return await remoteSource.logout();
   }
 
   Future<bool> forgotPassword({required String email}) async {
