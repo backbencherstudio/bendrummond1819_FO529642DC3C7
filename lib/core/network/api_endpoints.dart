@@ -8,7 +8,7 @@ class ApiEndpoints {
   static const String verifyMail = 'api/auth/verify-email';
   static const String resendOtp = 'api/auth/resend-verification-email';
   static const String loadUser = 'api/auth/me';
-  static const String updateProfile = 'api/auth/update-profile';
+  static const String updateProfile = 'api/auth/update';
   static const String forgetPassword = 'api/auth/forgot-password';
   static const String verifyResetOtp = 'api/auth/verify-email';
   static const String resetPassword = 'api/auth/reset-password';

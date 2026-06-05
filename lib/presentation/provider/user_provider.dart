@@ -35,6 +35,41 @@ class UserNotifier extends Notifier<UserState> {
       state = UserState(isLoading: false, error: e.toString());
     }
   }
+
+  Future<void> updateProfile({
+    String? name,
+    String? avatar,
+    String? address,
+    String? phoneNumber,
+    bool? billRemainders,
+    bool? notificationRemainder,
+    String? gender,
+    String? dateOfBirth,
+  }) async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      final repository = AuthRepository(
+        remoteSource: AuthApiService(apiClient: ApiClient()),
+      );
+      final user = await repository.updateProfile(
+        name: name,
+        avatar: avatar,
+        address: address,
+        phoneNumber: phoneNumber,
+        billRemainders: billRemainders,
+        notificationRemainder: notificationRemainder,
+        gender: gender,
+        dateOfBirth: dateOfBirth,
+      );
+      if (user != null) {
+        state = UserState(user: user, isLoading: false);
+      } else {
+        state = state.copyWith(isLoading: false, error: 'Failed to update profile');
+      }
+    } catch (e) {
+      state = UserState(isLoading: false, error: e.toString());
+    }
+  }
 }
 
 final userProvider = NotifierProvider<UserNotifier, UserState>(

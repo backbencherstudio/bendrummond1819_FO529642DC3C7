@@ -1,6 +1,7 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
+import 'package:bendrummond1819_fo529642dc3c7/data/sources/local/shared_preference/shared_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -66,13 +67,21 @@ class _SplashScreenState extends State<SplashScreen>
           _punchEffectController.forward().then((_) async {
             await Future.delayed(const Duration(seconds: 3));
 
-            /// *************** on Boarding screen *********************
             if (mounted) {
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                RoutesName.onBoardingRoute,
-                (predicate) => false,
-              );
+              final token = await SharedPreferenceData.getToken();
+              if (token != null && token.isNotEmpty) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  RoutesName.bottomNavRoute,
+                  (predicate) => false,
+                );
+              } else {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  RoutesName.onBoardingRoute,
+                  (predicate) => false,
+                );
+              }
             }
           });
         });

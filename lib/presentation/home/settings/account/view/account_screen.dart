@@ -166,7 +166,13 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                     child: _buildButton("Cancel", () {}, isSecondary: true),
                   ),
                   SizedBox(width: 15.w),
-                  Expanded(child: _buildButton("Save", () {})),
+                  Expanded(child: _buildButton("Save", () {
+                    ref.read(userProvider.notifier).updateProfile(
+                      name: _nameController.text,
+                      phoneNumber: _phoneController.text,
+                      dateOfBirth: _dobController.text,
+                    );
+                  })),
                 ],
               ),
               SizedBox(height: 30.h),
