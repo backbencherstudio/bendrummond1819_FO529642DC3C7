@@ -1,6 +1,6 @@
-import 'dart:ui';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/set_up_screen_riverpod.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/widgets/custom_dash_border.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/setup_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +9,6 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../../core/resource/constants/color_manger.dart';
 import '../../../../../core/resource/constants/icon_manager.dart';
 import '../../../../../core/resource/constants/style_manager.dart';
-import '../../../../balances/view/balances_screen.dart';
 import '../../../../widgets/custom_from_field.dart';
 import '../../../../widgets/outline_button.dart';
 import '../../../../widgets/primary_button.dart';
@@ -29,6 +28,16 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
   final amountController = TextEditingController();
   final frequencyController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    saving = List.from(ref.read(setupDataProvider).savings);
+  }
+
+  void _syncSavings() {
+    ref.read(setupDataProvider.notifier).setSavings(List.from(saving));
+  }
+
   void _addNewBill() {
     if (savingNameController.text.isNotEmpty &&
         amountController.text.isNotEmpty) {
@@ -43,6 +52,7 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
         amountController.clear();
         frequencyController.clear();
       });
+      _syncSavings();
     }
   }
 
@@ -118,7 +128,10 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
               ),
               SizedBox(width: 10.w),
               GestureDetector(
-                onTap: () => setState(() => saving.remove(save)),
+                onTap: () {
+                  setState(() => saving.remove(save));
+                  _syncSavings();
+                },
                 child: Icon(
                   Icons.close,
                   size: 20.sp,

@@ -1,19 +1,16 @@
-import 'dart:ui';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/widgets/set_up7_screen.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/widgets/custom_dash_border.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/setup_data_provider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/outline_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/set_up_screen_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../../core/resource/constants/color_manger.dart';
 import '../../../../../core/resource/constants/icon_manager.dart';
 import '../../../../../core/resource/constants/style_manager.dart';
-import '../../../../balances/view/balances_screen.dart';
 
 class SetUp6Screen extends ConsumerStatefulWidget {
   const SetUp6Screen({super.key});
@@ -30,6 +27,16 @@ class _SetUp6ScreenState extends ConsumerState<SetUp6Screen> {
   final amountController = TextEditingController();
   final dayController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    bills = List.from(ref.read(setupDataProvider).bills);
+  }
+
+  void _syncBills() {
+    ref.read(setupDataProvider.notifier).setBills(List.from(bills));
+  }
+
   void _addNewBill() {
     if (nameController.text.isNotEmpty && amountController.text.isNotEmpty) {
       setState(() {
@@ -43,6 +50,7 @@ class _SetUp6ScreenState extends ConsumerState<SetUp6Screen> {
         amountController.clear();
         dayController.clear();
       });
+      _syncBills();
     }
   }
 
@@ -118,7 +126,10 @@ class _SetUp6ScreenState extends ConsumerState<SetUp6Screen> {
               ),
               SizedBox(width: 10.w),
               GestureDetector(
-                onTap: () => setState(() => bills.remove(bill)),
+                onTap: () {
+                  setState(() => bills.remove(bill));
+                  _syncBills();
+                },
                 child: Icon(
                   Icons.close,
                   size: 20.sp,

@@ -1,12 +1,14 @@
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/utils.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/setup_data_provider.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/outline_button.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
-import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
 import '../widgets/set_up1_screen.dart';
 import '../widgets/set_up2_screen.dart';
 import '../widgets/set_up3_screen.dart';
@@ -161,15 +163,26 @@ class _SetUpMainViewState extends ConsumerState<SetUpScreen> {
                     ),
                   ],
                   if (currentStep == 8) ...[
-                    PrimaryButton(
-                      title: "Continue",
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          RoutesName.chooseYourPlainScreen,
-                        );
-                      },
-                    ),
+                    ref.watch(setupDataProvider).isSubmitting
+                        ? Center(child: CircularProgressIndicator(color: ColorManager.textPrimary))
+                        : PrimaryButton(
+                            title: "Continue",
+                            onTap: () async {
+                              final success = await ref.read(setupDataProvider.notifier).submitSetup();
+                              if (success && mounted) {
+                                Navigator.pushNamed(
+                                  context,
+                                  RoutesName.chooseYourPlainScreen,
+                                );
+                              } else if (mounted) {
+                                Utils.showToast(
+                                  message: ref.read(setupDataProvider).errorMessage ?? "Setup failed. Please try again.",
+                                  backgroundColor: ColorManager.errorColor,
+                                  textColor: ColorManager.whiteColor,
+                                );
+                              }
+                            },
+                          ),
                   ],
                 ],
               ),

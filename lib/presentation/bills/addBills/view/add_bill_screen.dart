@@ -1,29 +1,109 @@
+import 'package:bendrummond1819_fo529642dc3c7/core/network/api_clients.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/utils.dart';
+import 'package:bendrummond1819_fo529642dc3c7/data/repositories/setup_repository.dart';
+import 'package:bendrummond1819_fo529642dc3c7/data/sources/remote/setup_api_service.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/outline_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../core/resource/constants/icon_manager.dart';
 import '../../../widgets/custom_date_picker_field.dart';
 
-class AddBillScreen extends StatefulWidget {
+class AddBillScreen extends ConsumerStatefulWidget {
   const AddBillScreen({super.key});
 
   @override
-  State<AddBillScreen> createState() => _AddBillScreenState();
+  ConsumerState<AddBillScreen> createState() => _AddBillScreenState();
 }
 
-class _AddBillScreenState extends State<AddBillScreen> {
+class _AddBillScreenState extends ConsumerState<AddBillScreen> {
   bool _isRecurring = false;
-  int _selectedFrequency = 0; // 0: Beginning, 1: Middle, 2: End
+  int _selectedFrequency = 0;
   String selectedFrequency="";
   bool isFrequencyExpanded=false;
   TextEditingController frequentlyController=TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _dueDayController = TextEditingController();
+  bool _isSubmitting = false;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _amountController.dispose();
+    _dueDayController.dispose();
+    frequentlyController.dispose();
+    super.dispose();
+  }
+
+  String _categoryFromFrequency() {
+    switch (_selectedFrequency) {
+      case 0: return 'HOUSING';
+      case 1: return 'REGULAR_BILL';
+      case 2: return 'REGULAR_BILL';
+      default: return 'REGULAR_BILL';
+    }
+  }
+
+  Future<void> _submitBill() async {
+    if (_nameController.text.isEmpty || _amountController.text.isEmpty) {
+      Utils.showToast(
+        message: "Please fill in all required fields",
+        backgroundColor: ColorManager.errorColor,
+        textColor: ColorManager.whiteColor,
+      );
+      return;
+    }
+
+    setState(() => _isSubmitting = true);
+
+    try {
+      final repository = SetupRepository(
+        remoteSource: SetupApiService(apiClient: ApiClient()),
+      );
+
+      final success = await repository.addBill(
+        category: _categoryFromFrequency(),
+        name: _nameController.text,
+        amount: double.tryParse(_amountController.text) ?? 0,
+        dueDay: int.tryParse(_dueDayController.text),
+        frequency: 'MONTHLY',
+        isRecurring: _isRecurring,
+      );
+
+      if (success && mounted) {
+        Utils.showToast(
+          message: "Bill added successfully",
+          backgroundColor: ColorManager.successColor,
+          textColor: ColorManager.whiteColor,
+        );
+        Navigator.pop(context);
+      } else if (mounted) {
+        Utils.showToast(
+          message: "Failed to add bill",
+          backgroundColor: ColorManager.errorColor,
+          textColor: ColorManager.whiteColor,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        Utils.showToast(
+          message: "Error: ${e.toString()}",
+          backgroundColor: ColorManager.errorColor,
+          textColor: ColorManager.whiteColor,
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +136,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
 
               _buildLabel("Bill Name"),
               SizedBox(height: 6.h),
-              CustomFromField(hintText: "Electricity Bill"),
+              CustomFromField(hintText: "Electricity Bill", controller: _nameController),
 
               SizedBox(height: 12.h),
 
@@ -65,6 +145,7 @@ class _AddBillScreenState extends State<AddBillScreen> {
               CustomFromField(
                 hintText: '60',
                 prefixIcon: SvgPicture.asset(IconManager.dollar),
+                controller: _amountController,
               ),
 
               SizedBox(height: 6.h),
@@ -106,31 +187,27 @@ class _AddBillScreenState extends State<AddBillScreen> {
 
               SizedBox(height: 6.h),
 
-              // Custom Date Dropdown
-              //_buildCustomDateDropdown(),
               CustomDatePickerField(
-  hintText: "Select Frequency Date",
-  controller: frequentlyController,
-  // Optional: If you need to update other variables in your screen when the date changes
-  onDateSelected: () {
-    setState(() {
-      selectedFrequency = frequentlyController.text;
-      isFrequencyExpanded = false;
-    });
-  },
-  // Optional: Integrates perfectly with Flutter Form validation
-  validator: (value) {
-    if (value == null || value.isEmpty) {
-      return 'Please pick a date';
-    }
-    return null;
-  },
-),
+                hintText: "Select Frequency Date",
+                controller: frequentlyController,
+                onDateSelected: () {
+                  setState(() {
+                    selectedFrequency = frequentlyController.text;
+                    isFrequencyExpanded = false;
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please pick a date';
+                  }
+                  return null;
+                },
+              ),
 
               SizedBox(height: 12.h),
               _buildLabel("Due day"),
               SizedBox(height: 6.h),
-              CustomFromField(hintText: "4 "),
+              CustomFromField(hintText: "4", controller: _dueDayController),
 
               SizedBox(height: 24.h),
 
@@ -138,11 +215,15 @@ class _AddBillScreenState extends State<AddBillScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: CustomOutlinedButton(title: "Delete", onTap: () {}),
+                    child: CustomOutlinedButton(title: "Delete", onTap: () {
+                      Navigator.pop(context);
+                    }),
                   ),
                   SizedBox(width: 12.w),
                   Expanded(
-                    child: PrimaryButton(title: "Add Bill", onTap: () {}),
+                    child: _isSubmitting
+                        ? Center(child: CircularProgressIndicator(color: ColorManager.textPrimary))
+                        : PrimaryButton(title: "Add Bill", onTap: _submitBill),
                   ),
                 ],
               ),
@@ -195,7 +276,6 @@ class _AddBillScreenState extends State<AddBillScreen> {
                 ),
               ],
             ),
-            //tik mark on selected
             if (isSelected)
               Container(
                 padding: EdgeInsets.all(6.r),

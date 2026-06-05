@@ -1,22 +1,59 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/user_provider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class AccountScreen extends StatefulWidget {
+class AccountScreen extends ConsumerStatefulWidget {
   const AccountScreen({super.key});
 
   @override
-  State<AccountScreen> createState() => _AccountScreenState();
+  ConsumerState<AccountScreen> createState() => _AccountScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen> {
+class _AccountScreenState extends ConsumerState<AccountScreen> {
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _dobController = TextEditingController();
+  bool _initialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(userProvider.notifier).loadUser();
+    });
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _phoneController.dispose();
+    _dobController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider).user;
+    if (user != null && !_initialized) {
+      _initialized = true;
+      _nameController.text = user.name;
+      _emailController.text = user.email;
+      _phoneController.text = user.phoneNumber ?? '';
+      _dobController.text = user.dateOfBirth ?? '';
+    }
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -90,12 +127,12 @@ class _AccountScreenState extends State<AccountScreen> {
               // =========== Form Fields ============
               _buildLabel("Your full name"),
               SizedBox(height: 6.h),
-              CustomFromField(hintText: 'Md. Tajemul Islam'),
+              CustomFromField(controller: _nameController),
               SizedBox(height: 12.h),
 
               _buildLabel("Email address"),
               SizedBox(height: 6.h),
-              CustomFromField(hintText: 'tajemulislamgames@gmail.com'),
+              CustomFromField(controller: _emailController),
               SizedBox(height: 12.h),
 
               _buildLabel("Password"),
@@ -116,11 +153,11 @@ class _AccountScreenState extends State<AccountScreen> {
               SizedBox(height: 12.h),
               _buildLabel("Phone number"),
               SizedBox(height: 6.h),
-              CustomFromField(hintText: '(123) 456-7890'),
+              CustomFromField(controller: _phoneController),
               SizedBox(height: 12.h),
               _buildLabel("Date of birth"),
               SizedBox(height: 8.h),
-              CustomFromField(hintText: 'MM/DD/YYYY'),
+              CustomFromField(controller: _dobController),
               SizedBox(height: 32.h),
               // ========== Action Buttons ============
               Row(

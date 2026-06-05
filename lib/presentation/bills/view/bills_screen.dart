@@ -1,19 +1,29 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/setup_data_api_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class BillsScreen extends StatefulWidget {
+class BillsScreen extends ConsumerStatefulWidget {
   const BillsScreen({super.key});
 
   @override
-  State<BillsScreen> createState() => _BillsScreenState();
+  ConsumerState<BillsScreen> createState() => _BillsScreenState();
 }
 
-class _BillsScreenState extends State<BillsScreen> {
+class _BillsScreenState extends ConsumerState<BillsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => ref.read(setupApiDataProvider.notifier).fetchData());
+  }
+
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(setupApiDataProvider);
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -21,7 +31,6 @@ class _BillsScreenState extends State<BillsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header: Bills
               Text(
                 'Bills',
                 style: getSemiBoldStyle22(
@@ -32,15 +41,15 @@ class _BillsScreenState extends State<BillsScreen> {
 
               SizedBox(height: 24.h),
 
-              // Sub-header Row: Total per month + Add Button
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '\$1,100/month',
+                    state.data != null
+                        ? '\$${state.data!.financialCommitments.fold<double>(0, (sum, c) => sum + c.amount).toStringAsFixed(0)}/month'
+                        : '\$0/month',
                     style: getRegularStyle16_400(color: ColorManager.brown400),
                   ),
-                  // Small circular plus button
                   InkWell(
                     onTap: () =>
                         Navigator.pushNamed(context, RoutesName.addBillScreen),
@@ -62,18 +71,28 @@ class _BillsScreenState extends State<BillsScreen> {
 
               SizedBox(height: 16.h),
 
-              // Bills List
               Expanded(
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    _buildBillCard("Car payment", "Monthly", "\$500"),
-                    SizedBox(height: 12.h),
-                    _buildBillCard("Rent", "Monthly", "\$500"),
-                    SizedBox(height: 12.h),
-                    _buildBillCard("Rent", "Due day 4", "\$100"),
-                  ],
-                ),
+                child: state.isLoading
+                    ? Center(child: CircularProgressIndicator(color: ColorManager.textPrimary))
+                    : state.data == null || state.data!.financialCommitments.isEmpty
+                        ? Center(
+                            child: Text(
+                              "No bills yet",
+                              style: getRegularStyle16_400(color: ColorManager.brown400),
+                            ),
+                          )
+                        : ListView(
+                            padding: EdgeInsets.zero,
+                            children: state.data!.financialCommitments.map((c) {
+                              final subtitle = c.dueDay != null ? "Due day ${c.dueDay}" : (c.frequency ?? "Monthly");
+                              return Column(
+                                children: [
+                                  _buildBillCard(c.name, subtitle, "\$${c.amount.toStringAsFixed(0)}"),
+                                  SizedBox(height: 12.h),
+                                ],
+                              );
+                            }).toList(),
+                          ),
               ),
             ],
           ),
@@ -82,7 +101,6 @@ class _BillsScreenState extends State<BillsScreen> {
     );
   }
 
-  // Helper Widget for Bill Cards
   Widget _buildBillCard(String title, String subtitle, String amount) {
     return Container(
       width: double.infinity,

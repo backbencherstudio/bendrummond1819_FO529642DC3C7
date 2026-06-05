@@ -1,28 +1,89 @@
+import 'package:bendrummond1819_fo529642dc3c7/core/network/api_clients.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/utils.dart';
+import 'package:bendrummond1819_fo529642dc3c7/data/repositories/setup_repository.dart';
+import 'package:bendrummond1819_fo529642dc3c7/data/sources/remote/setup_api_service.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class AddGoalScreen extends StatefulWidget {
+class AddGoalScreen extends ConsumerStatefulWidget {
   const AddGoalScreen({super.key});
 
   @override
-  State<AddGoalScreen> createState() => _AddGoalScreenState();
+  ConsumerState<AddGoalScreen> createState() => _AddGoalScreenState();
 }
 
-class _AddGoalScreenState extends State<AddGoalScreen> {
+class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
   final savingNameController = TextEditingController();
+  final _amountController = TextEditingController();
+  bool _isSubmitting = false;
+  String _selectedFrequency = "Per month";
+
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     savingNameController.dispose();
+    _amountController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submitGoal() async {
+    if (savingNameController.text.isEmpty || _amountController.text.isEmpty) {
+      Utils.showToast(
+        message: "Please fill in all required fields",
+        backgroundColor: ColorManager.errorColor,
+        textColor: ColorManager.whiteColor,
+      );
+      return;
+    }
+
+    setState(() => _isSubmitting = true);
+
+    try {
+      final repository = SetupRepository(
+        remoteSource: SetupApiService(apiClient: ApiClient()),
+      );
+
+      final frequency = _selectedFrequency == "Per month" ? "MONTHLY" : "WEEKLY";
+
+      final success = await repository.addNewGoal(
+        goalName: savingNameController.text,
+        targetAmount: double.tryParse(_amountController.text) ?? 0,
+        contribution: double.tryParse(_amountController.text) ?? 0,
+        frequency: frequency,
+      );
+
+      if (success && mounted) {
+        Utils.showToast(
+          message: "Goal Added",
+          backgroundColor: ColorManager.successColor,
+          textColor: ColorManager.whiteColor,
+        );
+        Navigator.pop(context);
+      } else if (mounted) {
+        Utils.showToast(
+          message: "Failed to add goal",
+          backgroundColor: ColorManager.errorColor,
+          textColor: ColorManager.whiteColor,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        Utils.showToast(
+          message: "Error: ${e.toString()}",
+          backgroundColor: ColorManager.errorColor,
+          textColor: ColorManager.whiteColor,
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
   }
 
   @override
@@ -81,6 +142,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
               CustomFromField(
                 hintText: '60',
                 prefixIcon: SvgPicture.asset(IconManager.dollar),
+                controller: _amountController,
               ),
 
               SizedBox(height: 12.h),
@@ -88,19 +150,14 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
               // ================ Frequency Section ===================
               _buildLabel("Frequency"),
               SizedBox(height: 6.h),
-              _buildDropdownField("Per month"),
+              _buildDropdownField(_selectedFrequency),
               SizedBox(height: 24.h),
               // ================ Add Goal Button =====================
-              PrimaryButton(
+              _isSubmitting
+                  ? Center(child: CircularProgressIndicator(color: ColorManager.textPrimary))
+                  : PrimaryButton(
                 title: 'Add Goal',
-                onTap: () {
-                  Navigator.pop(context);
-                  Utils.showToast(
-                    message: "Goal Added",
-                    backgroundColor: ColorManager.successColor,
-                    textColor: ColorManager.whiteColor,
-                  );
-                },
+                onTap: _submitGoal,
               ),
               SizedBox(height: 20),
             ],
@@ -143,6 +200,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
 
   // ======== Dropdown Field ==============
   Widget _buildDropdownField(String value) {
+    final List<String> items = ["Per month", "Per week"];
     return Container(
       padding: EdgeInsets.only(
         top: 14.r,
@@ -158,7 +216,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           dropdownColor: ColorManager.secondaryBackGround,
-          value: value,
+          value: _selectedFrequency,
           icon: Icon(
             Icons.keyboard_arrow_down,
             color: ColorManager.primaryButton,
@@ -166,7 +224,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
           ),
           isExpanded: true,
           style: getRegularStyle16_400(color: ColorManager.brown400),
-          items: [value].map((String val) {
+          items: items.map((String val) {
             return DropdownMenuItem<String>(
               value: val,
               child: Text(
@@ -175,7 +233,11 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
               ),
             );
           }).toList(),
-          onChanged: (_) {},
+          onChanged: (val) {
+            if (val != null) {
+              setState(() => _selectedFrequency = val);
+            }
+          },
         ),
       ),
     );

@@ -1,5 +1,4 @@
-import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/widgets/set_up6_screen.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/set_up_screen_riverpod.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/setup_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,7 +18,16 @@ class SetUp5Screen extends ConsumerStatefulWidget {
 
 class _SetUp5ScreenState extends ConsumerState<SetUp5Screen> {
   bool isChecked = false;
-  final TextEditingController _amountController = TextEditingController();
+  late final TextEditingController _amountController;
+
+  @override
+  void initState() {
+    super.initState();
+    _amountController = TextEditingController(text: ref.read(setupDataProvider).carPaymentAmount);
+    _amountController.addListener(() {
+      ref.read(setupDataProvider.notifier).setCarPaymentAmount(_amountController.text);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,7 @@
-import 'dart:ui';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/widgets/set_up8_screen.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/widgets/custom_dash_border.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/setup_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/set_up_screen_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -11,7 +9,6 @@ import '../../../../../core/resource/constants/color_manger.dart';
 import '../../../../../core/resource/constants/icon_manager.dart';
 import '../../../../../core/resource/constants/style_manager.dart';
 import '../../../../../core/resource/utils.dart';
-import '../../../../balances/view/balances_screen.dart';
 import '../../../../widgets/custom_from_field.dart';
 import '../../../../widgets/outline_button.dart';
 import '../../../../widgets/primary_button.dart';
@@ -34,6 +31,16 @@ class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
   final amountController = TextEditingController();
   final frequentlyController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    debts = List.from(ref.read(setupDataProvider).debts);
+  }
+
+  void _syncDebts() {
+    ref.read(setupDataProvider.notifier).setDebts(List.from(debts));
+  }
+
   void _addNewBill() {
     if (whatIsItController.text.isNotEmpty &&
         amountController.text.isNotEmpty) {
@@ -48,6 +55,7 @@ class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
         amountController.clear();
         frequentlyController.clear();
       });
+      _syncDebts();
     }
   }
 
@@ -123,7 +131,10 @@ class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
               ),
               SizedBox(width: 10.w),
               GestureDetector(
-                onTap: () => setState(() => debts.remove(bill)),
+                onTap: () {
+                  setState(() => debts.remove(bill));
+                  _syncDebts();
+                },
                 child: Icon(
                   Icons.close,
                   size: 20.sp,

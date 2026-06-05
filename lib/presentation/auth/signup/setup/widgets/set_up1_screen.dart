@@ -1,20 +1,22 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/setup_data_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../../core/resource/constants/color_manger.dart';
 import '../../../../../core/resource/constants/style_manager.dart';
 
-class SetUp1Screen extends StatefulWidget {
+class SetUp1Screen extends ConsumerStatefulWidget {
   const SetUp1Screen({super.key});
 
   @override
-  State<SetUp1Screen> createState() => _SetUp1ScreenState();
+  ConsumerState<SetUp1Screen> createState() => _SetUp1ScreenState();
 }
 
-class _SetUp1ScreenState extends State<SetUp1Screen> {
-  int _selectedIndex = 0;
+class _SetUp1ScreenState extends ConsumerState<SetUp1Screen> {
+  late int _selectedIndex;
   final List<Map<String, dynamic>> _options = [
     {
       "title": "Same every paycheck",
@@ -32,6 +34,12 @@ class _SetUp1ScreenState extends State<SetUp1Screen> {
       "icon": IconManager.shuffleRoundedIcon,
     },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = ref.read(setupDataProvider).incomeTypeIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +77,10 @@ class _SetUp1ScreenState extends State<SetUp1Screen> {
     final isSelected = _selectedIndex == index;
     final item = _options[index];
     return GestureDetector(
-      onTap: () => setState(() => _selectedIndex = index),
+      onTap: () {
+        setState(() => _selectedIndex = index);
+        ref.read(setupDataProvider.notifier).setIncomeTypeIndex(index);
+      },
       child: Container(
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(

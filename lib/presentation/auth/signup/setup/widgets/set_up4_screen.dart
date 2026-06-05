@@ -1,4 +1,5 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/setup_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,7 +17,16 @@ class SetUp4Screen extends ConsumerStatefulWidget {
 
 class _SetUp4ScreenState extends ConsumerState<SetUp4Screen> {
   bool isChecked = false;
-  final TextEditingController _amountController = TextEditingController();
+  late final TextEditingController _amountController;
+
+  @override
+  void initState() {
+    super.initState();
+    _amountController = TextEditingController(text: ref.read(setupDataProvider).rentAmount);
+    _amountController.addListener(() {
+      ref.read(setupDataProvider.notifier).setRentAmount(_amountController.text);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

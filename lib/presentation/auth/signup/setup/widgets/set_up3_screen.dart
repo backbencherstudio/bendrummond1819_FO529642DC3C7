@@ -1,11 +1,8 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/widgets/set_up4_screen.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/set_up_screen_riverpod.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/setup_data_provider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,8 +16,19 @@ class SetUp3Screen extends ConsumerStatefulWidget {
 }
 
 class _SetUp3ScreenState extends ConsumerState<SetUp3Screen> {
-  final TextEditingController _amountController = TextEditingController();
-  bool _isRecurring = false;
+  late final TextEditingController _amountController;
+  late bool _isRecurring;
+
+  @override
+  void initState() {
+    super.initState();
+    final data = ref.read(setupDataProvider);
+    _amountController = TextEditingController(text: data.baseIncome);
+    _isRecurring = data.isRecurringIncome;
+    _amountController.addListener(() {
+      ref.read(setupDataProvider.notifier).setBaseIncome(_amountController.text);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +79,10 @@ class _SetUp3ScreenState extends ConsumerState<SetUp3Screen> {
 
                     // --- Custom Checkbox Row ---
                     GestureDetector(
-                      onTap: () => setState(() => _isRecurring = !_isRecurring),
+                      onTap: () {
+                        setState(() => _isRecurring = !_isRecurring);
+                        ref.read(setupDataProvider.notifier).setIsRecurringIncome(_isRecurring);
+                      },
                       child: Row(
                         children: [
                           Container(

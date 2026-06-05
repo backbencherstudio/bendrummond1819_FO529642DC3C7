@@ -1,9 +1,6 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/widgets/set_up3_screen.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/set_up_screen_riverpod.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/setup_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,7 +13,13 @@ class SetUp2Screen extends ConsumerStatefulWidget {
 }
 
 class _SetUp2ScreenState extends ConsumerState<SetUp2Screen> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = ref.read(setupDataProvider).payFrequencyIndex;
+  }
 
   final List<String> _payFrequencies = [
     "Weekly",
@@ -82,7 +85,10 @@ class _SetUp2ScreenState extends ConsumerState<SetUp2Screen> {
     required bool isSelected,
   }) {
     return GestureDetector(
-      onTap: () => setState(() => _selectedIndex = index),
+      onTap: () {
+        setState(() => _selectedIndex = index);
+        ref.read(setupDataProvider.notifier).setPayFrequencyIndex(index);
+      },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),

@@ -1,19 +1,29 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/setup_data_api_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class GoalsScreen extends StatefulWidget {
+class GoalsScreen extends ConsumerStatefulWidget {
   const GoalsScreen({super.key});
 
   @override
-  State<GoalsScreen> createState() => _GoalsScreenState();
+  ConsumerState<GoalsScreen> createState() => _GoalsScreenState();
 }
 
-class _GoalsScreenState extends State<GoalsScreen> {
+class _GoalsScreenState extends ConsumerState<GoalsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => ref.read(setupApiDataProvider.notifier).fetchData());
+  }
+
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(setupApiDataProvider);
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -21,7 +31,6 @@ class _GoalsScreenState extends State<GoalsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header: Goals
               Text(
                 'Goals',
                 style: getSemiBoldStyle22(
@@ -32,7 +41,6 @@ class _GoalsScreenState extends State<GoalsScreen> {
 
               SizedBox(height: 24.h),
 
-              // Sub-header Row: "Your future goals" + Add Button
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -40,7 +48,6 @@ class _GoalsScreenState extends State<GoalsScreen> {
                     'Your future goals',
                     style: getRegularStyle16_400(color: ColorManager.brown400),
                   ),
-                  // Small circular plus button
                   InkWell(
                     onTap: () =>
                         Navigator.pushNamed(context, RoutesName.addGoalScreen),
@@ -62,10 +69,23 @@ class _GoalsScreenState extends State<GoalsScreen> {
 
               SizedBox(height: 16.h),
 
-              // Goals List
-              _buildGoalCard("Buy a Iphone 17 Pro", "\$60/monthly"),
-              SizedBox(height: 12.h),
-              _buildGoalCard("Emergency fund", "\$30/monthly"),
+              if (state.isLoading)
+                Center(child: CircularProgressIndicator(color: ColorManager.textPrimary))
+              else if (state.data == null || state.data!.savingsGoals.isEmpty)
+                Padding(
+                  padding: EdgeInsets.only(top: 40.h),
+                  child: Center(
+                    child: Text(
+                      "No goals yet",
+                      style: getRegularStyle16_400(color: ColorManager.brown400),
+                    ),
+                  ),
+                )
+              else
+                ...state.data!.savingsGoals.map((g) => Padding(
+                  padding: EdgeInsets.only(bottom: 12.h),
+                  child: _buildGoalCard(g.goalName, "\$${g.contribution.toStringAsFixed(0)}/${g.frequency.toLowerCase()}"),
+                )),
             ],
           ),
         ),
@@ -73,7 +93,6 @@ class _GoalsScreenState extends State<GoalsScreen> {
     );
   }
 
-  // Reusable Widget for Goal Cards
   Widget _buildGoalCard(String title, String subtitle) {
     return Container(
       width: double.infinity,

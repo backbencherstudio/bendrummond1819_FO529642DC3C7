@@ -6,7 +6,7 @@ class DashedRectPainter extends CustomPainter {
   final Color color;
   final double radius;
 
-  DashedRectPainter({required this.color, required this.radius});
+  DashedRectPainter({required this.color, this.radius = 12});
 
   @override
   void paint(Canvas canvas, Size size) {

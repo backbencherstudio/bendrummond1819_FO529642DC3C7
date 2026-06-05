@@ -2,18 +2,41 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_mang
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class HomeSettingsScreen extends StatefulWidget {
+class HomeSettingsScreen extends ConsumerStatefulWidget {
   const HomeSettingsScreen({super.key});
 
   @override
-  State<HomeSettingsScreen> createState() => _HomeSettingsScreenState();
+  ConsumerState<HomeSettingsScreen> createState() => _HomeSettingsScreenState();
 }
 
-class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
+class _HomeSettingsScreenState extends ConsumerState<HomeSettingsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(userProvider.notifier).loadUser();
+    });
+  }
+
+  String _formatDate(String date) {
+    try {
+      final parsed = DateTime.parse(date);
+      final months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+      return '${months[parsed.month - 1]} ${parsed.year}';
+    } catch (_) {
+      return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +74,7 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
                     CircleAvatar(
                       radius: 30.r,
                       backgroundImage: NetworkImage(
-                        'https://wallpapers.com/images/featured/goku-super-saiyan-dm8zixw58guf3x1b.jpg', // Placeholder for Yasir
+                        'https://wallpapers.com/images/featured/goku-super-saiyan-dm8zixw58guf3x1b.jpg',
                       ),
                     ),
                     SizedBox(width: 15.w),
@@ -61,14 +84,14 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Md. Tajemul Islam',
+                            ref.watch(userProvider).user?.name ?? 'User',
                             style: getSemiBoldStyle22(
                               fontSize: 20,
                               color: ColorManager.textPrimary,
                             ),
                           ),
                           Text(
-                            'tajemulislamgames@gmail.com',
+                            ref.watch(userProvider).user?.email ?? '',
                             style: getRegularStyle16_400(
                               color: ColorManager.brown300,
                               fontSize: 14,
@@ -76,7 +99,9 @@ class _HomeSettingsScreenState extends State<HomeSettingsScreen> {
                           ),
                           SizedBox(height: 4.h),
                           Text(
-                            'Member since January 2024',
+                            ref.watch(userProvider).user != null
+                                ? 'Member since ${_formatDate(ref.watch(userProvider).user!.createdAt)}'
+                                : '',
                             style: getRegularStyle16_400(
                               color: ColorManager.brown300,
                               fontSize: 12,
