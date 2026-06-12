@@ -3,12 +3,14 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manag
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/subscription/viewmodel/choose_plan_riverpod.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/subscription_provider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 class ChooseYourPlanScreen extends ConsumerStatefulWidget {
   const ChooseYourPlanScreen({super.key});
@@ -20,18 +22,30 @@ class ChooseYourPlanScreen extends ConsumerStatefulWidget {
 
 class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(subscriptionProvider.notifier).loadOfferings();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isMonthlyState = ref.watch(planToggleProvider);
+    final subState = ref.watch(subscriptionProvider);
+    final monthlyPackage =
+        subState.offerings?.current?.monthly?.storeProduct;
+    final yearlyPackage =
+        subState.offerings?.current?.annual?.storeProduct;
+
     return Scaffold(
       backgroundColor: ColorManager.secondaryBackGround,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 32.h),
-
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // =============== Header Section ==================
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -50,7 +64,6 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
                 ],
               ),
               SizedBox(height: 24.h),
-              // =========== First Text Section =================
               Text(
                 "Start knowing what's safe to spend.",
                 style: getBoldStyle32(
@@ -58,19 +71,15 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
                 ),
               ),
               SizedBox(height: 16.h),
-              // =========== Second Text Section =================
               Text(
                 "Full access to Stability. Cancel anytime.",
                 style: getRegularStyle16_400(color: ColorManager.brown400),
               ),
               SizedBox(height: 24.h),
-
-              // ============= Toggle Switch Section =============
               Center(
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    // monthly yearly toggle
                     _buildToggleSwitch(isMonthlyState),
                     Positioned(
                       right: -50.5.w,
@@ -84,7 +93,6 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
                           color: ColorManager.goldAccent,
                           borderRadius: BorderRadius.circular(999.r),
                         ),
-                        // best value tag
                         child: Text(
                           'Best Value',
                           style: getLightStyle12_400(
@@ -96,21 +104,44 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
                   ],
                 ),
               ),
-
               SizedBox(height: 24.h),
-
-              // ============== Plan Details Card =============
-              _buildPlanCard(isMonthlyState),
+              _buildPlanCard(
+                isMonthlyState,
+                monthlyPackage,
+                yearlyPackage,
+                subState.isLoading,
+              ),
               SizedBox(height: 40.h),
-              // =============== Primary Button ===============
+              if (subState.error != null)
+                Padding(
+                  padding: EdgeInsets.only(bottom: 12.h),
+                  child: Text(
+                    subState.error!,
+                    style: getLightStyle14_400(color: ColorManager.redColor),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               PrimaryButton(
-                title: 'Start my Plan',
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    RoutesName.completePaymentScreen,
-                  );
-                },
+                title: subState.isLoading ? 'Loading...' : 'Start my Plan',
+                onTap: subState.isLoading
+                    ? null
+                    : () {
+                        final package = isMonthlyState
+                            ? subState.offerings?.current?.monthly
+                            : subState.offerings?.current?.annual;
+                        if (package == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content:
+                                    Text('No products available. Please try again.')),
+                          );
+                          return;
+                        }
+                        Navigator.pushNamed(
+                          context,
+                          RoutesName.completePaymentScreen,
+                        );
+                      },
               ),
             ],
           ),
@@ -119,7 +150,6 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
     );
   }
 
-  // ================== Toggle Button Section ================
   Widget _buildToggleSwitch(bool isMonthly) {
     return Container(
       width: 220.w,
@@ -171,8 +201,18 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
     );
   }
 
-  // ============= Monthly Yearly Card Plain ==============
-  Widget _buildPlanCard(bool isMonthly) {
+  Widget _buildPlanCard(
+    bool isMonthly,
+    StoreProduct? monthlyProduct,
+    StoreProduct? yearlyProduct,
+    bool isLoading,
+  ) {
+    final price = isMonthly
+        ? (monthlyProduct?.priceString ?? '\$3.99')
+        : (yearlyProduct?.priceString ?? '\$39.99');
+    final period = isMonthly ? '/month' : '/year';
+    final label = isMonthly ? 'Billed every month' : 'Billed every year';
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 32.h),
       decoration: BoxDecoration(
@@ -202,8 +242,9 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
                   ),
                   SizedBox(height: 12.h),
                   Text(
-                    isMonthly ? 'Billed every month' : 'Billed every year',
-                    style: getRegularStyle16_400(color: ColorManager.grayBlack400),
+                    label,
+                    style: getRegularStyle16_400(
+                        color: ColorManager.grayBlack400),
                   ),
                 ],
               ),
@@ -211,14 +252,14 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    isMonthly ? '\$3.99' : '\$39.99',
+                    isLoading ? '...' : price,
                     style: getBoldStyle32(
                       color: ColorManager.textPrimary,
                     ),
                   ),
                   SizedBox(height: 12.h),
                   Text(
-                    isMonthly ? '/month' : '/year',
+                    period,
                     style: getRegularStyle14_400(
                       color: ColorManager.grayBlack400,
                     ),

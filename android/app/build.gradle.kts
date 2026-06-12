@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.bendrummond1819_fo529642dc3c7"
+    namespace = "com.innova.stabilityapp"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.bendrummond1819_fo529642dc3c7"
+        applicationId = "com.innova.stabilityapp"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

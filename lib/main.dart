@@ -1,5 +1,6 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/network/api_clients.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/services/revenuecat_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +11,7 @@ import 'core/route/routes_name.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ApiClient.headerSet();
+  await RevenueCatService.initialize();
   runApp(const ProviderScope(child: MyApp()));
 }
 

@@ -1,4 +1,4 @@
-package com.example.bendrummond1819_fo529642dc3c7
+package com.innova.stabilityapp
 
 import io.flutter.embedding.android.FlutterActivity
 

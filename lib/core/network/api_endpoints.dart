@@ -1,7 +1,6 @@
 class ApiEndpoints {
-  // static const String baseUrl =
-  //     "https://maui-intermediate-represented-option.trycloudflare.com";
-  static const String baseUrl = "http://192.168.7.42:4222";
+  static const String baseUrl =
+      "https://installation-registry-kid-recorders.trycloudflare.com";
   static const String register = 'api/auth/register';
   static const String login = 'api/auth/login';
   static const String switchRole = 'api/auth/switch-role';

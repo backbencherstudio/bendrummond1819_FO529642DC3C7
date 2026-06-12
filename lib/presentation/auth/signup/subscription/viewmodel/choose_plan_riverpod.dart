@@ -1,14 +1,12 @@
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PlanToggleNotifier extends StateNotifier<bool> {
-  PlanToggleNotifier() : super(true);
-  void toggle(bool value) {
-    state = value;
-  }
+class PlanToggleNotifier extends Notifier<bool> {
+  @override
+  bool build() => true;
+
+  void toggle(bool value) => state = value;
 }
 
-final planToggleProvider = StateNotifierProvider<PlanToggleNotifier, bool>((
-  ref,
-) {
-  return PlanToggleNotifier();
-});
+final planToggleProvider = NotifierProvider<PlanToggleNotifier, bool>(
+  PlanToggleNotifier.new,
+);
