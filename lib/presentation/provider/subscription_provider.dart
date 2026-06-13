@@ -70,7 +70,7 @@ class SubscriptionNotifier extends Notifier<SubscriptionState> {
           isPro: isPro,
           offerings: state.offerings,
         );
-        return isPro;
+        return true;
       }
       state = state.copyWith(
         isLoading: false,
@@ -96,7 +96,7 @@ class SubscriptionNotifier extends Notifier<SubscriptionState> {
         isPro: isPro,
         offerings: state.offerings,
       );
-      return isPro;
+      return customerInfo != null;
     } catch (e) {
       state = SubscriptionState(isLoading: false, error: e.toString());
       return false;
