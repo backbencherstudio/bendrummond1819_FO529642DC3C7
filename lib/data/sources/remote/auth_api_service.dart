@@ -224,6 +224,51 @@ class AuthApiService {
     }
   }
 
+  //verify email (signup otp)
+  Future<bool> verifyEmail({
+    required String email,
+    required String otp,
+  }) async {
+    try {
+      final body = {"email": email, "token": otp};
+      final dynamic response = await apiClient.postRequest(
+        endpoints: ApiEndpoints.verifyMail,
+        body: body,
+      );
+      if (response == null) return false;
+      log("Verify email response: $response");
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          return false;
+        }
+      }
+      return true;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //resend otp (signup)
+  Future<bool> resendOtp({required String email}) async {
+    try {
+      final body = {"email": email};
+      final dynamic response = await apiClient.postRequest(
+        endpoints: ApiEndpoints.resendOtp,
+        body: body,
+      );
+      if (response == null) return false;
+      log("Resend OTP response: $response");
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          return false;
+        }
+      }
+      return true;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   //reset password
   Future<bool> resetPassword({
     required String email,

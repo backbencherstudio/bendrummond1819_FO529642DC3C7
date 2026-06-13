@@ -67,6 +67,17 @@ class AuthRepository {
     return await remoteSource.verifyResetOtp(email: email, otp: otp);
   }
 
+  Future<bool> verifyEmail({
+    required String email,
+    required String otp,
+  }) async {
+    return await remoteSource.verifyEmail(email: email, otp: otp);
+  }
+
+  Future<bool> resendOtp({required String email}) async {
+    return await remoteSource.resendOtp(email: email);
+  }
+
   Future<bool> resetPassword({
     required String email,
     required String password,

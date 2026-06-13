@@ -27,50 +27,50 @@ class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case RoutesName.splashRoute:
-        return MaterialPageRoute(builder: (_) => const SplashScreen());
+        return MaterialPageRoute(builder: (_) => const SplashScreen(), settings: routeSettings);
 
       /// ****************** auth ******************
       case RoutesName.signInRoute:
-        return MaterialPageRoute(builder: (_) => SigningScreen());
+        return MaterialPageRoute(builder: (_) => SigningScreen(), settings: routeSettings);
       case RoutesName.signUpRoute:
-        return MaterialPageRoute(builder: (_) => SignupScreen());
+        return MaterialPageRoute(builder: (_) => SignupScreen(), settings: routeSettings);
       case RoutesName.forgotPasswordRoute:
-        return MaterialPageRoute(builder: (_) => ForgotPassword());
+        return MaterialPageRoute(builder: (_) => ForgotPassword(), settings: routeSettings);
       case RoutesName.forgotPasswordOtpRoute:
-        return MaterialPageRoute(builder: (_) => ForgotPasswordOtpScreen());
+        return MaterialPageRoute(builder: (_) => ForgotPasswordOtpScreen(), settings: routeSettings);
       case RoutesName.resetNewPasswordRoute:
-        return MaterialPageRoute(builder: (_) => SetNewPasswordScreen());
+        return MaterialPageRoute(builder: (_) => SetNewPasswordScreen(), settings: routeSettings);
 
       /// *************** bottom nav ****************
       case RoutesName.bottomNavRoute:
-        return MaterialPageRoute(builder: (_) => BottomNavBarScreen());
+        return MaterialPageRoute(builder: (_) => BottomNavBarScreen(), settings: routeSettings);
       case RoutesName.payScreen:
-        return MaterialPageRoute(builder: (_) => PayScreen());
+        return MaterialPageRoute(builder: (_) => PayScreen(), settings: routeSettings);
       case RoutesName.addGoalScreen:
-        return MaterialPageRoute(builder: (_) => AddGoalScreen());
+        return MaterialPageRoute(builder: (_) => AddGoalScreen(), settings: routeSettings);
       case RoutesName.addBillScreen:
-        return MaterialPageRoute(builder: (_) => AddBillScreen());
+        return MaterialPageRoute(builder: (_) => AddBillScreen(), settings: routeSettings);
       case RoutesName.homeSettingsScreen:
-        return MaterialPageRoute(builder: (_) => HomeSettingsScreen());
+        return MaterialPageRoute(builder: (_) => HomeSettingsScreen(), settings: routeSettings);
       case RoutesName.accountScreen:
-        return MaterialPageRoute(builder: (_) => AccountScreen());
+        return MaterialPageRoute(builder: (_) => AccountScreen(), settings: routeSettings);
       case RoutesName.notificationScreen:
-        return MaterialPageRoute(builder: (_) => NotificationScreen());
+        return MaterialPageRoute(builder: (_) => NotificationScreen(), settings: routeSettings);
       case RoutesName.aboutScreen:
-        return MaterialPageRoute(builder: (_) => AboutScreen());
+        return MaterialPageRoute(builder: (_) => AboutScreen(), settings: routeSettings);
       case RoutesName.onBoardingRoute:
-        return MaterialPageRoute(builder: (_) => OnboardingScreen());
+        return MaterialPageRoute(builder: (_) => OnboardingScreen(), settings: routeSettings);
       // ================ Subscription ================
       case RoutesName.chooseYourPlainScreen:
-        return MaterialPageRoute(builder: (_) => ChooseYourPlanScreen());
+        return MaterialPageRoute(builder: (_) => ChooseYourPlanScreen(), settings: routeSettings);
       case RoutesName.completePaymentScreen:
-        return MaterialPageRoute(builder: (_) => CompletePaymentScreen());
+        return MaterialPageRoute(builder: (_) => CompletePaymentScreen(), settings: routeSettings);
       case RoutesName.resultScreen:
-        return MaterialPageRoute(builder: (_) => ResultScreen());
+        return MaterialPageRoute(builder: (_) => ResultScreen(), settings: routeSettings);
       case RoutesName.signupOtpScreen:
-        return MaterialPageRoute(builder: (_) => SignupOtpScreen());
+        return MaterialPageRoute(builder: (_) => SignupOtpScreen(), settings: routeSettings);
       case RoutesName.setUpScreen:
-        return MaterialPageRoute(builder: (_) => SetUpScreen());
+        return MaterialPageRoute(builder: (_) => SetUpScreen(), settings: routeSettings);
       default:
         return unDefineRoute();
     }

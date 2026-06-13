@@ -41,10 +41,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           dob: _dobController.text.trim(),
         );
     if (success && mounted) {
-      Navigator.pushNamedAndRemoveUntil(
+      Navigator.pushReplacementNamed(
         context,
-        RoutesName.signInRoute,
-        (route) => false,
+        RoutesName.signupOtpScreen,
+        arguments: _emailController.text.trim(),
       );
     } else if (!success && mounted) {
       final state = ref.read(signUpViewModelProvider);

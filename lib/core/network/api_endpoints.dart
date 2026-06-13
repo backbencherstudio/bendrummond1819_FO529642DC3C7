@@ -1,6 +1,6 @@
 class ApiEndpoints {
   static const String baseUrl =
-      "https://installation-registry-kid-recorders.trycloudflare.com";
+      "https://officially-motel-savings-success.trycloudflare.com";
   static const String register = 'api/auth/register';
   static const String login = 'api/auth/login';
   static const String switchRole = 'api/auth/switch-role';
