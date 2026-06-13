@@ -1,6 +1,7 @@
 class ApiEndpoints {
   static const String baseUrl =
       "https://officially-motel-savings-success.trycloudflare.com";
+  //===================== auth ApiEndpoints ===========================//
   static const String register = 'api/auth/register';
   static const String login = 'api/auth/login';
   static const String switchRole = 'api/auth/switch-role';
@@ -13,6 +14,8 @@ class ApiEndpoints {
   static const String resetPassword = 'api/auth/reset-password';
   static const String logout = 'api/auth/logout';
   static const String createAndagetJob = 'api/jobs';
+
+  //========================set-up ApiEndpoints=========================//
   static const String setUp = 'api/set-up';
   static const String addNewGoal = 'api/set-up/add-new-goal';
   static const String addBill = 'api/set-up/add-bill';

@@ -21,42 +21,52 @@ class SetUp8Screen extends ConsumerStatefulWidget {
 
 class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
   bool isAdding = false;
-  List<Map<String, String>> saving = [];
 
   final savingNameController = TextEditingController();
   final amountController = TextEditingController();
   final frequencyController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    saving = List.from(ref.read(setupDataProvider).savings);
+  void dispose() {
+    savingNameController.dispose();
+    amountController.dispose();
+    frequencyController.dispose();
+    super.dispose();
   }
 
-  void _syncSavings() {
-    ref.read(setupDataProvider.notifier).setSavings(List.from(saving));
-  }
-
-  void _addNewBill() {
+  void _addNewGoal() {
     if (savingNameController.text.isNotEmpty &&
         amountController.text.isNotEmpty) {
+      final savings = List<Map<String, String>>.from(
+        ref.read(setupDataProvider).savings,
+      );
+      savings.add({
+        'savingName': savingNameController.text,
+        'amount': amountController.text,
+        'frequently': frequencyController.text,
+      });
+      ref.read(setupDataProvider.notifier).setSavings(savings);
       setState(() {
-        saving.add({
-          'savingName': savingNameController.text,
-          'amount': amountController.text,
-          'frequently': frequencyController.text,
-        });
         isAdding = false;
         savingNameController.clear();
         amountController.clear();
         frequencyController.clear();
       });
-      _syncSavings();
     }
+  }
+
+  void _removeGoal(Map<String, String> goal) {
+    final savings = List<Map<String, String>>.from(
+      ref.read(setupDataProvider).savings,
+    );
+    savings.remove(goal);
+    ref.read(setupDataProvider.notifier).setSavings(savings);
   }
 
   @override
   Widget build(BuildContext context) {
+    final savings = ref.watch(setupDataProvider.select((s) => s.savings));
+
     return Scaffold(
       backgroundColor: ColorManager.secondary,
       body: SafeArea(
@@ -78,10 +88,10 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
 
               ListView.builder(
                 padding: EdgeInsets.zero,
-                itemCount: saving.length,
+                itemCount: savings.length,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  return savingCard(saving[index]);
+                  return savingCard(savings[index]);
                 },
               ),
 
@@ -122,15 +132,12 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
           Row(
             children: [
               Text(
-                "\$${save['amount']}",
+                "\$${save['amount'] ?? '0'}",
                 style: getRegularStyle18_400(color: ColorManager.brown400),
               ),
               SizedBox(width: 10.w),
               GestureDetector(
-                onTap: () {
-                  setState(() => saving.remove(save));
-                  _syncSavings();
-                },
+                onTap: () => _removeGoal(save),
                 child: Icon(
                   Icons.close,
                   size: 20.sp,
@@ -145,7 +152,6 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
   }
 
   Widget _buildInputForm() {
-    bool isChecked = false;
     final List<String> suggestions = [
       "Emergency fund",
       "Vacation",
@@ -241,7 +247,7 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
                     CustomFromField(
                       hintText: "Per month",
                       controller: frequencyController,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.text,
                       suffixIcon: Icon(
                         Icons.keyboard_arrow_down_outlined,
                         color: ColorManager.brown400,
@@ -263,7 +269,7 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
               ),
               SizedBox(width: 12.w),
               Expanded(
-                child: PrimaryButton(onTap: _addNewBill, title: "Add"),
+                child: PrimaryButton(onTap: _addNewGoal, title: "Add"),
               ),
             ],
           ),

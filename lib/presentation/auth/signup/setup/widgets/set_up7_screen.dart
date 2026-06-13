@@ -22,10 +22,9 @@ class SetUp7Screen extends ConsumerStatefulWidget {
 
 class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
   bool isAdding = false;
-  List<Map<String, String>> debts = [];
+  bool isChecked = false;
   bool isFrequencyExpanded = false;
   String selectedFrequency = "Beginning of month";
-  bool isChecked = false;
 
   final whatIsItController = TextEditingController();
   final amountController = TextEditingController();
@@ -34,33 +33,50 @@ class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
   @override
   void initState() {
     super.initState();
-    debts = List.from(ref.read(setupDataProvider).debts);
+    frequentlyController.text = selectedFrequency;
   }
 
-  void _syncDebts() {
-    ref.read(setupDataProvider.notifier).setDebts(List.from(debts));
+  @override
+  void dispose() {
+    whatIsItController.dispose();
+    amountController.dispose();
+    frequentlyController.dispose();
+    super.dispose();
   }
 
   void _addNewBill() {
     if (whatIsItController.text.isNotEmpty &&
         amountController.text.isNotEmpty) {
+      final debts = List<Map<String, String>>.from(
+        ref.read(setupDataProvider).debts,
+      );
+      debts.add({
+        'name': whatIsItController.text,
+        'amount': amountController.text,
+        'frequently': frequentlyController.text,
+      });
+      ref.read(setupDataProvider.notifier).setDebts(debts);
       setState(() {
-        debts.add({
-          'name': whatIsItController.text,
-          'amount': amountController.text,
-          'frequently': frequentlyController.text,
-        });
         isAdding = false;
         whatIsItController.clear();
         amountController.clear();
-        frequentlyController.clear();
+        frequentlyController.text = selectedFrequency;
       });
-      _syncDebts();
     }
+  }
+
+  void _removeDebt(Map<String, String> debt) {
+    final debts = List<Map<String, String>>.from(
+      ref.read(setupDataProvider).debts,
+    );
+    debts.remove(debt);
+    ref.read(setupDataProvider.notifier).setDebts(debts);
   }
 
   @override
   Widget build(BuildContext context) {
+    final debts = ref.watch(setupDataProvider.select((s) => s.debts));
+
     return Scaffold(
       backgroundColor: ColorManager.secondary,
       body: SafeArea(
@@ -114,11 +130,11 @@ class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                bill['name']!,
+                bill['name'] ?? 'N/A',
                 style: getRegularStyle18_400(color: ColorManager.brown400),
               ),
               Text(
-                bill['frequently']!,
+                bill['frequently'] ?? '',
                 style: getRegularStyle14_400(color: ColorManager.grayBlack400),
               ),
             ],
@@ -131,10 +147,7 @@ class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
               ),
               SizedBox(width: 10.w),
               GestureDetector(
-                onTap: () {
-                  setState(() => debts.remove(bill));
-                  _syncDebts();
-                },
+                onTap: () => _removeDebt(bill),
                 child: Icon(
                   Icons.close,
                   size: 20.sp,
@@ -149,7 +162,6 @@ class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
   }
 
   Widget _buildInputForm() {
-    bool isChecked = false;
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
@@ -197,13 +209,13 @@ class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
                       width: 1.5,
                     ),
                   ),
-                  // child: isChecked
-                  //     ? Icon(
-                  //         Icons.check,
-                  //         size: 14.sp,
-                  //         color: ColorManager.textPrimary,
-                  //       )
-                  //     : null,
+                  child: isChecked
+                      ? Icon(
+                          Icons.check,
+                          size: 14.sp,
+                          color: ColorManager.textPrimary,
+                        )
+                      : null,
                 ),
                 SizedBox(width: 12.w),
                 Text(
@@ -229,8 +241,8 @@ class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
             child: IgnorePointer(
               child: CustomFromField(
                 hintText: "Select frequency",
-                controller: frequentlyController..text = selectedFrequency,
-                keyboardType: TextInputType.text,
+              controller: frequentlyController,
+              keyboardType: TextInputType.text,
                 suffixIcon: Icon(
                   isFrequencyExpanded
                       ? Icons.keyboard_arrow_up_outlined

@@ -68,7 +68,7 @@ class CustomFromField extends StatelessWidget {
         fillColor: fillColor ?? ColorManager.backgroundSecondary,
         hintText: hintText,
         labelText: labelText,
-        hintStyle: style ?? getRegularStyle16_400(color: ColorManager.brown400),
+        hintStyle: getRegularStyle16_400(color: ColorManager.brown300),
 
         // Prefix Icon setup with constraints
         prefixIcon: prefixIcon != null

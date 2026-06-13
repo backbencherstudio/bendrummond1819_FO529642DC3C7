@@ -21,41 +21,52 @@ class SetUp6Screen extends ConsumerStatefulWidget {
 
 class _SetUp6ScreenState extends ConsumerState<SetUp6Screen> {
   bool isAdding = false;
-  List<Map<String, String>> bills = [];
+  bool isChecked = false;
 
   final nameController = TextEditingController();
   final amountController = TextEditingController();
   final dayController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    bills = List.from(ref.read(setupDataProvider).bills);
-  }
-
-  void _syncBills() {
-    ref.read(setupDataProvider.notifier).setBills(List.from(bills));
+  void dispose() {
+    nameController.dispose();
+    amountController.dispose();
+    dayController.dispose();
+    super.dispose();
   }
 
   void _addNewBill() {
     if (nameController.text.isNotEmpty && amountController.text.isNotEmpty) {
+      final bills = List<Map<String, String>>.from(
+        ref.read(setupDataProvider).bills,
+      );
+      bills.add({
+        'name': nameController.text,
+        'amount': amountController.text,
+        'day': dayController.text,
+      });
+      ref.read(setupDataProvider.notifier).setBills(bills);
       setState(() {
-        bills.add({
-          'name': nameController.text,
-          'amount': amountController.text,
-          'day': dayController.text,
-        });
         isAdding = false;
         nameController.clear();
         amountController.clear();
         dayController.clear();
       });
-      _syncBills();
     }
+  }
+
+  void _removeBill(Map<String, String> bill) {
+    final bills = List<Map<String, String>>.from(
+      ref.read(setupDataProvider).bills,
+    );
+    bills.remove(bill);
+    ref.read(setupDataProvider.notifier).setBills(bills);
   }
 
   @override
   Widget build(BuildContext context) {
+    final bills = ref.watch(setupDataProvider.select((s) => s.bills));
+
     return Scaffold(
       backgroundColor: ColorManager.secondary,
       body: SafeArea(
@@ -109,7 +120,7 @@ class _SetUp6ScreenState extends ConsumerState<SetUp6Screen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                bill['name']!,
+                bill['name'] ?? 'N/A',
                 style: getRegularStyle18_400(color: ColorManager.brown400),
               ),
               Text(
@@ -121,15 +132,12 @@ class _SetUp6ScreenState extends ConsumerState<SetUp6Screen> {
           Row(
             children: [
               Text(
-                "\$${bill['amount']}",
+                "\$${bill['amount'] ?? '0'}",
                 style: getRegularStyle18_400(color: ColorManager.brown400),
               ),
               SizedBox(width: 10.w),
               GestureDetector(
-                onTap: () {
-                  setState(() => bills.remove(bill));
-                  _syncBills();
-                },
+                onTap: () => _removeBill(bill),
                 child: Icon(
                   Icons.close,
                   size: 20.sp,
@@ -144,7 +152,6 @@ class _SetUp6ScreenState extends ConsumerState<SetUp6Screen> {
   }
 
   Widget _buildInputForm() {
-    bool isChecked = false;
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
