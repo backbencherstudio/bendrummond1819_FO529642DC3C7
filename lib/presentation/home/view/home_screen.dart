@@ -3,11 +3,13 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manag
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/setup_data_api_provider.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/user_provider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_logo_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -20,13 +22,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(setupApiDataProvider.notifier).fetchData());
+    Future.microtask(() {
+      ref.read(setupApiDataProvider.notifier).fetchData();
+      ref.read(userProvider.notifier).loadUser();
+    });
+  }
+
+  String _greeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(setupApiDataProvider);
+    final userState = ref.watch(userProvider);
     final data = state.data;
+    final now = DateTime.now();
+
+    final userName = userState.user?.name ?? 'there';
+    final greeting = _greeting();
 
     final totalIncome = data?.incomes.fold<double>(0, (sum, i) => sum + i.baseIncome) ?? 0;
     final totalBills = data?.financialCommitments.fold<double>(0, (sum, c) => sum + c.amount) ?? 0;
@@ -47,10 +64,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       customLogoText(),
+                      SizedBox(height: 4.h),
                       Text(
-                        'Good evening, Yasir',
+                        '$greeting, $userName',
                         style: getRegularStyle16_400(
                           fontSize: 14,
+                          color: ColorManager.cA87B4D,
+                        ).copyWith(fontStyle: FontStyle.italic),
+                      ),
+                      Text(
+                        DateFormat('EEEE, MMMM d').format(now),
+                        style: getRegularStyle16_400(
+                          fontSize: 12,
                           color: ColorManager.cA87B4D,
                         ).copyWith(fontStyle: FontStyle.italic),
                       ),
@@ -132,7 +157,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             child: Text(
                               data?.incomes.isNotEmpty == true
                                   ? '${data!.incomes.first.payFrequency.replaceAll('_', ' ').toLowerCase()} paycheck'
-                                  : 'October 1st paycheck',
+                                  : 'monthly paycheck',
                               style: getLightStyle14_400(
                                 color: ColorManager.cA27E5D,
                               ),
@@ -161,7 +186,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               SizedBox(height: 32.h),
 
-              _buildBreakdownRow("Pay going to bills", "\$${totalBills.toStringAsFixed(0)}"),
+              _buildBreakdownRow("Pay this period", "\$${totalIncome.toStringAsFixed(0)}"),
               SizedBox(height: 16.h),
               _buildBreakdownRow("Bills ($billsCount)", "\$${totalBills.toStringAsFixed(0)}"),
 
