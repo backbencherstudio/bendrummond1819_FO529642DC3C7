@@ -17,15 +17,10 @@ class RevenueCatService {
     }
   }
 
-  static Future<Offerings?> getOfferings() async {
-    try {
-      final offerings = await Purchases.getOfferings();
-      log("Offerings fetched: ${offerings.current?.identifier}");
-      return offerings;
-    } catch (e) {
-      log("Failed to fetch offerings: $e");
-      return null;
-    }
+  static Future<Offerings> getOfferings() async {
+    final offerings = await Purchases.getOfferings();
+    log("Offerings fetched: ${offerings.current?.identifier}");
+    return offerings;
   }
 
   static Future<CustomerInfo?> purchasePackage(Package package) async {

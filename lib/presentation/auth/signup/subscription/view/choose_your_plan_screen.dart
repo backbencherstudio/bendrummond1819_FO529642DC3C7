@@ -37,6 +37,9 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
         subState.offerings?.current?.monthly?.storeProduct;
     final yearlyPackage =
         subState.offerings?.current?.annual?.storeProduct;
+    final canPurchase = !subState.isLoading &&
+        subState.error == null &&
+        subState.offerings?.current != null;
 
     return Scaffold(
       backgroundColor: ColorManager.secondaryBackGround,
@@ -112,28 +115,52 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
                 subState.isLoading,
               ),
               SizedBox(height: 40.h),
-              if (subState.error != null)
-                Padding(
-                  padding: EdgeInsets.only(bottom: 12.h),
-                  child: Text(
-                    subState.error!,
-                    style: getLightStyle14_400(color: ColorManager.redColor),
-                    textAlign: TextAlign.center,
+              if (subState.error != null) ...[
+                Container(
+                  padding: EdgeInsets.all(12.w),
+                  decoration: BoxDecoration(
+                    color: ColorManager.redColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          subState.error!,
+                          style: getLightStyle14_400(
+                            color: ColorManager.redColor,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8.w),
+                      GestureDetector(
+                        onTap: () => ref
+                            .read(subscriptionProvider.notifier)
+                            .loadOfferings(),
+                        child: Text(
+                          'Retry',
+                          style: getLightStyle14_500(
+                            color: ColorManager.goldAccent,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+                SizedBox(height: 12.h),
+              ],
               PrimaryButton(
                 title: subState.isLoading ? 'Loading...' : 'Start my Plan',
-                onTap: subState.isLoading
-                    ? null
-                    : () {
+                onTap: canPurchase
+                    ? () {
                         final package = isMonthlyState
-                            ? subState.offerings?.current?.monthly
-                            : subState.offerings?.current?.annual;
+                            ? subState.offerings!.current!.monthly
+                            : subState.offerings!.current!.annual;
                         if (package == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                                content:
-                                    Text('No products available. Please try again.')),
+                                content: Text(
+                                    'This plan is not available. Please try a different plan.')),
                           );
                           return;
                         }
@@ -141,7 +168,8 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
                           context,
                           RoutesName.completePaymentScreen,
                         );
-                      },
+                      }
+                    : null,
               ),
             ],
           ),

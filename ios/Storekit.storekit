@@ -1,0 +1,107 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "C487B321",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6779163214",
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
+    "_developerTeamID" : "S8NDD7VT88",
+    "_disableDialogs" : false,
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 803018512.53082001,
+    "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : false,
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+
+    ],
+    "_timeRate" : 0
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "22150247",
+      "localizations" : [
+
+      ],
+      "name" : "Stability Pro Subscriptions",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "3.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6779171757",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "This is monthly subscription for stability app",
+              "displayName" : "Premium Monthly Subscription",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "stability_monthly_pro",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Pro Subscription Monthly",
+          "subscriptionGroupID" : "22150247",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "39.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6779173830",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "This is yearly subscription",
+              "displayName" : "Premium Yearly Subscription",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "stability_yearly_pro",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Pro Subscription Yearly",
+          "subscriptionGroupID" : "22150247",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

@@ -38,6 +38,14 @@ class SubscriptionNotifier extends Notifier<SubscriptionState> {
     try {
       final isPro = await RevenueCatService.isPro();
       final offerings = await RevenueCatService.getOfferings();
+      if (offerings.current == null) {
+        state = SubscriptionState(
+          isLoading: false,
+          isPro: isPro,
+          error: 'No current offering configured. Please set up an offering in the RevenueCat dashboard.',
+        );
+        return;
+      }
       state = SubscriptionState(
         isLoading: false,
         isPro: isPro,

@@ -66,5 +66,17 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+      
+<!-- Photo Library -->
+<key>NSPhotoLibraryUsageDescription</key>
+<string>This app requires access to your photo library.</string>
+
+<!-- Camera -->
+<key>NSCameraUsageDescription</key>
+<string>This app requires access to your camera.</string>
+
+<!-- Location -->
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>This app uses your location to provide relevant content.</string>
 </dict>
 </plist>
