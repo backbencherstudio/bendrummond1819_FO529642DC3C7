@@ -2,6 +2,7 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_mang
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/setup_data_provider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/setup_data_api_provider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/user_provider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_logo_text.dart';
@@ -28,6 +29,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
   }
 
+  double _monthlyMultiplier(String frequency) {
+    switch (frequency) {
+      case 'WEEKLY': return 4.33;
+      case 'EVERY_2_WEEKS': return 2.17;
+      case 'TWICE_A_MONTH': return 2;
+      case 'MONTHLY': return 1;
+      default: return 1;
+    }
+  }
+
   String _greeting() {
     final hour = DateTime.now().hour;
     if (hour < 12) return 'Good morning';
@@ -35,20 +46,80 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return 'Good evening';
   }
 
+  double _monthlyMultiplierFromIndex(int index) {
+    switch (index) {
+      case 0: return 4.33;
+      case 1: return 2.17;
+      case 2: return 2;
+      case 3: return 1;
+      default: return 1;
+    }
+  }
+
+  String _payFrequencyLabel(int index) {
+    const labels = ['weekly', 'every 2 weeks', 'twice a month', 'monthly'];
+    return index < labels.length ? '${labels[index]} paycheck' : 'monthly paycheck';
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(setupApiDataProvider);
     final userState = ref.watch(userProvider);
+    final setupData = ref.watch(setupDataProvider);
     final data = state.data;
     final now = DateTime.now();
 
     final userName = userState.user?.name ?? 'there';
     final greeting = _greeting();
 
-    final totalIncome = data?.incomes.fold<double>(0, (sum, i) => sum + i.baseIncome) ?? 0;
-    final totalBills = data?.financialCommitments.fold<double>(0, (sum, c) => sum + c.amount) ?? 0;
-    final safeToSpend = totalIncome - totalBills;
-    final billsCount = data?.financialCommitments.length ?? 0;
+    double safeToSpend;
+    double breakdownMonthlyIncome;
+    double breakdownBills;
+    String payFrequencyLabel;
+    int billsCount;
+
+    if (data != null && data.incomes.isNotEmpty) {
+      final monthlyIncome = data.incomes.fold<double>(
+        0, (sum, i) => sum + i.baseIncome * _monthlyMultiplier(i.payFrequency),
+      );
+      final totalBills = data.financialCommitments.fold<double>(0, (sum, c) => sum + c.amount);
+      final totalSavings = data.savingsGoals.fold<double>(0, (sum, g) => sum + g.contribution);
+      final monthlyRemaining = monthlyIncome - totalBills - totalSavings;
+      safeToSpend = monthlyRemaining / 4.33;
+      breakdownMonthlyIncome = monthlyIncome;
+      breakdownBills = totalBills;
+      payFrequencyLabel = '${data.incomes.first.payFrequency.replaceAll('_', ' ').toLowerCase()} paycheck';
+      billsCount = data.financialCommitments.length;
+    } else if (setupData.baseIncome.isNotEmpty) {
+      final income = double.tryParse(setupData.baseIncome) ?? 0;
+      final monthlyIncomeVal = income * _monthlyMultiplierFromIndex(setupData.payFrequencyIndex);
+      final rent = double.tryParse(setupData.rentAmount) ?? 0;
+      final carPayment = double.tryParse(setupData.carPaymentAmount) ?? 0;
+      double billsTotal = 0;
+      for (final bill in setupData.bills) {
+        billsTotal += double.tryParse(bill['amount'] ?? '0') ?? 0;
+      }
+      double debtsTotal = 0;
+      for (final debt in setupData.debts) {
+        debtsTotal += double.tryParse(debt['amount'] ?? '0') ?? 0;
+      }
+      double savingsTotal = 0;
+      for (final goal in setupData.savings) {
+        savingsTotal += double.tryParse(goal['amount'] ?? '0') ?? 0;
+      }
+      final monthlyRemaining = monthlyIncomeVal - rent - carPayment - billsTotal - debtsTotal - savingsTotal;
+      safeToSpend = monthlyRemaining / 4.33;
+      breakdownMonthlyIncome = monthlyIncomeVal;
+      breakdownBills = rent + carPayment + billsTotal + debtsTotal;
+      payFrequencyLabel = _payFrequencyLabel(setupData.payFrequencyIndex);
+      billsCount = setupData.bills.length + setupData.debts.length;
+    } else {
+      safeToSpend = 0;
+      breakdownMonthlyIncome = 0;
+      breakdownBills = 0;
+      payFrequencyLabel = 'monthly paycheck';
+      billsCount = 0;
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -155,9 +226,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 10.w),
                             child: Text(
-                              data?.incomes.isNotEmpty == true
-                                  ? '${data!.incomes.first.payFrequency.replaceAll('_', ' ').toLowerCase()} paycheck'
-                                  : 'monthly paycheck',
+                              payFrequencyLabel,
                               style: getLightStyle14_400(
                                 color: ColorManager.cA27E5D,
                               ),
@@ -186,9 +255,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               SizedBox(height: 32.h),
 
-              _buildBreakdownRow("Pay this period", "\$${totalIncome.toStringAsFixed(0)}"),
+              _buildBreakdownRow("Pay this period", "\$${breakdownMonthlyIncome.toStringAsFixed(0)}"),
               SizedBox(height: 16.h),
-              _buildBreakdownRow("Bills ($billsCount)", "\$${totalBills.toStringAsFixed(0)}"),
+              _buildBreakdownRow("Bills ($billsCount)", "\$${breakdownBills.toStringAsFixed(0)}"),
 
               SizedBox(height: 20.h),
               Divider(color: ColorManager.cE0D4C2, thickness: 1),
