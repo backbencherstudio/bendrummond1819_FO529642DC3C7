@@ -116,7 +116,7 @@ class ApiClient {
     try {
       log("\n\nurl :${ApiEndpoints.baseUrl}/$endpoints\n\n");
       final response = await _dio.patch(
-        '${ApiEndpoints.baseUrl}/$endpoints',
+        '/$endpoints',
         data: body ?? formData,
         options: Options(
           headers: headers ?? {"Content-Type": "multipart/form-data"},
