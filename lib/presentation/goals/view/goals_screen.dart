@@ -70,22 +70,33 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen> {
               SizedBox(height: 16.h),
 
               if (state.isLoading)
-                Center(child: CircularProgressIndicator(color: ColorManager.textPrimary))
+                Center(
+                  child: CircularProgressIndicator(
+                    color: ColorManager.textPrimary,
+                  ),
+                )
               else if (state.data == null || state.data!.savingsGoals.isEmpty)
                 Padding(
                   padding: EdgeInsets.only(top: 40.h),
                   child: Center(
                     child: Text(
                       "No goals yet",
-                      style: getRegularStyle16_400(color: ColorManager.brown400),
+                      style: getRegularStyle16_400(
+                        color: ColorManager.brown400,
+                      ),
                     ),
                   ),
                 )
               else
-                ...state.data!.savingsGoals.map((g) => Padding(
-                  padding: EdgeInsets.only(bottom: 12.h),
-                  child: _buildGoalCard(g.goalName, "\$${g.contribution.toStringAsFixed(0)}/${g.frequency.toLowerCase()}"),
-                )),
+                ...state.data!.savingsGoals.map(
+                  (g) => Padding(
+                    padding: EdgeInsets.only(bottom: 12.h),
+                    child: _buildGoalCard(
+                      g.goalName,
+                      "\$${g.contribution.toStringAsFixed(0)}/${g.frequency.toLowerCase()}",
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

@@ -44,15 +44,16 @@ class FinancialCommitmentData {
     this.isRecurring = false,
   });
 
-  factory FinancialCommitmentData.fromJson(Map<String, dynamic> json) => FinancialCommitmentData(
-    id: json['id'],
-    category: json['category'] ?? '',
-    name: json['name'] ?? '',
-    amount: (json['amount'] ?? 0).toDouble(),
-    dueDay: json['due_day'],
-    frequency: json['frequency'],
-    isRecurring: json['is_recurring'] == true || json['is_recurring'] == 1,
-  );
+  factory FinancialCommitmentData.fromJson(Map<String, dynamic> json) =>
+      FinancialCommitmentData(
+        id: json['id'],
+        category: json['category'] ?? '',
+        name: json['name'] ?? '',
+        amount: (json['amount'] ?? 0).toDouble(),
+        dueDay: json['due_day'],
+        frequency: json['frequency'],
+        isRecurring: json['is_recurring'] == true || json['is_recurring'] == 1,
+      );
 
   Map<String, dynamic> toJson() => {
     'category': category,
@@ -65,7 +66,7 @@ class FinancialCommitmentData {
 }
 
 class SavingsGoalData {
-  final int? id;
+  final String? id;
   final String goalName;
   final double targetAmount;
   final double contribution;
@@ -79,13 +80,14 @@ class SavingsGoalData {
     required this.frequency,
   });
 
-  factory SavingsGoalData.fromJson(Map<String, dynamic> json) => SavingsGoalData(
-    id: json['id'],
-    goalName: json['goal_name'] ?? '',
-    targetAmount: (json['target_amount'] ?? 0).toDouble(),
-    contribution: (json['contribution'] ?? 0).toDouble(),
-    frequency: json['frequency'] ?? '',
-  );
+  factory SavingsGoalData.fromJson(Map<String, dynamic> json) =>
+      SavingsGoalData(
+        id: json['id']?.toString(),
+        goalName: json['goal_name'] ?? '',
+        targetAmount: double.tryParse(json['target_amount'].toString()) ?? 0,
+        contribution: double.tryParse(json['contribution'].toString()) ?? 0,
+        frequency: json['frequency'] ?? '',
+      );
 
   Map<String, dynamic> toJson() => {
     'goal_name': goalName,
@@ -108,7 +110,9 @@ class SetupRequest {
 
   Map<String, dynamic> toJson() => {
     'incomes': incomes.map((e) => e.toJson()).toList(),
-    'financialCommitments': financialCommitments.map((e) => e.toJson()).toList(),
+    'financialCommitments': financialCommitments
+        .map((e) => e.toJson())
+        .toList(),
     'savingsGoals': savingsGoals.map((e) => e.toJson()).toList(),
   };
 }
@@ -125,14 +129,23 @@ class SetupResponse {
   });
 
   factory SetupResponse.fromJson(Map<String, dynamic> json) => SetupResponse(
-    incomes: (json['incomes'] as List<dynamic>?)
-        ?.map((e) => IncomeData.fromJson(e as Map<String, dynamic>))
-        .toList() ?? [],
-    financialCommitments: (json['financialCommitments'] as List<dynamic>?)
-        ?.map((e) => FinancialCommitmentData.fromJson(e as Map<String, dynamic>))
-        .toList() ?? [],
-    savingsGoals: (json['savingsGoals'] as List<dynamic>?)
-        ?.map((e) => SavingsGoalData.fromJson(e as Map<String, dynamic>))
-        .toList() ?? [],
+    incomes:
+        (json['incomes'] as List<dynamic>?)
+            ?.map((e) => IncomeData.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [],
+    financialCommitments:
+        (json['financialCommitments'] as List<dynamic>?)
+            ?.map(
+              (e) =>
+                  FinancialCommitmentData.fromJson(e as Map<String, dynamic>),
+            )
+            .toList() ??
+        [],
+    savingsGoals:
+        (json['savingsGoals'] as List<dynamic>?)
+            ?.map((e) => SavingsGoalData.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [],
   );
 }

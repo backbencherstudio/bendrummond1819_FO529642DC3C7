@@ -42,7 +42,7 @@ class SetupRepository {
     return remoteSource.getBillById(id);
   }
 
-  Future<bool> deleteSavingGoal(int id) {
+  Future<bool> deleteSavingGoal(String id) {
     return remoteSource.deleteSavingGoal(id);
   }
 
@@ -51,7 +51,7 @@ class SetupRepository {
   }
 
   Future<bool> updateSavingGoal({
-    required int id,
+    required String id,
     String? goalName,
     double? targetAmount,
     double? contribution,

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/network/api_clients.dart';
 import '../../../data/models/setup_models.dart';
@@ -11,8 +12,15 @@ class SetupApiDataState {
 
   const SetupApiDataState({this.data, this.isLoading = false, this.error});
 
-  SetupApiDataState copyWith({SetupResponse? data, bool? isLoading, String? error}) =>
-      SetupApiDataState(data: data ?? this.data, isLoading: isLoading ?? this.isLoading, error: error);
+  SetupApiDataState copyWith({
+    SetupResponse? data,
+    bool? isLoading,
+    String? error,
+  }) => SetupApiDataState(
+    data: data ?? this.data,
+    isLoading: isLoading ?? this.isLoading,
+    error: error,
+  );
 }
 
 class SetupApiDataNotifier extends Notifier<SetupApiDataState> {
@@ -27,6 +35,7 @@ class SetupApiDataNotifier extends Notifier<SetupApiDataState> {
         remoteSource: SetupApiService(apiClient: ApiClient()),
       );
       final data = await repository.getSetupData();
+      debugPrint("Data inside $data");
       state = SetupApiDataState(data: data, isLoading: false);
     } catch (e) {
       state = SetupApiDataState(isLoading: false, error: e.toString());
@@ -39,6 +48,7 @@ class SetupApiDataNotifier extends Notifier<SetupApiDataState> {
   }
 }
 
-final setupApiDataProvider = NotifierProvider<SetupApiDataNotifier, SetupApiDataState>(
-  SetupApiDataNotifier.new,
-);
+final setupApiDataProvider =
+    NotifierProvider<SetupApiDataNotifier, SetupApiDataState>(
+      SetupApiDataNotifier.new,
+    );

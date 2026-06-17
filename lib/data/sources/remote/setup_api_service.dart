@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'package:flutter/material.dart';
+
 import '../../../core/network/api_clients.dart';
 import '../../../core/network/api_endpoints.dart';
 import '../../models/setup_models.dart';
@@ -117,25 +119,23 @@ class SetupApiService {
   Future<SetupResponse?> getSetupData() async {
     try {
       final response = await apiClient.getRequest(
-        endpoints: ApiEndpoints.setUp,
+        endpoints: ApiEndpoints.savingGoals,
       );
 
-      if (response == null) return null;
-
-      log("Get setup data response: $response");
-
       if (response is Map<String, dynamic>) {
-        if (response['success'] == true && response['data'] != null) {
-          return SetupResponse.fromJson(
-            response['data'] as Map<String, dynamic>,
-          );
+        final data = response['data'];
+
+        if (data == null) {
+          return null;
         }
+
+        return SetupResponse.fromJson(data);
       }
 
       return null;
     } catch (e) {
-      log("Get setup data error: ${e.toString()}");
-      rethrow;
+      log("Get setup data error: $e");
+      return null;
     }
   }
 
@@ -180,7 +180,8 @@ class SetupApiService {
 
       if (response is Map<String, dynamic>) {
         if (response['success'] == true && response['data'] != null) {
-          final list = response['data'] as List<dynamic>;
+          final data = response['data'] as Map<String, dynamic>;
+          final list = data['savingsGoals'] as List<dynamic>;
           return list
               .map((e) => SavingsGoalData.fromJson(e as Map<String, dynamic>))
               .toList();
@@ -223,7 +224,7 @@ class SetupApiService {
     }
   }
 
-  Future<bool> deleteSavingGoal(int id) async {
+  Future<bool> deleteSavingGoal(String id) async {
     try {
       final response = await ApiClient.deleteRequest(
         endpoints: ApiEndpoints.savingGoalById(id),
@@ -296,7 +297,7 @@ class SetupApiService {
   }
 
   Future<bool> updateSavingGoal({
-    required int id,
+    required String id,
     String? goalName,
     double? targetAmount,
     double? contribution,
