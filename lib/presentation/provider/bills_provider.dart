@@ -45,6 +45,20 @@ class BillsNotifier extends Notifier<BillsState> {
     fetchBills();
   }
 
+  Future<bool> deleteBill(String id) async {
+    try {
+      final repository = SetupRepository(
+        remoteSource: SetupApiService(apiClient: ApiClient()),
+      );
+      final success = await repository.deleteBill(id);
+      refresh();
+      return success;
+    } catch (e) {
+      refresh();
+      return false;
+    }
+  }
+
   Future<bool> updateBill({
     required String id,
     String? category,

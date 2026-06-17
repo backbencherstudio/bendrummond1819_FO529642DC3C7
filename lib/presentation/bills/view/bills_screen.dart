@@ -1,6 +1,7 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/utils.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
 import 'package:bendrummond1819_fo529642dc3c7/data/models/setup_models.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/bills_provider.dart';
@@ -105,11 +106,42 @@ class _BillsScreenState extends ConsumerState<BillsScreen> {
                           final subtitle = c.dueDay != null
                               ? "Due day ${c.dueDay}"
                               : (c.frequency ?? "Monthly");
-                          return Column(
-                            children: [
-                              _buildBillCard(c, subtitle),
-                              SizedBox(height: 12.h),
-                            ],
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 12.h),
+                            child: Dismissible(
+                              key: ValueKey(c.id),
+                              direction: DismissDirection.endToStart,
+                              background: Container(
+                                alignment: Alignment.centerRight,
+                                padding: EdgeInsets.only(right: 24.w),
+                                decoration: BoxDecoration(
+                                  color: ColorManager.errorColor,
+                                  borderRadius: BorderRadius.circular(12.r),
+                                ),
+                                child: Icon(
+                                  Icons.delete_outline,
+                                  color: ColorManager.whiteColor,
+                                  size: 24.sp,
+                                ),
+                              ),
+                              onDismissed: (_) async {
+                                final success = await ref
+                                    .read(billsProvider.notifier)
+                                    .deleteBill(c.id!);
+                                if (context.mounted) {
+                                  Utils.showToast(
+                                    message: success
+                                        ? "Bill deleted"
+                                        : "Failed to delete bill",
+                                    backgroundColor: success
+                                        ? ColorManager.successColor
+                                        : ColorManager.errorColor,
+                                    textColor: ColorManager.whiteColor,
+                                  );
+                                }
+                              },
+                              child: _buildBillCard(c, subtitle),
+                            ),
                           );
                         }).toList(),
                       ),
