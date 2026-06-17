@@ -26,7 +26,7 @@ class SetupApiDataState {
 class SetupApiDataNotifier extends Notifier<SetupApiDataState> {
   @override
   SetupApiDataState build() => const SetupApiDataState();
-
+  //fetchData
   Future<void> fetchData() async {
     if (state.data != null) return;
     state = state.copyWith(isLoading: true, error: null);
@@ -39,6 +39,22 @@ class SetupApiDataNotifier extends Notifier<SetupApiDataState> {
       state = SetupApiDataState(data: data, isLoading: false);
     } catch (e) {
       state = SetupApiDataState(isLoading: false, error: e.toString());
+    }
+  }
+
+  //deletegoal
+
+  Future<void> deleteGoal(String id) async {
+    try {
+      final repository = SetupRepository(
+        remoteSource: SetupApiService(apiClient: ApiClient()),
+      );
+
+      final res = await repository.deleteSavingGoal(id);
+      debugPrint("Delete Goal $res");
+      refresh();
+    } catch (e) {
+      debugPrint("Delete error $e");
     }
   }
 

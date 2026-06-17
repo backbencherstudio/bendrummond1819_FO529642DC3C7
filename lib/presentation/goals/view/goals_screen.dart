@@ -92,6 +92,7 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen> {
                   (g) => Padding(
                     padding: EdgeInsets.only(bottom: 12.h),
                     child: _buildGoalCard(
+                      g.id,
                       g.goalName,
                       "\$${g.contribution.toStringAsFixed(0)}/${g.frequency.toLowerCase()}",
                     ),
@@ -104,7 +105,7 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen> {
     );
   }
 
-  Widget _buildGoalCard(String title, String subtitle) {
+  Widget _buildGoalCard(String? id, String title, String subtitle) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(16.r),
@@ -135,7 +136,19 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen> {
               ],
             ),
           ),
-          Icon(Icons.close, color: ColorManager.primaryButton, size: 20.sp),
+          GestureDetector(
+            onTap: () {
+              debugPrint("Gesturebutton");
+              if (id != null) {
+                ref.read(setupApiDataProvider.notifier).deleteGoal(id);
+              }
+            },
+            child: Icon(
+              Icons.close,
+              color: ColorManager.primaryButton,
+              size: 20.sp,
+            ),
+          ),
         ],
       ),
     );

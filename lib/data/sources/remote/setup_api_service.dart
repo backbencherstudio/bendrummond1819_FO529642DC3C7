@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:flutter/material.dart';
 
 import '../../../core/network/api_clients.dart';
 import '../../../core/network/api_endpoints.dart';
@@ -227,7 +226,7 @@ class SetupApiService {
   Future<bool> deleteSavingGoal(String id) async {
     try {
       final response = await ApiClient.deleteRequest(
-        endpoints: ApiEndpoints.savingGoalById(id),
+        endpoints: ApiEndpoints.deletSavingGoalById(id),
       );
 
       if (response == null) return false;

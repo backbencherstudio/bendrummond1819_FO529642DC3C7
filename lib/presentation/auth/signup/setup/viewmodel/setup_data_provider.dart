@@ -68,95 +68,124 @@ class SetupDataNotifier extends Notifier<SetupDataState> {
   @override
   SetupDataState build() => SetupDataState();
 
-  void setIncomeTypeIndex(int index) => state = state.copyWith(incomeTypeIndex: index);
-  void setPayFrequencyIndex(int index) => state = state.copyWith(payFrequencyIndex: index);
+  void setIncomeTypeIndex(int index) =>
+      state = state.copyWith(incomeTypeIndex: index);
+  void setPayFrequencyIndex(int index) =>
+      state = state.copyWith(payFrequencyIndex: index);
   void setBaseIncome(String value) => state = state.copyWith(baseIncome: value);
-  void setIsRecurringIncome(bool value) => state = state.copyWith(isRecurringIncome: value);
+  void setIsRecurringIncome(bool value) =>
+      state = state.copyWith(isRecurringIncome: value);
   void setRentAmount(String value) => state = state.copyWith(rentAmount: value);
-  void setCarPaymentAmount(String value) => state = state.copyWith(carPaymentAmount: value);
-  void setBills(List<Map<String, String>> bills) => state = state.copyWith(bills: bills);
-  void setDebts(List<Map<String, String>> debts) => state = state.copyWith(debts: debts);
-  void setSavings(List<Map<String, String>> savings) => state = state.copyWith(savings: savings);
+  void setCarPaymentAmount(String value) =>
+      state = state.copyWith(carPaymentAmount: value);
+  void setBills(List<Map<String, String>> bills) =>
+      state = state.copyWith(bills: bills);
+  void setDebts(List<Map<String, String>> debts) =>
+      state = state.copyWith(debts: debts);
+  void setSavings(List<Map<String, String>> savings) =>
+      state = state.copyWith(savings: savings);
 
   String _incomeTypeValue(int index) {
     switch (index) {
-      case 0: return 'SAME_EVERY_PAYCHECK';
-      case 1: return 'VARIES_A_LITTLE';
-      case 2: return 'VARIES_A_LOT';
-      default: return 'SAME_EVERY_PAYCHECK';
+      case 0:
+        return 'SAME_EVERY_PAYCHECK';
+      case 1:
+        return 'VARIES_A_LITTLE';
+      case 2:
+        return 'VARIES_A_LOT';
+      default:
+        return 'SAME_EVERY_PAYCHECK';
     }
   }
 
   String _payFrequencyValue(int index) {
     switch (index) {
-      case 0: return 'WEEKLY';
-      case 1: return 'EVERY_2_WEEKS';
-      case 2: return 'TWICE_A_MONTH';
-      case 3: return 'MONTHLY';
-      case 4: return 'INCONSISTENT';
-      default: return 'WEEKLY';
+      case 0:
+        return 'WEEKLY';
+      case 1:
+        return 'EVERY_2_WEEKS';
+      case 2:
+        return 'TWICE_A_MONTH';
+      case 3:
+        return 'MONTHLY';
+      case 4:
+        return 'INCONSISTENT';
+      default:
+        return 'WEEKLY';
     }
   }
 
   SetupRequest _buildRequest() {
     final incomes = <IncomeData>[];
     if (state.baseIncome.isNotEmpty) {
-      incomes.add(IncomeData(
-        incomeType: _incomeTypeValue(state.incomeTypeIndex),
-        payFrequency: _payFrequencyValue(state.payFrequencyIndex),
-        baseIncome: double.tryParse(state.baseIncome) ?? 0,
-      ));
+      incomes.add(
+        IncomeData(
+          incomeType: _incomeTypeValue(state.incomeTypeIndex),
+          payFrequency: _payFrequencyValue(state.payFrequencyIndex),
+          baseIncome: double.tryParse(state.baseIncome) ?? 0,
+        ),
+      );
     }
 
     final commitments = <FinancialCommitmentData>[];
     if (state.rentAmount.isNotEmpty) {
-      commitments.add(FinancialCommitmentData(
-        category: 'HOUSING',
-        name: 'Rent',
-        amount: double.tryParse(state.rentAmount) ?? 0,
-        dueDay: 1,
-        frequency: 'WEEKLY',
-        isRecurring: true,
-      ));
+      commitments.add(
+        FinancialCommitmentData(
+          category: 'HOUSING',
+          name: 'Rent',
+          amount: double.tryParse(state.rentAmount) ?? 0,
+          dueDay: 1,
+          frequency: 'WEEKLY',
+          isRecurring: true,
+        ),
+      );
     }
     if (state.carPaymentAmount.isNotEmpty) {
-      commitments.add(FinancialCommitmentData(
-        category: 'CAR_PAYMENT',
-        name: 'Car Payment',
-        amount: double.tryParse(state.carPaymentAmount) ?? 0,
-        dueDay: 1,
-        frequency: 'MONTHLY',
-        isRecurring: true,
-      ));
+      commitments.add(
+        FinancialCommitmentData(
+          category: 'CAR_PAYMENT',
+          name: 'Car Payment',
+          amount: double.tryParse(state.carPaymentAmount) ?? 0,
+          dueDay: 1,
+          frequency: 'MONTHLY',
+          isRecurring: true,
+        ),
+      );
     }
     for (final bill in state.bills) {
-      commitments.add(FinancialCommitmentData(
-        category: 'REGULAR_BILL',
-        name: bill['name'] ?? 'Bill',
-        amount: double.tryParse(bill['amount'] ?? '0') ?? 0,
-        dueDay: int.tryParse(bill['day'] ?? ''),
-        frequency: 'MONTHLY',
-        isRecurring: true,
-      ));
+      commitments.add(
+        FinancialCommitmentData(
+          category: 'REGULAR_BILL',
+          name: bill['name'] ?? 'Bill',
+          amount: double.tryParse(bill['amount'] ?? '0') ?? 0,
+          dueDay: int.tryParse(bill['day'] ?? ''),
+          frequency: 'MONTHLY',
+          isRecurring: true,
+        ),
+      );
     }
     for (final debt in state.debts) {
-      commitments.add(FinancialCommitmentData(
-        category: 'DEBT',
-        name: debt['name'] ?? 'Debt',
-        amount: double.tryParse(debt['amount'] ?? '0') ?? 0,
-        frequency: 'MONTHLY',
-        isRecurring: true,
-      ));
+      commitments.add(
+        FinancialCommitmentData(
+          category: 'DEBT',
+          name: debt['name'] ?? 'Debt',
+          amount: double.tryParse(debt['amount'] ?? '0') ?? 0,
+          frequency: 'MONTHLY',
+          isRecurring: true,
+        ),
+      );
     }
 
     final savings = <SavingsGoalData>[];
     for (final goal in state.savings) {
-      savings.add(SavingsGoalData(
-        goalName: goal['savingName'] ?? 'Goal',
-        targetAmount: double.tryParse(goal['amount'] ?? '0') ?? 0,
-        contribution: double.tryParse(goal['amount'] ?? '0') ?? 0,
-        frequency: 'MONTHLY',
-      ));
+      savings.add(
+        SavingsGoalData(
+          goalName: goal['savingName'] ?? 'Goal',
+          targetAmount: double.tryParse(goal['amount'] ?? '0') ?? 0,
+          contribution: double.tryParse(goal['amount'] ?? '0') ?? 0,
+          frequency: 'MONTHLY',
+        ),
+      );
     }
 
     return SetupRequest(
@@ -167,7 +196,11 @@ class SetupDataNotifier extends Notifier<SetupDataState> {
   }
 
   Future<bool> submitSetup() async {
-    state = state.copyWith(isSubmitting: true, isSuccess: null, errorMessage: null);
+    state = state.copyWith(
+      isSubmitting: true,
+      isSuccess: null,
+      errorMessage: null,
+    );
 
     try {
       final repository = SetupRepository(
@@ -179,13 +212,21 @@ class SetupDataNotifier extends Notifier<SetupDataState> {
       state = state.copyWith(isSubmitting: false, isSuccess: success);
       return success;
     } catch (e) {
-      state = state.copyWith(isSubmitting: false, errorMessage: e.toString(), isSuccess: false);
+      state = state.copyWith(
+        isSubmitting: false,
+        errorMessage: e.toString(),
+        isSuccess: false,
+      );
       return false;
     }
   }
 
   Future<bool> updateSetup() async {
-    state = state.copyWith(isSubmitting: true, isSuccess: null, errorMessage: null);
+    state = state.copyWith(
+      isSubmitting: true,
+      isSuccess: null,
+      errorMessage: null,
+    );
 
     try {
       final repository = SetupRepository(
@@ -197,7 +238,11 @@ class SetupDataNotifier extends Notifier<SetupDataState> {
       state = state.copyWith(isSubmitting: false, isSuccess: success);
       return success;
     } catch (e) {
-      state = state.copyWith(isSubmitting: false, errorMessage: e.toString(), isSuccess: false);
+      state = state.copyWith(
+        isSubmitting: false,
+        errorMessage: e.toString(),
+        isSuccess: false,
+      );
       return false;
     }
   }

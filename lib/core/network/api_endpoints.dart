@@ -25,6 +25,7 @@ class ApiEndpoints {
   static const String payIncomes = '/set-up/pay-incomes';
   static String billById(int id) => '/set-up/bills/$id';
   static String savingGoalById(String id) => '/set-up/saving-goals/$id';
+  static String deletSavingGoalById(String id) => '/set-up/saving-goals/$id';
   static String billForPatch(int id) => '/set-up/bill/$id';
   static String incomeForPatch(int id) => '/set-up/income/$id';
 }
