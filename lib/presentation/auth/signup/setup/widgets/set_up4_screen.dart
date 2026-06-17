@@ -3,7 +3,8 @@ import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/vie
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 import '../../../../../core/resource/constants/icon_manager.dart';
 import '../../../../../core/resource/constants/style_manager.dart';
 import '../../../../widgets/custom_from_field.dart';
@@ -22,18 +23,38 @@ class _SetUp4ScreenState extends ConsumerState<SetUp4Screen> {
   @override
   void initState() {
     super.initState();
-    _amountController = TextEditingController(text: ref.read(setupDataProvider).rentAmount);
+
+    _amountController = TextEditingController(
+      text: ref.read(setupDataProvider).rentAmount,
+    );
+
     _amountController.addListener(() {
-      ref.read(setupDataProvider.notifier).setRentAmount(_amountController.text);
+      ref
+          .read(setupDataProvider.notifier)
+          .setRentAmount(_amountController.text);
     });
   }
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: ColorManager.secondary,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.h),
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          padding: EdgeInsets.only(
+            left: 24.w,
+            right: 24.w,
+            top: 12.h,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 24.h,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -41,7 +62,9 @@ class _SetUp4ScreenState extends ConsumerState<SetUp4Screen> {
                 "What's your rent or mortgage?",
                 style: getSemiBoldStyle32(color: ColorManager.textPrimary),
               ),
+
               SizedBox(height: 15.h),
+
               Text(
                 "Monthly amount. Include whatever you pay each month.",
                 style: getRegularStyle16_400(color: ColorManager.brown400),
@@ -54,12 +77,13 @@ class _SetUp4ScreenState extends ConsumerState<SetUp4Screen> {
                 prefixIcon: SvgPicture.asset(IconManager.dollar),
                 controller: _amountController,
               ),
+
               SizedBox(height: 16.h),
 
-              // --- Checkbox Row ---
               GestureDetector(
                 onTap: () => setState(() => isChecked = !isChecked),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       width: 20.w,
@@ -79,10 +103,14 @@ class _SetUp4ScreenState extends ConsumerState<SetUp4Screen> {
                             )
                           : null,
                     ),
+
                     SizedBox(width: 12.w),
-                    Text(
-                      "Set as Weekly/Monthly Payment",
-                      style: getRegularStyle14_400(color: ColorManager.brown),
+
+                    Expanded(
+                      child: Text(
+                        "Set as Weekly/Monthly Payment",
+                        style: getRegularStyle14_400(color: ColorManager.brown),
+                      ),
                     ),
                   ],
                 ),
@@ -90,7 +118,6 @@ class _SetUp4ScreenState extends ConsumerState<SetUp4Screen> {
 
               SizedBox(height: 24.h),
 
-              // --- Info Box ---
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(16.r),
@@ -100,8 +127,7 @@ class _SetUp4ScreenState extends ConsumerState<SetUp4Screen> {
                 ),
                 child: Text(
                   "Your biggest bill first. Everything else gets smaller from here.",
-                  style:
-                 getRegularStyle16_400(color:   ColorManager.brown400)
+                  style: getRegularStyle16_400(color: ColorManager.brown400),
                 ),
               ),
             ],

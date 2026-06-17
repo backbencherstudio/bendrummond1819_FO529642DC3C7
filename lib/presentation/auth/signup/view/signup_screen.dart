@@ -29,8 +29,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _fullNameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _dobController = TextEditingController();
+  String? _emailError;
 
   Future<void> _handleRegister() async {
+    setState(() {
+      _emailError = null;
+    });
+
     final success = await ref
         .read(signUpViewModelProvider.notifier)
         .register(
@@ -40,6 +45,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           phone: _phoneController.text.trim(),
           dob: _dobController.text.trim(),
         );
+    print(success);
     if (success && mounted) {
       Navigator.pushReplacementNamed(
         context,

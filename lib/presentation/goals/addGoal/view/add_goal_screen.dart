@@ -5,6 +5,7 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_mana
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/utils.dart';
 import 'package:bendrummond1819_fo529642dc3c7/data/repositories/setup_repository.dart';
 import 'package:bendrummond1819_fo529642dc3c7/data/sources/remote/setup_api_service.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/setup_data_api_provider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
@@ -50,7 +51,9 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
         remoteSource: SetupApiService(apiClient: ApiClient()),
       );
 
-      final frequency = _selectedFrequency == "Per month" ? "MONTHLY" : "WEEKLY";
+      final frequency = _selectedFrequency == "Per month"
+          ? "MONTHLY"
+          : "WEEKLY";
 
       final success = await repository.addNewGoal(
         goalName: savingNameController.text,
@@ -59,12 +62,14 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
         frequency: frequency,
       );
 
+      print(success);
       if (success && mounted) {
         Utils.showToast(
           message: "Goal Added",
           backgroundColor: ColorManager.successColor,
           textColor: ColorManager.whiteColor,
         );
+        ref.invalidate(setupApiDataProvider);
         Navigator.pop(context);
       } else if (mounted) {
         Utils.showToast(
@@ -154,11 +159,12 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
               SizedBox(height: 24.h),
               // ================ Add Goal Button =====================
               _isSubmitting
-                  ? Center(child: CircularProgressIndicator(color: ColorManager.textPrimary))
-                  : PrimaryButton(
-                title: 'Add Goal',
-                onTap: _submitGoal,
-              ),
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: ColorManager.textPrimary,
+                      ),
+                    )
+                  : PrimaryButton(title: 'Add Goal', onTap: _submitGoal),
               SizedBox(height: 20),
             ],
           ),
