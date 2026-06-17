@@ -12,6 +12,7 @@ class RoutesName {
   static const String payScreen = "/payScreen";
   static const String addGoalScreen = "/addGoalScreen";
   static const String addBillScreen = "/addBillScreen";
+  static const String editBillScreen = "/editBillScreen";
   static const String homeSettingsScreen = "/homeSettingScreen";
   static const String aboutScreen = "/aboutScreen";
   static const String notificationScreen = "/notificationScreen";

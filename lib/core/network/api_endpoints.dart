@@ -23,7 +23,7 @@ class ApiEndpoints {
   static const String savingGoals = '/set-up/saving-goals';
   static const String monthlyBills = '/set-up/monthly-bills';
   static const String payIncomes = '/set-up/pay-incomes';
-  static String billById(String id) => '/set-up/bills/$id';
+  static String billById(String id) => '/set-up/bill/$id';
   static String savingGoalById(String id) => '/set-up/saving-goals/$id';
   static String deletSavingGoalById(String id) => '/set-up/saving-goals/$id';
   static String billForPatch(String id) => '/set-up/bill/$id';

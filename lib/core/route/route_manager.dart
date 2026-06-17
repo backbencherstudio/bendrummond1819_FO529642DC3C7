@@ -4,6 +4,7 @@ import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signin/view/sign
 import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/view/signup_screen.dart';
 
 import 'package:bendrummond1819_fo529642dc3c7/presentation/bills/addBills/view/add_bill_screen.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/bills/editBill/view/edit_bill_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/goals/addGoal/view/add_goal_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/home/settings/about/view/about_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/home/settings/account/view/account_screen.dart';
@@ -50,6 +51,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => AddGoalScreen(), settings: routeSettings);
       case RoutesName.addBillScreen:
         return MaterialPageRoute(builder: (_) => AddBillScreen(), settings: routeSettings);
+      case RoutesName.editBillScreen:
+        return MaterialPageRoute(builder: (_) => EditBillScreen(), settings: routeSettings);
       case RoutesName.homeSettingsScreen:
         return MaterialPageRoute(builder: (_) => HomeSettingsScreen(), settings: routeSettings);
       case RoutesName.accountScreen:

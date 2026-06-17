@@ -1,10 +1,13 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
+import 'package:bendrummond1819_fo529642dc3c7/data/models/setup_models.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/bills_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class BillsScreen extends ConsumerStatefulWidget {
   const BillsScreen({super.key});
@@ -104,11 +107,7 @@ class _BillsScreenState extends ConsumerState<BillsScreen> {
                               : (c.frequency ?? "Monthly");
                           return Column(
                             children: [
-                              _buildBillCard(
-                                c.name,
-                                subtitle,
-                                "\$${c.amount.toStringAsFixed(0)}",
-                              ),
+                              _buildBillCard(c, subtitle),
                               SizedBox(height: 12.h),
                             ],
                           );
@@ -122,7 +121,7 @@ class _BillsScreenState extends ConsumerState<BillsScreen> {
     );
   }
 
-  Widget _buildBillCard(String title, String subtitle, String amount) {
+  Widget _buildBillCard(FinancialCommitmentData bill, String subtitle) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(16.r),
@@ -140,7 +139,7 @@ class _BillsScreenState extends ConsumerState<BillsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  bill.name,
                   style: getMediumStyle18(color: ColorManager.brown500),
                 ),
                 SizedBox(height: 12.h),
@@ -154,9 +153,38 @@ class _BillsScreenState extends ConsumerState<BillsScreen> {
               ],
             ),
           ),
-          Text(
-            amount,
-            style: getMediumStyle18(color: ColorManager.textPrimary),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "\$${bill.amount.toStringAsFixed(0)}",
+                style: getMediumStyle18(color: ColorManager.textPrimary),
+              ),
+              SizedBox(width: 8.w),
+              InkWell(
+                onTap: () => Navigator.pushNamed(
+                  context,
+                  RoutesName.editBillScreen,
+                  arguments: bill,
+                ),
+                child: Container(
+                  padding: EdgeInsets.all(8.r),
+                  decoration: BoxDecoration(
+                    color: ColorManager.backgroundCard,
+                    shape: BoxShape.circle,
+                  ),
+                  child: SvgPicture.asset(
+                    IconManager.editIcon,
+                    width: 16.sp,
+                    height: 16.sp,
+                    colorFilter: ColorFilter.mode(
+                      ColorManager.primaryButton,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

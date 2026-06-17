@@ -44,6 +44,37 @@ class BillsNotifier extends Notifier<BillsState> {
     state = const BillsState();
     fetchBills();
   }
+
+  Future<bool> updateBill({
+    required String id,
+    String? category,
+    String? name,
+    double? amount,
+    int? dueDay,
+    String? frequency,
+    bool? isRecurring,
+  }) async {
+    try {
+      final repository = SetupRepository(
+        remoteSource: SetupApiService(apiClient: ApiClient()),
+      );
+      final success = await repository.updateBill(
+        id: id,
+        category: category,
+        name: name,
+        amount: amount,
+        dueDay: dueDay,
+        frequency: frequency,
+        isRecurring: isRecurring,
+      );
+      if (success) {
+        refresh();
+      }
+      return success;
+    } catch (e) {
+      return false;
+    }
+  }
 }
 
 final billsProvider = NotifierProvider<BillsNotifier, BillsState>(
