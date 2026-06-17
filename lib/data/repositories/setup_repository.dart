@@ -38,7 +38,7 @@ class SetupRepository {
     return remoteSource.getPayIncomes();
   }
 
-  Future<FinancialCommitmentData?> getBillById(int id) {
+  Future<FinancialCommitmentData?> getBillById(String id) {
     return remoteSource.getBillById(id);
   }
 
@@ -46,7 +46,7 @@ class SetupRepository {
     return remoteSource.deleteSavingGoal(id);
   }
 
-  Future<bool> deleteBill(int id) {
+  Future<bool> deleteBill(String id) {
     return remoteSource.deleteBill(id);
   }
 
@@ -67,7 +67,7 @@ class SetupRepository {
   }
 
   Future<bool> updateBill({
-    required int id,
+    required String id,
     String? category,
     String? name,
     double? amount,

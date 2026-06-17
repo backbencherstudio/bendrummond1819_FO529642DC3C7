@@ -206,7 +206,8 @@ class SetupApiService {
 
       if (response is Map<String, dynamic>) {
         if (response['success'] == true && response['data'] != null) {
-          final list = response['data'] as List<dynamic>;
+          final data = response['data'] as Map<String, dynamic>;
+          final list = data['financialCommitments'] as List<dynamic>;
           return list
               .map(
                 (e) =>
@@ -246,7 +247,7 @@ class SetupApiService {
     }
   }
 
-  Future<bool> deleteBill(int id) async {
+  Future<bool> deleteBill(String id) async {
     try {
       final response = await ApiClient.deleteRequest(
         endpoints: ApiEndpoints.billById(id),
@@ -332,7 +333,7 @@ class SetupApiService {
   }
 
   Future<bool> updateBill({
-    required int id,
+    required String id,
     String? category,
     String? name,
     double? amount,
@@ -405,7 +406,7 @@ class SetupApiService {
     }
   }
 
-  Future<FinancialCommitmentData?> getBillById(int id) async {
+  Future<FinancialCommitmentData?> getBillById(String id) async {
     try {
       final response = await apiClient.getRequest(
         endpoints: ApiEndpoints.billById(id),

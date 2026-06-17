@@ -1,6 +1,6 @@
 class ApiEndpoints {
   static const String baseUrl =
-      "https://howard-stereo-cute-trailer.trycloudflare.com/api";
+      "https://elections-tattoo-entity-surname.trycloudflare.com/api";
   //===================== auth ApiEndpoints ===========================//
   static const String register = '/auth/register';
   static const String login = '/auth/login';
@@ -23,9 +23,9 @@ class ApiEndpoints {
   static const String savingGoals = '/set-up/saving-goals';
   static const String monthlyBills = '/set-up/monthly-bills';
   static const String payIncomes = '/set-up/pay-incomes';
-  static String billById(int id) => '/set-up/bills/$id';
+  static String billById(String id) => '/set-up/bills/$id';
   static String savingGoalById(String id) => '/set-up/saving-goals/$id';
   static String deletSavingGoalById(String id) => '/set-up/saving-goals/$id';
-  static String billForPatch(int id) => '/set-up/bill/$id';
+  static String billForPatch(String id) => '/set-up/bill/$id';
   static String incomeForPatch(int id) => '/set-up/income/$id';
 }

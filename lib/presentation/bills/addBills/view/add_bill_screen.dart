@@ -4,6 +4,7 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_mana
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/utils.dart';
 import 'package:bendrummond1819_fo529642dc3c7/data/repositories/setup_repository.dart';
 import 'package:bendrummond1819_fo529642dc3c7/data/sources/remote/setup_api_service.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/bills_provider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/outline_button.dart';
@@ -84,6 +85,7 @@ class _AddBillScreenState extends ConsumerState<AddBillScreen> {
           backgroundColor: ColorManager.successColor,
           textColor: ColorManager.whiteColor,
         );
+        ref.invalidate(billsProvider);
         Navigator.pop(context);
       } else if (mounted) {
         Utils.showToast(

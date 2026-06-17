@@ -1,7 +1,7 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/setup_data_api_provider.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/bills_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,12 +17,12 @@ class _BillsScreenState extends ConsumerState<BillsScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(setupApiDataProvider.notifier).fetchData());
+    Future.microtask(() => ref.read(billsProvider.notifier).fetchBills());
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(setupApiDataProvider);
+    final state = ref.watch(billsProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -45,8 +45,8 @@ class _BillsScreenState extends ConsumerState<BillsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    state.data != null
-                        ? '\$${state.data!.financialCommitments.fold<double>(0, (sum, c) => sum + c.amount).toStringAsFixed(0)}/month'
+                    state.bills.isNotEmpty
+                        ? '\$${state.bills.fold<double>(0, (sum, c) => sum + c.amount).toStringAsFixed(0)}/month'
                         : '\$0/month',
                     style: getRegularStyle16_400(color: ColorManager.brown400),
                   ),
@@ -73,26 +73,47 @@ class _BillsScreenState extends ConsumerState<BillsScreen> {
 
               Expanded(
                 child: state.isLoading
-                    ? Center(child: CircularProgressIndicator(color: ColorManager.textPrimary))
-                    : state.data == null || state.data!.financialCommitments.isEmpty
-                        ? Center(
-                            child: Text(
-                              "No bills yet",
-                              style: getRegularStyle16_400(color: ColorManager.brown400),
-                            ),
-                          )
-                        : ListView(
-                            padding: EdgeInsets.zero,
-                            children: state.data!.financialCommitments.map((c) {
-                              final subtitle = c.dueDay != null ? "Due day ${c.dueDay}" : (c.frequency ?? "Monthly");
-                              return Column(
-                                children: [
-                                  _buildBillCard(c.name, subtitle, "\$${c.amount.toStringAsFixed(0)}"),
-                                  SizedBox(height: 12.h),
-                                ],
-                              );
-                            }).toList(),
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: ColorManager.textPrimary,
+                        ),
+                      )
+                    : state.error != null
+                    ? Center(
+                        child: Text(
+                          "Error loading bills",
+                          style: getRegularStyle16_400(
+                            color: ColorManager.errorColor,
                           ),
+                        ),
+                      )
+                    : state.bills.isEmpty
+                    ? Center(
+                        child: Text(
+                          "No bills yet",
+                          style: getRegularStyle16_400(
+                            color: ColorManager.brown400,
+                          ),
+                        ),
+                      )
+                    : ListView(
+                        padding: EdgeInsets.zero,
+                        children: state.bills.map((c) {
+                          final subtitle = c.dueDay != null
+                              ? "Due day ${c.dueDay}"
+                              : (c.frequency ?? "Monthly");
+                          return Column(
+                            children: [
+                              _buildBillCard(
+                                c.name,
+                                subtitle,
+                                "\$${c.amount.toStringAsFixed(0)}",
+                              ),
+                              SizedBox(height: 12.h),
+                            ],
+                          );
+                        }).toList(),
+                      ),
               ),
             ],
           ),

@@ -26,7 +26,7 @@ class IncomeData {
 }
 
 class FinancialCommitmentData {
-  final int? id;
+  final String? id;
   final String category;
   final String name;
   final double amount;
@@ -46,11 +46,11 @@ class FinancialCommitmentData {
 
   factory FinancialCommitmentData.fromJson(Map<String, dynamic> json) =>
       FinancialCommitmentData(
-        id: json['id'],
+        id: json['id']?.toString(),
         category: json['category'] ?? '',
         name: json['name'] ?? '',
-        amount: (json['amount'] ?? 0).toDouble(),
-        dueDay: json['due_day'],
+        amount: double.tryParse(json['amount']?.toString() ?? '') ?? 0,
+        dueDay: json['due_day'] is int ? json['due_day'] as int : int.tryParse(json['due_day']?.toString() ?? ''),
         frequency: json['frequency'],
         isRecurring: json['is_recurring'] == true || json['is_recurring'] == 1,
       );
