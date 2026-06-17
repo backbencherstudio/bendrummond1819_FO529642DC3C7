@@ -44,17 +44,20 @@ class SetupApiDataNotifier extends Notifier<SetupApiDataState> {
 
   //deletegoal
 
-  Future<void> deleteGoal(String id) async {
+  Future<bool> deleteGoal(String id) async {
     try {
       final repository = SetupRepository(
         remoteSource: SetupApiService(apiClient: ApiClient()),
       );
 
-      final res = await repository.deleteSavingGoal(id);
-      debugPrint("Delete Goal $res");
-      refresh();
+      final success = await repository.deleteSavingGoal(id);
+      if (success) {
+        refresh();
+      }
+      return success;
     } catch (e) {
       debugPrint("Delete error $e");
+      return false;
     }
   }
 

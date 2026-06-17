@@ -1,6 +1,7 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/utils.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/setup_data_api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -136,17 +137,29 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen> {
               ],
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              debugPrint("Gesturebutton");
-              if (id != null) {
-                ref.read(setupApiDataProvider.notifier).deleteGoal(id);
+          InkWell(
+            onTap: () async {
+              if (id == null) return;
+              final success = await ref
+                  .read(setupApiDataProvider.notifier)
+                  .deleteGoal(id);
+              if (context.mounted) {
+                Utils.showToast(
+                  message: success ? "Goal deleted" : "Failed to delete goal",
+                  backgroundColor: success
+                      ? ColorManager.successColor
+                      : ColorManager.errorColor,
+                  textColor: ColorManager.whiteColor,
+                );
               }
             },
-            child: Icon(
-              Icons.close,
-              color: ColorManager.primaryButton,
-              size: 20.sp,
+            child: Container(
+              padding: EdgeInsets.all(14.r),
+              child: Icon(
+                Icons.close,
+                color: ColorManager.primaryButton,
+                size: 20.sp,
+              ),
             ),
           ),
         ],
