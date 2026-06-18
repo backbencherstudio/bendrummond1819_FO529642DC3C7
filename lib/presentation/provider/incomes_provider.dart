@@ -7,21 +7,29 @@ import '../../data/sources/remote/setup_api_service.dart';
 
 class IncomesState {
   final List<IncomeData> incomes;
+  final List<FinancialCommitmentData> financialCommitments;
+  final double safeToSpend;
   final bool isLoading;
   final String? error;
 
   const IncomesState({
     this.incomes = const [],
+    this.financialCommitments = const [],
+    this.safeToSpend = 0,
     this.isLoading = false,
     this.error,
   });
 
   IncomesState copyWith({
     List<IncomeData>? incomes,
+    List<FinancialCommitmentData>? financialCommitments,
+    double? safeToSpend,
     bool? isLoading,
     String? error,
   }) => IncomesState(
     incomes: incomes ?? this.incomes,
+    financialCommitments: financialCommitments ?? this.financialCommitments,
+    safeToSpend: safeToSpend ?? this.safeToSpend,
     isLoading: isLoading ?? this.isLoading,
     error: error,
   );
@@ -31,6 +39,21 @@ class IncomesNotifier extends Notifier<IncomesState> {
   @override
   IncomesState build() => const IncomesState();
 
+  double _monthlyMultiplier(String frequency) {
+    switch (frequency) {
+      case 'WEEKLY':
+        return 4.33;
+      case 'EVERY_2_WEEKS':
+        return 2.17;
+      case 'TWICE_A_MONTH':
+        return 2;
+      case 'MONTHLY':
+        return 1;
+      default:
+        return 1;
+    }
+  }
+
   Future<void> fetchIncomes() async {
     state = state.copyWith(isLoading: true, error: null);
     try {
@@ -39,7 +62,32 @@ class IncomesNotifier extends Notifier<IncomesState> {
       );
       final data = await repository.getSetupData();
       debugPrint("Incomes provider $data");
-      state = IncomesState(incomes: data?.incomes ?? [], isLoading: false);
+
+      final incomes = data?.incomes ?? [];
+      final commitments = data?.financialCommitments ?? [];
+      final savings = data?.savingsGoals ?? [];
+
+      final monthlyIncome = incomes.fold<double>(
+        0,
+        (sum, i) => sum + i.baseIncome * _monthlyMultiplier(i.payFrequency),
+      );
+      final totalCommitments = commitments.fold<double>(
+        0, (sum, c) => sum + c.amount,
+      );
+      final totalSavings = savings.fold<double>(
+        0, (sum, g) => sum + g.contribution,
+      );
+
+      final safeToSpend = monthlyIncome > 0
+          ? (monthlyIncome - totalCommitments - totalSavings) / 4.33
+          : 0.0;
+
+      state = IncomesState(
+        incomes: incomes,
+        financialCommitments: commitments,
+        safeToSpend: safeToSpend,
+        isLoading: false,
+      );
     } catch (e) {
       state = IncomesState(isLoading: false, error: e.toString());
     }

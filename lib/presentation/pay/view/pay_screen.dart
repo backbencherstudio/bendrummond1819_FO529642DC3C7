@@ -58,134 +58,170 @@ class _PayScreenState extends ConsumerState<PayScreen> {
             top: 32.r,
             bottom: 100.h,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Pay & Income',
-                style: getSemiBoldStyle22(
-                  color: ColorManager.textPrimary,
-                  fontSize: 32,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Pay & Income',
+                  style: getSemiBoldStyle22(
+                    color: ColorManager.textPrimary,
+                    fontSize: 32,
+                  ),
                 ),
-              ),
-              SizedBox(height: 24.h),
+                SizedBox(height: 24.h),
 
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(16.r),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16.r),
-                  border: Border.all(color: ColorManager.backgroundPressed100),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Safe to spend',
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(16.r),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16.r),
+                    border: Border.all(color: ColorManager.backgroundPressed100),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Safe to spend',
+                            style: getRegularStyle16_400(
+                              color: ColorManager.brown300,
+                              fontSize: 14,
+                            ),
+                          ),
+                          SizedBox(height: 20.h),
+                          Text(
+                            '\$${state.safeToSpend.toStringAsFixed(0)}',
+                            style: getMediumStyle18(
+                              color: ColorManager.textPrimary,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Updates when you save',
+                          textAlign: TextAlign.right,
                           style: getRegularStyle16_400(
                             color: ColorManager.brown300,
                             fontSize: 14,
                           ),
                         ),
-                        SizedBox(height: 20.h),
-                        Text(
-                          '\$185',
-                          style: getMediumStyle18(
-                            color: ColorManager.textPrimary,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Expanded(
-                      child: Text(
-                        'Updates when you save',
-                        textAlign: TextAlign.right,
-                        style: getRegularStyle16_400(
-                          color: ColorManager.brown300,
-                          fontSize: 14,
-                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 24.h),
-
-              Text(
-                'Your incomes',
-                style: getRegularStyle16_400(color: ColorManager.brown400),
-              ),
-              SizedBox(height: 12.h),
-
-              Expanded(
-                child: state.isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: ColorManager.textPrimary,
-                        ),
-                      )
-                    : state.incomes.isEmpty
-                    ? Center(
-                        child: Text(
-                          "No incomes yet",
-                          style: getRegularStyle16_400(
-                            color: ColorManager.brown400,
-                          ),
-                        ),
-                      )
-                    : ListView.separated(
-                        itemCount: state.incomes.length,
-                        separatorBuilder: (_, _) => SizedBox(height: 12.h),
-                        itemBuilder: (_, i) =>
-                            _buildIncomeCard(state.incomes[i]),
-                      ),
-              ),
-
-              SizedBox(height: 16.h),
-
-              GestureDetector(
-                onTap: () => _showAddEditSheet(),
-                child: CustomPaint(
-                  painter: DashedRectPainter(color: ColorManager.primaryButton),
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(
-                      vertical: 12.h,
-                      horizontal: 16.w,
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(8.w),
-                          decoration: BoxDecoration(
-                            color: ColorManager.backgroundCard,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.add,
-                            color: ColorManager.primaryButton,
-                            size: 20.sp,
-                          ),
-                        ),
-                        SizedBox(width: 15.w),
-                        Text(
-                          'Add an income',
-                          style: getRegularStyle16_400(
-                            color: ColorManager.brown400,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+                SizedBox(height: 24.h),
+
+                if (state.isLoading)
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 40.h),
+                      child: CircularProgressIndicator(
+                        color: ColorManager.textPrimary,
+                      ),
+                    ),
+                  )
+                else ...[
+                  Text(
+                    'Your incomes',
+                    style: getRegularStyle16_400(color: ColorManager.brown400),
+                  ),
+                  SizedBox(height: 12.h),
+
+                  if (state.incomes.isEmpty)
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.h),
+                      child: Text(
+                        "No incomes yet",
+                        style: getRegularStyle16_400(
+                          color: ColorManager.brown400,
+                        ),
+                      ),
+                    )
+                  else
+                    ...List.generate(state.incomes.length, (i) {
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 12.h),
+                        child: _buildIncomeCard(state.incomes[i]),
+                      );
+                    }),
+
+                  SizedBox(height: 24.h),
+
+                  Text(
+                    'Your pay',
+                    style: getRegularStyle16_400(color: ColorManager.brown400),
+                  ),
+                  SizedBox(height: 12.h),
+
+                  if (state.financialCommitments.isEmpty)
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 16.h),
+                      child: Text(
+                        "No commitments yet",
+                        style: getRegularStyle16_400(
+                          color: ColorManager.brown400,
+                        ),
+                      ),
+                    )
+                  else
+                    ...List.generate(state.financialCommitments.length, (i) {
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 12.h),
+                        child: _buildCommitmentCard(
+                          state.financialCommitments[i],
+                        ),
+                      );
+                    }),
+
+                  SizedBox(height: 16.h),
+
+                  GestureDetector(
+                    onTap: () => _showAddEditSheet(),
+                    child: CustomPaint(
+                      painter:
+                          DashedRectPainter(color: ColorManager.primaryButton),
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 12.h,
+                          horizontal: 16.w,
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(8.w),
+                              decoration: BoxDecoration(
+                                color: ColorManager.backgroundCard,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.add,
+                                color: ColorManager.primaryButton,
+                                size: 20.sp,
+                              ),
+                            ),
+                            SizedBox(width: 15.w),
+                            Text(
+                              'Add an income',
+                              style: getRegularStyle16_400(
+                                color: ColorManager.brown400,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
           ),
         ),
       ),
@@ -233,33 +269,56 @@ class _PayScreenState extends ConsumerState<PayScreen> {
                 fontSize: 18,
               ),
             ),
-            SizedBox(width: 18.w),
-            GestureDetector(
-              onTap: () => _deleteIncome(income.id),
-              child: Icon(
-                Icons.close,
-                color: ColorManager.primaryButton,
-                size: 20.sp,
-              ),
-            ),
           ],
         ),
       ),
     );
   }
 
-  Future<void> _deleteIncome(String? id) async {
-    if (id == null) return;
-    final success = await ref.read(incomesProvider.notifier).deleteIncome(id);
-    if (context.mounted) {
-      Utils.showToast(
-        message: success ? "Income deleted" : "Failed to delete income",
-        backgroundColor: success
-            ? ColorManager.successColor
-            : ColorManager.errorColor,
-        textColor: ColorManager.whiteColor,
-      );
-    }
+  Widget _buildCommitmentCard(FinancialCommitmentData c) {
+    return Container(
+      padding: EdgeInsets.all(16.r),
+      decoration: BoxDecoration(
+        color: ColorManager.secondaryBackGround,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: ColorManager.borderE0D9D1, width: 2),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  c.name,
+                  style: getRegularStyle16_400(
+                    color: ColorManager.brown400,
+                    fontSize: 18,
+                  ),
+                ),
+                if (c.dueDay != null) ...[
+                  SizedBox(height: 4.h),
+                  Text(
+                    'Due day ${c.dueDay}',
+                    style: getRegularStyle16_400(
+                      color: ColorManager.brown400,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          Text(
+            '\$${c.amount.toStringAsFixed(0)}',
+            style: getRegularStyle16_400(
+              color: ColorManager.brown400,
+              fontSize: 18,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _showAddEditSheet({IncomeData? existing}) {
