@@ -18,12 +18,6 @@ const List<String> _frequencies = [
   'MONTHLY',
 ];
 
-const List<String> _commitmentCategories = [
-  'HOUSING',
-  'CAR_PAYMENT',
-  'DEBT',
-];
-
 String _formatLabel(String value) {
   return value
       .replaceAll('_', ' ')
@@ -83,7 +77,9 @@ class _PayScreenState extends ConsumerState<PayScreen> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16.r),
-                    border: Border.all(color: ColorManager.backgroundPressed100),
+                    border: Border.all(
+                      color: ColorManager.backgroundPressed100,
+                    ),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -190,8 +186,9 @@ class _PayScreenState extends ConsumerState<PayScreen> {
                   GestureDetector(
                     onTap: () => _showAddEditSheet(),
                     child: CustomPaint(
-                      painter:
-                          DashedRectPainter(color: ColorManager.primaryButton),
+                      painter: DashedRectPainter(
+                        color: ColorManager.primaryButton,
+                      ),
                       child: Container(
                         width: double.infinity,
                         padding: EdgeInsets.symmetric(
@@ -215,47 +212,6 @@ class _PayScreenState extends ConsumerState<PayScreen> {
                             SizedBox(width: 15.w),
                             Text(
                               'Add an income',
-                              style: getRegularStyle16_400(
-                                color: ColorManager.brown400,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 12.h),
-
-                  GestureDetector(
-                    onTap: () => _showAddCommitmentSheet(),
-                    child: CustomPaint(
-                      painter:
-                          DashedRectPainter(color: ColorManager.primaryButton),
-                      child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(
-                          vertical: 12.h,
-                          horizontal: 16.w,
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(8.w),
-                              decoration: BoxDecoration(
-                                color: ColorManager.backgroundCard,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.add,
-                                color: ColorManager.primaryButton,
-                                size: 20.sp,
-                              ),
-                            ),
-                            SizedBox(width: 15.w),
-                            Text(
-                              'Add a payment',
                               style: getRegularStyle16_400(
                                 color: ColorManager.brown400,
                                 fontSize: 18,
@@ -566,251 +522,6 @@ class _PayScreenState extends ConsumerState<PayScreen> {
                     ),
                   ],
                 ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  void _showAddCommitmentSheet() {
-    final formKey = GlobalKey<FormState>();
-    String selectedCategory = _commitmentCategories[0];
-    String selectedFreq = _frequencies[0];
-    final nameController = TextEditingController();
-    final amountController = TextEditingController();
-    final dueDayController = TextEditingController();
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-      ),
-      builder: (ctx) {
-        bool submitting = false;
-
-        return StatefulBuilder(
-          builder: (ctx, setSheetState) {
-            return Padding(
-              padding: EdgeInsets.only(
-                left: 20.w,
-                right: 20.w,
-                top: 24.h,
-                bottom: MediaQuery.of(ctx).viewInsets.bottom + 24.h,
-              ),
-              child: Form(
-                key: formKey,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Add payment',
-                        style: getSemiBoldStyle22(
-                        color: ColorManager.textPrimary,
-                        fontSize: 22.sp,
-                      ),
-                    ),
-                    SizedBox(height: 20.h),
-                    Text(
-                      'Category',
-                      style: getRegularStyle16_400(
-                        color: ColorManager.brown400,
-                      ),
-                    ),
-                    SizedBox(height: 6.h),
-                    DropdownButtonFormField<String>(
-                      initialValue: selectedCategory,
-                      items: _commitmentCategories
-                          .map(
-                            (c) => DropdownMenuItem(
-                              value: c,
-                              child: Text(_formatLabel(c)),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (v) {
-                        if (v == null) return;
-                        setSheetState(() => selectedCategory = v);
-                      },
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 12.h),
-                    Text(
-                      'Name',
-                      style: getRegularStyle16_400(
-                        color: ColorManager.brown400,
-                      ),
-                    ),
-                    SizedBox(height: 6.h),
-                    TextFormField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        hintText: 'e.g. Rent',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                      ),
-                      validator: (v) =>
-                          v == null || v.trim().isEmpty ? 'Required' : null,
-                    ),
-                    SizedBox(height: 12.h),
-                    Text(
-                      'Amount',
-                      style: getRegularStyle16_400(
-                        color: ColorManager.brown400,
-                      ),
-                    ),
-                    SizedBox(height: 6.h),
-                    TextFormField(
-                      controller: amountController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        hintText: 'e.g. 500',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                      ),
-                      validator: (v) {
-                        if (v == null || v.trim().isEmpty) return 'Required';
-                        if (double.tryParse(v) == null) return 'Invalid number';
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 12.h),
-                    Text(
-                      'Frequency',
-                      style: getRegularStyle16_400(
-                        color: ColorManager.brown400,
-                      ),
-                    ),
-                    SizedBox(height: 6.h),
-                    DropdownButtonFormField<String>(
-                      initialValue: selectedFreq,
-                      items: _frequencies
-                          .map(
-                            (f) => DropdownMenuItem(
-                              value: f,
-                              child: Text(_formatLabel(f)),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (v) {
-                        if (v == null) return;
-                        setSheetState(() => selectedFreq = v);
-                      },
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 12.h),
-                    Text(
-                      'Due day (optional)',
-                      style: getRegularStyle16_400(
-                        color: ColorManager.brown400,
-                      ),
-                    ),
-                    SizedBox(height: 6.h),
-                    TextFormField(
-                      controller: dueDayController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        hintText: 'e.g. 1',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                      ),
-                      validator: (v) {
-                        if (v == null || v.trim().isEmpty) return null;
-                        final day = int.tryParse(v);
-                        if (day == null || day < 1 || day > 31) {
-                          return 'Enter 1-31';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 24.h),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50.h,
-                      child: ElevatedButton(
-                        onPressed: submitting
-                            ? null
-                            : () async {
-                                if (!formKey.currentState!.validate()) return;
-                                setSheetState(() => submitting = true);
-
-                                final name = nameController.text.trim();
-                                final amount = double.parse(
-                                  amountController.text.trim(),
-                                );
-                                final dueDayText = dueDayController.text.trim();
-                                final dueDay = dueDayText.isNotEmpty
-                                    ? int.parse(dueDayText)
-                                    : null;
-
-                                final success = await ref
-                                    .read(incomesProvider.notifier)
-                                    .addCommitment(
-                                      category: selectedCategory,
-                                      name: name,
-                                      amount: amount,
-                                      dueDay: dueDay,
-                                      frequency: selectedFreq,
-                                      isRecurring: true,
-                                    );
-
-                                if (ctx.mounted) {
-                                  Navigator.pop(ctx);
-                                }
-                                if (context.mounted) {
-                                  Utils.showToast(
-                                    message: success
-                                        ? "Payment added"
-                                        : "Failed to add payment",
-                                    backgroundColor: success
-                                        ? ColorManager.successColor
-                                        : ColorManager.errorColor,
-                                    textColor: ColorManager.whiteColor,
-                                  );
-                                }
-                              },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: ColorManager.brown,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.r),
-                          ),
-                        ),
-                        child: submitting
-                            ? SizedBox(
-                                width: 20.r,
-                                height: 20.r,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : Text(
-                                'Add',
-                                style: getMediumStyle18(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               ),
             );
           },

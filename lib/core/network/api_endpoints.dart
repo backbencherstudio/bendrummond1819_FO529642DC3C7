@@ -14,7 +14,7 @@ class ApiEndpoints {
   static const String resetPassword = '/auth/reset-password';
   static const String logout = '/auth/logout';
   static const String createAndagetJob = '/jobs';
-
+  static const String deleteAccount = '/auth/delete-account';
   //========================set-up ApiEndpoints=========================//
   static const String setUp = '/set-up';
   static const String addNewGoal = '/set-up/add-new-goal';

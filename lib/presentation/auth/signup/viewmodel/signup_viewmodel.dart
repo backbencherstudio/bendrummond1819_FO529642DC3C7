@@ -38,7 +38,7 @@ class SignUpModelview extends StateNotifier<SignUpState> {
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        errorMessage: e.toString(),
+        errorMessage: e.toString().replaceFirst('Exception: ', ''),
       );
       return false;
     }

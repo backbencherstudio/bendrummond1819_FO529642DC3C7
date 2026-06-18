@@ -33,11 +33,12 @@ class AuthApiService {
       log("Register response: $response");
 
       if (response is Map<String, dynamic>) {
-        if (response['success'] == false) {
-          throw Exception(response['message'] ?? response['error'] ?? 'Registration failed');
-        }
-        if (response['error'] != null) {
-          throw Exception(response['error'].toString());
+        if (response['success'] == false ||
+            response['error'] != null ||
+            (response['statusCode'] != null && response['statusCode'] >= 400)) {
+          throw Exception(
+            response['message'] ?? response['error'] ?? 'Registration failed',
+          );
         }
 
         try {
