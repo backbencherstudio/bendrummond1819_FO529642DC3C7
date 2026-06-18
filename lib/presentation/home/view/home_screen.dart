@@ -3,7 +3,7 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manag
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/setup_data_provider.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/setup_data_api_provider.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/incomes_provider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/user_provider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_logo_text.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      ref.read(setupApiDataProvider.notifier).fetchData();
+      ref.read(incomesProvider.notifier).fetchIncomes();
       ref.read(userProvider.notifier).loadUser();
     });
   }
@@ -75,10 +75,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(setupApiDataProvider);
+    final incomeState = ref.watch(incomesProvider);
     final userState = ref.watch(userProvider);
     final setupData = ref.watch(setupDataProvider);
-    final data = state.data;
     final now = DateTime.now();
 
     final userName = userState.user?.name ?? 'there';
@@ -90,16 +89,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     String payFrequencyLabel;
     int billsCount;
 
-    if (data != null && data.incomes.isNotEmpty) {
-      final monthlyIncome = data.incomes.fold<double>(
+    if (incomeState.incomes.isNotEmpty) {
+      final monthlyIncome = incomeState.incomes.fold<double>(
         0,
         (sum, i) => sum + i.baseIncome * _monthlyMultiplier(i.payFrequency),
       );
-      final totalBills = data.financialCommitments.fold<double>(
+      final totalBills = incomeState.financialCommitments.fold<double>(
         0,
         (sum, c) => sum + c.amount,
       );
-      final totalSavings = data.savingsGoals.fold<double>(
+      final totalSavings = incomeState.savingsGoals.fold<double>(
         0,
         (sum, g) => sum + g.contribution,
       );
@@ -108,8 +107,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       breakdownMonthlyIncome = monthlyIncome;
       breakdownBills = totalBills;
       payFrequencyLabel =
-          '${data.incomes.first.payFrequency.replaceAll('_', ' ').toLowerCase()} paycheck';
-      billsCount = data.financialCommitments.length;
+          '${incomeState.incomes.first.payFrequency.replaceAll('_', ' ').toLowerCase()} paycheck';
+      billsCount = incomeState.financialCommitments.length;
     } else if (setupData.baseIncome.isNotEmpty) {
       final income = double.tryParse(setupData.baseIncome) ?? 0;
       final monthlyIncomeVal =
@@ -237,7 +236,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                       Text(
                         textAlign: TextAlign.center,
-                        state.isLoading
+                        incomeState.isLoading
                             ? '...'
                             : '\$${safeToSpend.toStringAsFixed(0)}',
                         style: getMediumStyle18(
@@ -307,7 +306,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     style: getMediumStyle18(color: ColorManager.c3B2208),
                   ),
                   Text(
-                    state.isLoading
+                    incomeState.isLoading
                         ? '...'
                         : '\$${safeToSpend.toStringAsFixed(0)}',
                     style: getMediumStyle18(color: ColorManager.textPrimary),

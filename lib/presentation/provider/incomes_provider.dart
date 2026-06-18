@@ -8,6 +8,7 @@ import '../../data/sources/remote/setup_api_service.dart';
 class IncomesState {
   final List<IncomeData> incomes;
   final List<FinancialCommitmentData> financialCommitments;
+  final List<SavingsGoalData> savingsGoals;
   final double safeToSpend;
   final bool isLoading;
   final String? error;
@@ -15,6 +16,7 @@ class IncomesState {
   const IncomesState({
     this.incomes = const [],
     this.financialCommitments = const [],
+    this.savingsGoals = const [],
     this.safeToSpend = 0,
     this.isLoading = false,
     this.error,
@@ -23,12 +25,14 @@ class IncomesState {
   IncomesState copyWith({
     List<IncomeData>? incomes,
     List<FinancialCommitmentData>? financialCommitments,
+    List<SavingsGoalData>? savingsGoals,
     double? safeToSpend,
     bool? isLoading,
     String? error,
   }) => IncomesState(
     incomes: incomes ?? this.incomes,
     financialCommitments: financialCommitments ?? this.financialCommitments,
+    savingsGoals: savingsGoals ?? this.savingsGoals,
     safeToSpend: safeToSpend ?? this.safeToSpend,
     isLoading: isLoading ?? this.isLoading,
     error: error,
@@ -85,6 +89,7 @@ class IncomesNotifier extends Notifier<IncomesState> {
       state = IncomesState(
         incomes: incomes,
         financialCommitments: commitments,
+        savingsGoals: savings,
         safeToSpend: safeToSpend,
         isLoading: false,
       );
