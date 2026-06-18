@@ -31,7 +31,7 @@ class UserModel {
     id: json['id'].toString(),
     name: json['name'] ?? '',
     email: json['email'] ?? '',
-    avatar: json['avatar'],
+    avatar: json['avatar_url'],
     address: json['address'],
     phoneNumber: json['phone_number'],
     billRemainders: json['bill_remainders'] ?? false,

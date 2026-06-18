@@ -118,17 +118,15 @@ class SetupApiService {
   Future<SetupResponse?> getSetupData() async {
     try {
       final response = await apiClient.getRequest(
-        endpoints: ApiEndpoints.savingGoals,
+        endpoints: ApiEndpoints.setUp,
       );
 
       if (response is Map<String, dynamic>) {
-        final data = response['data'];
-
-        if (data == null) {
-          return null;
+        if (response['success'] == true && response['data'] != null) {
+          return SetupResponse.fromJson(
+            response['data'] as Map<String, dynamic>,
+          );
         }
-
-        return SetupResponse.fromJson(data);
       }
 
       return null;

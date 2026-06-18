@@ -37,8 +37,14 @@ class _HomeSettingsScreenState extends ConsumerState<HomeSettingsScreen> {
     }
   }
 
+  String _getInitial(String? name) {
+    if (name != null && name.isNotEmpty) return name[0].toUpperCase();
+    return 'U';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider).user;
     return Scaffold(
       backgroundColor: ColorManager.secondaryBackGround,
       body: SafeArea(
@@ -73,9 +79,18 @@ class _HomeSettingsScreenState extends ConsumerState<HomeSettingsScreen> {
                     // =========  Profile Image ===========
                     CircleAvatar(
                       radius: 30.r,
-                      backgroundImage: NetworkImage(
-                        'https://wallpapers.com/images/featured/goku-super-saiyan-dm8zixw58guf3x1b.jpg',
-                      ),
+                      backgroundImage: user?.avatar != null
+                          ? NetworkImage(user!.avatar!)
+                          : null,
+                      backgroundColor: ColorManager.brown,
+                      child: user?.avatar == null
+                          ? Text(
+                              _getInitial(user?.name),
+                              style: getBoldStyle32(
+                                color: ColorManager.whiteColor,
+                              ).copyWith(fontSize: 24.sp),
+                            )
+                          : null,
                     ),
                     SizedBox(width: 15.w),
                     // ========  Profile Info =============
@@ -84,14 +99,14 @@ class _HomeSettingsScreenState extends ConsumerState<HomeSettingsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            ref.watch(userProvider).user?.name ?? 'User',
+                            user?.name ?? 'User',
                             style: getSemiBoldStyle22(
                               fontSize: 20,
                               color: ColorManager.textPrimary,
                             ),
                           ),
                           Text(
-                            ref.watch(userProvider).user?.email ?? '',
+                            user?.email ?? '',
                             style: getRegularStyle16_400(
                               color: ColorManager.brown300,
                               fontSize: 14,
@@ -99,8 +114,8 @@ class _HomeSettingsScreenState extends ConsumerState<HomeSettingsScreen> {
                           ),
                           SizedBox(height: 4.h),
                           Text(
-                            ref.watch(userProvider).user != null
-                                ? 'Member since ${_formatDate(ref.watch(userProvider).user!.createdAt)}'
+                            user != null
+                                ? 'Member since ${_formatDate(user.createdAt)}'
                                 : '',
                             style: getRegularStyle16_400(
                               color: ColorManager.brown300,

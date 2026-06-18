@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
@@ -9,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AccountScreen extends ConsumerStatefulWidget {
   const AccountScreen({super.key});
@@ -25,6 +29,15 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
   final _phoneController = TextEditingController();
   final _dobController = TextEditingController();
   bool _initialized = false;
+  File? _pickedImage;
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      setState(() => _pickedImage = File(picked.path));
+    }
+  }
 
   @override
   void initState() {
@@ -43,6 +56,11 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
     _phoneController.dispose();
     _dobController.dispose();
     super.dispose();
+  }
+
+  String _getInitial(String? name) {
+    if (name != null && name.isNotEmpty) return name[0].toUpperCase();
+    return 'U';
   }
 
   @override
@@ -86,37 +104,71 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
               Center(
                 child: Stack(
                   children: [
-                    Container(
-                      width: 80.w,
-                      height: 80.h,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: ColorManager.whiteColor,
-                          width: 2,
-                        ),
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            'https://wallpapers.com/images/featured/goku-background-vhm3f71ddueli0kl.jpg',
+                    _pickedImage != null
+                        ? Container(
+                            width: 80.w,
+                            height: 80.h,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: ColorManager.whiteColor,
+                                width: 2,
+                              ),
+                              image: DecorationImage(
+                                image: FileImage(_pickedImage!),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
+                        : user?.avatar != null
+                        ? Container(
+                            width: 80.w,
+                            height: 80.h,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: ColorManager.whiteColor,
+                                width: 2,
+                              ),
+                              image: DecorationImage(
+                                image: NetworkImage(user!.avatar!),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
+                        : Container(
+                            width: 80.w,
+                            height: 80.h,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: ColorManager.brown,
+                            ),
+                            child: Center(
+                              child: Text(
+                                _getInitial(user?.name),
+                                style: getBoldStyle32(
+                                  color: ColorManager.whiteColor,
+                                ).copyWith(fontSize: 28.sp),
+                              ),
+                            ),
                           ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
                     Positioned(
                       bottom: 0,
                       right: 0,
-                      child: Container(
-                        padding: EdgeInsets.all(6.w),
-                        decoration: BoxDecoration(
-                          color: ColorManager.brown,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: ColorManager.grayBlack400,
-                            width: 2,
+                      child: GestureDetector(
+                        onTap: _pickImage,
+                        child: Container(
+                          padding: EdgeInsets.all(6.w),
+                          decoration: BoxDecoration(
+                            color: ColorManager.brown,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: ColorManager.grayBlack400,
+                              width: 2,
+                            ),
                           ),
+                          child: SvgPicture.asset(IconManager.editIcon),
                         ),
-                        child: SvgPicture.asset(IconManager.editIcon),
                       ),
                     ),
                   ],
@@ -167,22 +219,35 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                     child: _buildButton("Cancel", () {}, isSecondary: true),
                   ),
                   SizedBox(width: 15.w),
-                  Expanded(child: _buildButton("Save", () async {
-                    final success = await ref.read(userProvider.notifier).updateProfile(
-                      name: _nameController.text,
-                      phoneNumber: _phoneController.text,
-                      dateOfBirth: _dobController.text,
-                    );
-                    if (context.mounted) {
-                      Utils.showToast(
-                        message: success ? "Profile updated" : "Failed to update profile",
-                        backgroundColor: success
-                            ? ColorManager.successColor
-                            : ColorManager.errorColor,
-                        textColor: ColorManager.whiteColor,
-                      );
-                    }
-                  })),
+                  Expanded(
+                    child: _buildButton("Save", () async {
+                      String? avatarBase64;
+                      if (_pickedImage != null) {
+                        final bytes = await _pickedImage!.readAsBytes();
+                        avatarBase64 = base64Encode(bytes);
+                      }
+                      final success = await ref
+                          .read(userProvider.notifier)
+                          .updateProfile(
+                            name: _nameController.text,
+                            phoneNumber: _phoneController.text,
+                            dateOfBirth: _dobController.text,
+                            avatar: avatarBase64,
+                          );
+                      if (context.mounted) {
+                        setState(() => _pickedImage = null);
+                        Utils.showToast(
+                          message: success
+                              ? "Profile updated"
+                              : "Failed to update profile",
+                          backgroundColor: success
+                              ? ColorManager.successColor
+                              : ColorManager.errorColor,
+                          textColor: ColorManager.whiteColor,
+                        );
+                      }
+                    }),
+                  ),
                 ],
               ),
               SizedBox(height: 30.h),

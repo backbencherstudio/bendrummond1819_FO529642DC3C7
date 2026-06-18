@@ -33,7 +33,8 @@ class BalancesNotifier extends Notifier<BalancesState> {
       final repository = SetupRepository(
         remoteSource: SetupApiService(apiClient: ApiClient()),
       );
-      final debts = await repository.getDebts();
+      final bills = await repository.getMonthlyBills();
+      final debts = bills.where((b) => b.category == 'DEBT').toList();
       state = BalancesState(debts: debts, isLoading: false);
     } catch (e) {
       state = BalancesState(isLoading: false, error: e.toString());
@@ -54,10 +55,13 @@ class BalancesNotifier extends Notifier<BalancesState> {
       final repository = SetupRepository(
         remoteSource: SetupApiService(apiClient: ApiClient()),
       );
-      final success = await repository.addDebt(
+      final success = await repository.addBill(
+        category: 'DEBT',
         name: name,
         amount: amount,
         dueDay: dueDay,
+        frequency: 'WEEKLY',
+        isRecurring: true,
       );
       if (success) {
         refresh();
@@ -73,7 +77,7 @@ class BalancesNotifier extends Notifier<BalancesState> {
       final repository = SetupRepository(
         remoteSource: SetupApiService(apiClient: ApiClient()),
       );
-      final success = await repository.deleteDebt(id);
+      final success = await repository.deleteBill(id);
       if (success) {
         refresh();
       }
@@ -93,11 +97,14 @@ class BalancesNotifier extends Notifier<BalancesState> {
       final repository = SetupRepository(
         remoteSource: SetupApiService(apiClient: ApiClient()),
       );
-      final success = await repository.updateDebt(
+      final success = await repository.updateBill(
         id: id,
+        category: 'DEBT',
         name: name,
         amount: amount,
         dueDay: dueDay,
+        frequency: 'WEEKLY',
+        isRecurring: true,
       );
       if (success) {
         refresh();

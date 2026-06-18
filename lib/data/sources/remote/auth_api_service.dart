@@ -33,8 +33,21 @@ class AuthApiService {
       log("Register response: $response");
 
       if (response is Map<String, dynamic>) {
-        if (response['success'] == false || response['error'] != null) {
-          return false;
+        if (response['success'] == false) {
+          throw Exception(response['message'] ?? response['error'] ?? 'Registration failed');
+        }
+        if (response['error'] != null) {
+          throw Exception(response['error'].toString());
+        }
+
+        try {
+          final token = response['authorization']?['access_token'];
+          if (token != null) {
+            await SharedPreferenceData.setToken(token);
+            await ApiClient.headerSet();
+          }
+        } catch (_) {
+          log("Failed to save token from register response");
         }
       }
 

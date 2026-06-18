@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/resource/constants/color_manger.dart';
 import '../../../../core/resource/constants/style_manager.dart';
 import '../../../../core/route/routes_name.dart';
+import '../../../../data/sources/local/shared_preference/shared_preference.dart';
 import '../../../widgets/custom_back_button.dart';
 import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/custom_otp_field.dart';
@@ -46,11 +47,20 @@ class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
         .verifyEmail(email: _email, otp: otp);
 
     if (success && mounted) {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        RoutesName.signInRoute,
-        (route) => false,
-      );
+      final token = await SharedPreferenceData.getToken();
+      if (token != null && token.isNotEmpty && mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          RoutesName.setUpScreen,
+          (route) => false,
+        );
+      } else if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          RoutesName.signInRoute,
+          (route) => false,
+        );
+      }
     } else if (mounted) {
       final state = ref.read(signupOtpViewModelProvider);
       ScaffoldMessenger.of(context).showSnackBar(
