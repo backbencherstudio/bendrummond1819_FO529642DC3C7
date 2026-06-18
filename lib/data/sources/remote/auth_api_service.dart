@@ -238,6 +238,31 @@ class AuthApiService {
     }
   }
 
+  //delete account
+  Future<bool> deleteAccount() async {
+    try {
+      final dynamic response = await ApiClient.deleteRequest(
+        endpoints: ApiEndpoints.deleteAccount,
+      );
+
+      log("Delete account response: $response");
+
+      await SharedPreferenceData.removeToken();
+      await SharedPreferenceData.removeRole();
+      ApiClient.headers = null;
+
+      return true;
+    } catch (e) {
+      log("Delete account error: ${e.toString()}");
+
+      await SharedPreferenceData.removeToken();
+      await SharedPreferenceData.removeRole();
+      ApiClient.headers = null;
+
+      return true;
+    }
+  }
+
   //verify email (signup otp)
   Future<bool> verifyEmail({
     required String email,

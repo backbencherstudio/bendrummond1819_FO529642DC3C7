@@ -1,7 +1,10 @@
+import 'package:bendrummond1819_fo529642dc3c7/core/network/api_clients.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
+import 'package:bendrummond1819_fo529642dc3c7/data/repositories/auth_repository.dart';
+import 'package:bendrummond1819_fo529642dc3c7/data/sources/remote/auth_api_service.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,6 +43,52 @@ class _HomeSettingsScreenState extends ConsumerState<HomeSettingsScreen> {
   String _getInitial(String? name) {
     if (name != null && name.isNotEmpty) return name[0].toUpperCase();
     return 'U';
+  }
+
+  Future<void> _showDeleteConfirmation() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          'Delete Account',
+          style: getMediumStyle18(color: ColorManager.textPrimary),
+        ),
+        content: Text(
+          'Are you sure you want to permanently delete your account? This action cannot be undone.',
+          style: getRegularStyle16_400(color: ColorManager.textPrimary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(
+              'Cancel',
+              style: getRegularStyle16_400(color: ColorManager.brown),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(
+              'Delete',
+              style: getRegularStyle16_400(color: ColorManager.redColor),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true && mounted) {
+      final repository = AuthRepository(
+        remoteSource: AuthApiService(apiClient: ApiClient()),
+      );
+      await repository.deleteAccount();
+      if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          RoutesName.signInRoute,
+          (_) => false,
+        );
+      }
+    }
   }
 
   @override
@@ -152,10 +201,10 @@ class _HomeSettingsScreenState extends ConsumerState<HomeSettingsScreen> {
                   // Delete Button
                   Expanded(
                     child: _buildActionButton(
-                      onTap: () {},
+                      onTap: () => _showDeleteConfirmation(),
                       label: "Account Delete",
                       icon: IconManager.deleteIcon,
-                      color: ColorManager.redColor, // Red
+                      color: ColorManager.redColor,
                       textColor: Colors.white,
                     ),
                   ),

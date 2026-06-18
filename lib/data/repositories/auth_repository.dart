@@ -56,6 +56,10 @@ class AuthRepository {
     return await remoteSource.logout();
   }
 
+  Future<bool> deleteAccount() async {
+    return await remoteSource.deleteAccount();
+  }
+
   Future<bool> forgotPassword({required String email}) async {
     return await remoteSource.forgotPassword(email: email);
   }
