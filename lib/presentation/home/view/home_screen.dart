@@ -31,11 +31,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   double _monthlyMultiplier(String frequency) {
     switch (frequency) {
-      case 'WEEKLY': return 4.33;
-      case 'EVERY_2_WEEKS': return 2.17;
-      case 'TWICE_A_MONTH': return 2;
-      case 'MONTHLY': return 1;
-      default: return 1;
+      case 'WEEKLY':
+        return 4.33;
+      case 'EVERY_2_WEEKS':
+        return 2.17;
+      case 'TWICE_A_MONTH':
+        return 2;
+      case 'MONTHLY':
+        return 1;
+      default:
+        return 1;
     }
   }
 
@@ -48,17 +53,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   double _monthlyMultiplierFromIndex(int index) {
     switch (index) {
-      case 0: return 4.33;
-      case 1: return 2.17;
-      case 2: return 2;
-      case 3: return 1;
-      default: return 1;
+      case 0:
+        return 4.33;
+      case 1:
+        return 2.17;
+      case 2:
+        return 2;
+      case 3:
+        return 1;
+      default:
+        return 1;
     }
   }
 
   String _payFrequencyLabel(int index) {
     const labels = ['weekly', 'every 2 weeks', 'twice a month', 'monthly'];
-    return index < labels.length ? '${labels[index]} paycheck' : 'monthly paycheck';
+    return index < labels.length
+        ? '${labels[index]} paycheck'
+        : 'monthly paycheck';
   }
 
   @override
@@ -80,19 +92,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     if (data != null && data.incomes.isNotEmpty) {
       final monthlyIncome = data.incomes.fold<double>(
-        0, (sum, i) => sum + i.baseIncome * _monthlyMultiplier(i.payFrequency),
+        0,
+        (sum, i) => sum + i.baseIncome * _monthlyMultiplier(i.payFrequency),
       );
-      final totalBills = data.financialCommitments.fold<double>(0, (sum, c) => sum + c.amount);
-      final totalSavings = data.savingsGoals.fold<double>(0, (sum, g) => sum + g.contribution);
+      final totalBills = data.financialCommitments.fold<double>(
+        0,
+        (sum, c) => sum + c.amount,
+      );
+      final totalSavings = data.savingsGoals.fold<double>(
+        0,
+        (sum, g) => sum + g.contribution,
+      );
       final monthlyRemaining = monthlyIncome - totalBills - totalSavings;
       safeToSpend = monthlyRemaining / 4.33;
       breakdownMonthlyIncome = monthlyIncome;
       breakdownBills = totalBills;
-      payFrequencyLabel = '${data.incomes.first.payFrequency.replaceAll('_', ' ').toLowerCase()} paycheck';
+      payFrequencyLabel =
+          '${data.incomes.first.payFrequency.replaceAll('_', ' ').toLowerCase()} paycheck';
       billsCount = data.financialCommitments.length;
     } else if (setupData.baseIncome.isNotEmpty) {
       final income = double.tryParse(setupData.baseIncome) ?? 0;
-      final monthlyIncomeVal = income * _monthlyMultiplierFromIndex(setupData.payFrequencyIndex);
+      final monthlyIncomeVal =
+          income * _monthlyMultiplierFromIndex(setupData.payFrequencyIndex);
       final rent = double.tryParse(setupData.rentAmount) ?? 0;
       final carPayment = double.tryParse(setupData.carPaymentAmount) ?? 0;
       double billsTotal = 0;
@@ -107,7 +128,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       for (final goal in setupData.savings) {
         savingsTotal += double.tryParse(goal['amount'] ?? '0') ?? 0;
       }
-      final monthlyRemaining = monthlyIncomeVal - rent - carPayment - billsTotal - debtsTotal - savingsTotal;
+      final monthlyRemaining =
+          monthlyIncomeVal -
+          rent -
+          carPayment -
+          billsTotal -
+          debtsTotal -
+          savingsTotal;
       safeToSpend = monthlyRemaining / 4.33;
       breakdownMonthlyIncome = monthlyIncomeVal;
       breakdownBills = rent + carPayment + billsTotal + debtsTotal;
@@ -209,9 +236,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ).copyWith(letterSpacing: 1.5),
                       ),
                       Text(
-                        state.isLoading ? '...' : '\$${safeToSpend.toStringAsFixed(0)}',
+                        textAlign: TextAlign.center,
+                        state.isLoading
+                            ? '...'
+                            : '\$${safeToSpend.toStringAsFixed(0)}',
                         style: getMediumStyle18(
-                          fontSize: 100,
+                          fontSize: 80,
                           color: ColorManager.c2E1606,
                         ),
                       ),
@@ -255,9 +285,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               SizedBox(height: 32.h),
 
-              _buildBreakdownRow("Pay this period", "\$${breakdownMonthlyIncome.toStringAsFixed(0)}"),
+              _buildBreakdownRow(
+                "Pay this period",
+                "\$${breakdownMonthlyIncome.toStringAsFixed(0)}",
+              ),
               SizedBox(height: 16.h),
-              _buildBreakdownRow("Bills ($billsCount)", "\$${breakdownBills.toStringAsFixed(0)}"),
+              _buildBreakdownRow(
+                "Bills ($billsCount)",
+                "\$${breakdownBills.toStringAsFixed(0)}",
+              ),
 
               SizedBox(height: 20.h),
               Divider(color: ColorManager.cE0D4C2, thickness: 1),
@@ -271,7 +307,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     style: getMediumStyle18(color: ColorManager.c3B2208),
                   ),
                   Text(
-                    state.isLoading ? '...' : '\$${safeToSpend.toStringAsFixed(0)}',
+                    state.isLoading
+                        ? '...'
+                        : '\$${safeToSpend.toStringAsFixed(0)}',
                     style: getMediumStyle18(color: ColorManager.textPrimary),
                   ),
                 ],
