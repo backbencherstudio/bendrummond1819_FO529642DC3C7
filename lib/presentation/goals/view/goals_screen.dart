@@ -18,12 +18,12 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(setupApiDataProvider.notifier).fetchData());
+    Future.microtask(() => ref.read(savingGoalsProvider.notifier).fetchGoals());
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(setupApiDataProvider);
+    final goals = ref.watch(savingGoalsProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -70,13 +70,7 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen> {
 
               SizedBox(height: 16.h),
 
-              if (state.isLoading)
-                Center(
-                  child: CircularProgressIndicator(
-                    color: ColorManager.textPrimary,
-                  ),
-                )
-              else if (state.data == null || state.data!.savingsGoals.isEmpty)
+              if (goals.isEmpty)
                 Padding(
                   padding: EdgeInsets.only(top: 40.h),
                   child: Center(
@@ -89,7 +83,7 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen> {
                   ),
                 )
               else
-                ...state.data!.savingsGoals.map(
+                ...goals.map(
                   (g) => Padding(
                     padding: EdgeInsets.only(bottom: 12.h),
                     child: _buildGoalCard(
@@ -141,7 +135,7 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen> {
             onTap: () async {
               if (id == null) return;
               final success = await ref
-                  .read(setupApiDataProvider.notifier)
+                  .read(savingGoalsProvider.notifier)
                   .deleteGoal(id);
               if (context.mounted) {
                 Utils.showToast(

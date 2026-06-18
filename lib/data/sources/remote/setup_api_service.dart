@@ -178,7 +178,8 @@ class SetupApiService {
       if (response is Map<String, dynamic>) {
         if (response['success'] == true && response['data'] != null) {
           final data = response['data'] as Map<String, dynamic>;
-          final list = data['savingsGoals'] as List<dynamic>;
+          final rawList = data['saving_goals'] ?? data['savingsGoals'] ?? [];
+          final list = rawList as List<dynamic>;
           return list
               .map((e) => SavingsGoalData.fromJson(e as Map<String, dynamic>))
               .toList();
