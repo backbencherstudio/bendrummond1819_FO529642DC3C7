@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:dio/dio.dart';
 import '../../../core/network/api_clients.dart';
 import '../../../core/network/api_endpoints.dart';
 import '../../models/user_model.dart';
@@ -74,7 +75,9 @@ class AuthApiService {
 
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
-          return false;
+          throw Exception(
+            response['message'] ?? response['error'] ?? 'Login failed',
+          );
         }
 
         try {
@@ -90,6 +93,11 @@ class AuthApiService {
 
       return true;
     } catch (error) {
+      if (error is DioException &&
+          error.response?.data is Map<String, dynamic>) {
+        final msg = (error.response?.data as Map)['message'] ?? 'Login failed';
+        throw Exception(msg);
+      }
       rethrow;
     }
   }

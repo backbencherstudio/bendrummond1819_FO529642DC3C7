@@ -29,7 +29,7 @@ class SignInModelview extends StateNotifier<SignInState> {
 
       return success;
     } catch (e) {
-      state = state.copyWith(isLoading: false, errorMessage: e.toString());
+      state = state.copyWith(isLoading: false, errorMessage: e.toString().replaceFirst('Exception: ', ''));
 
       return false;
     }
