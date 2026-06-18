@@ -69,7 +69,7 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
           backgroundColor: ColorManager.successColor,
           textColor: ColorManager.whiteColor,
         );
-        ref.read(setupApiDataProvider.notifier).refresh();
+        ref.read(savingGoalsProvider.notifier).refresh();
         Navigator.pop(context);
       } else if (mounted) {
         Utils.showToast(
