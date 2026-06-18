@@ -87,13 +87,29 @@ class SetupRepository {
   }
 
   Future<bool> updateIncome({
-    required int id,
+    required String id,
     String? incomeType,
     String? payFrequency,
     double? baseIncome,
   }) {
     return remoteSource.updateIncome(
       id: id,
+      incomeType: incomeType,
+      payFrequency: payFrequency,
+      baseIncome: baseIncome,
+    );
+  }
+
+  Future<bool> deleteIncome(String id) {
+    return remoteSource.deleteIncome(id);
+  }
+
+  Future<bool> addIncome({
+    required String incomeType,
+    required String payFrequency,
+    required double baseIncome,
+  }) {
+    return remoteSource.addIncome(
       incomeType: incomeType,
       payFrequency: payFrequency,
       baseIncome: baseIncome,
@@ -130,5 +146,26 @@ class SetupRepository {
       frequency: frequency,
       isRecurring: isRecurring,
     );
+  }
+
+  Future<bool> addDebt({
+    required String name,
+    required double amount,
+    int? dueDay,
+  }) {
+    return remoteSource.addDebt(name: name, amount: amount, dueDay: dueDay);
+  }
+
+  Future<bool> deleteDebt(String id) {
+    return remoteSource.deleteDebt(id);
+  }
+
+  Future<bool> updateDebt({
+    required String id,
+    String? name,
+    double? amount,
+    int? dueDay,
+  }) {
+    return remoteSource.updateDebt(id: id, name: name, amount: amount, dueDay: dueDay);
   }
 }

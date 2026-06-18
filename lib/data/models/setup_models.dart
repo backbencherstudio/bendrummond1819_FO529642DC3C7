@@ -1,5 +1,5 @@
 class IncomeData {
-  final int? id;
+  final String? id;
   final String incomeType;
   final String payFrequency;
   final double baseIncome;
@@ -12,7 +12,7 @@ class IncomeData {
   });
 
   factory IncomeData.fromJson(Map<String, dynamic> json) => IncomeData(
-    id: json['id'],
+    id: json['id']?.toString(),
     incomeType: json['income_type'] ?? '',
     payFrequency: json['pay_frequency'] ?? '',
     baseIncome: (json['base_income'] ?? 0).toDouble(),

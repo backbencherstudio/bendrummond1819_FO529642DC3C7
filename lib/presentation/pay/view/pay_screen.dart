@@ -1,16 +1,32 @@
-import 'dart:developer';
+import 'dart:ui';
 
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/pay/viewmodel/pay_riverpod.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/utils.dart';
+import 'package:bendrummond1819_fo529642dc3c7/data/models/setup_models.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/incomes_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
-import '../../../core/resource/constants/icon_manager.dart';
+const List<String> _incomeTypes = [
+  'SAME_EVERY_PAYCHECK',
+  'FIXED',
+  'VARIABLE',
+];
+
+const List<String> _frequencies = [
+  'WEEKLY',
+  'EVERY_2_WEEKS',
+  'TWICE_A_MONTH',
+  'MONTHLY',
+];
+
+String _formatLabel(String value) {
+  return value.replaceAll('_', ' ').split(' ').map((w) =>
+      w.isNotEmpty ? '${w[0].toUpperCase()}${w.substring(1).toLowerCase()}' : '')
+      .join(' ');
+}
 
 class PayScreen extends ConsumerStatefulWidget {
   const PayScreen({super.key});
@@ -21,16 +37,22 @@ class PayScreen extends ConsumerStatefulWidget {
 
 class _PayScreenState extends ConsumerState<PayScreen> {
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => ref.read(incomesProvider.notifier).fetchIncomes());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final isSchedule = ref.watch(payScheduleProvider);
+    final state = ref.watch(incomesProvider);
+
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.0.r, vertical: 32.r),
+        child: Padding(
+          padding: EdgeInsets.only(left: 20.0.r, right: 20.0.r, top: 32.r, bottom: 100.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //========= Header Section ==========
               Text(
                 'Pay & Income',
                 style: getSemiBoldStyle22(
@@ -40,7 +62,6 @@ class _PayScreenState extends ConsumerState<PayScreen> {
               ),
               SizedBox(height: 24.h),
 
-              // ======= Safe to spend Card =========
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(16.r),
@@ -85,63 +106,78 @@ class _PayScreenState extends ConsumerState<PayScreen> {
                   ],
                 ),
               ),
+              SizedBox(height: 24.h),
+
+              Text(
+                'Your incomes',
+                style: getRegularStyle16_400(color: ColorManager.brown400),
+              ),
+              SizedBox(height: 12.h),
+
+              Expanded(
+                child: state.isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: ColorManager.textPrimary,
+                        ),
+                      )
+                    : state.incomes.isEmpty
+                        ? Center(
+                            child: Text(
+                              "No incomes yet",
+                              style: getRegularStyle16_400(
+                                color: ColorManager.brown400,
+                              ),
+                            ),
+                          )
+                        : ListView.separated(
+                            itemCount: state.incomes.length,
+                            separatorBuilder: (_, _) =>
+                                SizedBox(height: 12.h),
+                            itemBuilder: (_, i) =>
+                                _buildIncomeCard(state.incomes[i]),
+                          ),
+              ),
+
               SizedBox(height: 16.h),
 
-              // ========= Pay schedule section =========
-              _buildLabel('Pay schedule'),
-              SizedBox(height: 10.h),
-              Wrap(
-                spacing: 4,
-                runSpacing: 6,
-                children: [
-                  _buildChip('Weekly', isSchedule),
-                  _buildChip('Every 2 weeks', isSchedule),
-                  _buildChip('Monthly', isSchedule),
-                  _buildChip('Twice a month', isSchedule),
-                  _buildChip('It\'s inconsistent', isSchedule),
-                ],
-              ),
-              SizedBox(height: 12.h),
-
-              // ======== One paycheck amount ==========
-              _buildLabel('One paycheck amount'),
-              SizedBox(height: 6.h),
-              CustomFromField(
-                hintText: '1400',
-                prefixIcon: SvgPicture.asset(
-                  IconManager.dollar,
-                  width: 20.w,
-                  height: 20.h,
+              GestureDetector(
+                onTap: () => _showAddEditSheet(),
+                child: CustomPaint(
+                  painter: DashedRectPainter(color: ColorManager.primaryButton),
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(
+                      vertical: 12.h,
+                      horizontal: 16.w,
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(8.w),
+                          decoration: BoxDecoration(
+                            color: ColorManager.backgroundCard,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.add,
+                            color: ColorManager.primaryButton,
+                            size: 20.sp,
+                          ),
+                        ),
+                        SizedBox(width: 15.w),
+                        Text(
+                          'Add an income',
+                          style: getRegularStyle16_400(
+                            color: ColorManager.brown400,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-              SizedBox(height: 12.h),
-
-              // ======== Rent / mortgage ============
-              _buildLabel('Rent / mortgage (monthly)'),
-              SizedBox(height: 6.h),
-              CustomFromField(
-                hintText: '60',
-                prefixIcon: SvgPicture.asset(
-                  IconManager.dollar,
-                  width: 20.w,
-                  height: 20.h,
-                ),
-              ),
-
-              SizedBox(height: 80.h),
-
-              // ========== Save Changes Button ======
-              PrimaryButton(
-                title: 'Save changes',
-                onTap: () {
-                  log("Save change button clicked");
-                  // Navigator.pushNamed(
-                  //   context,
-                  //   RoutesName.chooseYourPlainScreen,
-                  // );
-                },
-              ),
-              SizedBox(height: 70.h),
             ],
           ),
         ),
@@ -149,40 +185,314 @@ class _PayScreenState extends ConsumerState<PayScreen> {
     );
   }
 
-  // ======= Helper widget for Labels ========
-  Widget _buildLabel(String text) {
-    return Text(
-      text,
-      style: getRegularStyle16_400(color: ColorManager.brown300),
-    );
-  }
-
-  // ===== Helper widget for Schedule Chips ======
-  Widget _buildChip(String label, String activeLabel) {
-    final bool isActive = label == activeLabel;
-    return InkWell(
-      borderRadius: BorderRadius.circular(999.r),
-      onTap: () {
-        ref.read(payScheduleProvider.notifier).schedule(label);
-      },
+  Widget _buildIncomeCard(IncomeData income) {
+    return GestureDetector(
+      onTap: () => _showAddEditSheet(existing: income),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+        padding: EdgeInsets.all(20.w),
         decoration: BoxDecoration(
-          color: isActive ? ColorManager.textPrimary : Colors.white,
-          borderRadius: BorderRadius.circular(999.r),
+          color: ColorManager.secondaryBackGround,
+          borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
-            color: isActive
-                ? ColorManager.textPrimary
-                : ColorManager.borderE0D9D1,
+            color: ColorManager.borderE0D9D1,
+            width: 2,
           ),
         ),
-        child: Text(
-          label,
-          style: getRegularStyle16_400(
-            color: isActive ? ColorManager.whiteColor : ColorManager.brown400,
-          ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _formatLabel(income.incomeType),
+                    style: getRegularStyle16_400(
+                      color: ColorManager.brown400,
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  Text(
+                    _formatLabel(income.payFrequency),
+                    style: getRegularStyle16_400(
+                      color: ColorManager.brown400,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Text(
+              '\$${income.baseIncome.toStringAsFixed(0)}',
+              style: getRegularStyle16_400(
+                color: ColorManager.brown400,
+                fontSize: 18,
+              ),
+            ),
+            SizedBox(width: 18.w),
+            GestureDetector(
+              onTap: () => _deleteIncome(income.id),
+              child: Icon(
+                Icons.close,
+                color: ColorManager.primaryButton,
+                size: 20.sp,
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
+
+  Future<void> _deleteIncome(String? id) async {
+    if (id == null) return;
+    final success =
+        await ref.read(incomesProvider.notifier).deleteIncome(id);
+    if (context.mounted) {
+      Utils.showToast(
+        message: success ? "Income deleted" : "Failed to delete income",
+        backgroundColor:
+            success ? ColorManager.successColor : ColorManager.errorColor,
+        textColor: ColorManager.whiteColor,
+      );
+    }
+  }
+
+  void _showAddEditSheet({IncomeData? existing}) {
+    final isEditing = existing != null;
+    final formKey = GlobalKey<FormState>();
+
+    String selectedType = existing?.incomeType ?? _incomeTypes[0];
+    String selectedFreq = existing?.payFrequency ?? _frequencies[0];
+    final amountController = TextEditingController(
+      text: existing != null
+          ? existing.baseIncome.toStringAsFixed(0)
+          : '',
+    );
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder: (ctx) {
+        bool submitting = false;
+
+        return StatefulBuilder(
+          builder: (ctx, setSheetState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 20.w,
+                right: 20.w,
+                top: 24.h,
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 24.h,
+              ),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      isEditing ? 'Edit income' : 'Add income',
+                      style: getSemiBoldStyle22(
+                        color: ColorManager.textPrimary,
+                        fontSize: 22.sp,
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
+                    Text(
+                      'Income type',
+                      style: getRegularStyle16_400(
+                        color: ColorManager.brown400,
+                      ),
+                    ),
+                    SizedBox(height: 6.h),
+                    DropdownButtonFormField<String>(
+                      initialValue: selectedType,
+                      items: _incomeTypes
+                          .map((t) => DropdownMenuItem(
+                                value: t,
+                                child: Text(_formatLabel(t)),
+                              ))
+                          .toList(),
+                      onChanged: (v) {
+                        if (v == null) return;
+                        setSheetState(() => selectedType = v);
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    Text(
+                      'Pay frequency',
+                      style: getRegularStyle16_400(
+                        color: ColorManager.brown400,
+                      ),
+                    ),
+                    SizedBox(height: 6.h),
+                    DropdownButtonFormField<String>(
+                      initialValue: selectedFreq,
+                      items: _frequencies
+                          .map((f) => DropdownMenuItem(
+                                value: f,
+                                child: Text(_formatLabel(f)),
+                              ))
+                          .toList(),
+                      onChanged: (v) {
+                        if (v == null) return;
+                        setSheetState(() => selectedFreq = v);
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    Text(
+                      'Amount',
+                      style: getRegularStyle16_400(
+                        color: ColorManager.brown400,
+                      ),
+                    ),
+                    SizedBox(height: 6.h),
+                    TextFormField(
+                      controller: amountController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: 'e.g. 120000',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                      ),
+                      validator: (v) {
+                        if (v == null || v.trim().isEmpty) return 'Required';
+                        if (double.tryParse(v) == null) return 'Invalid number';
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 24.h),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50.h,
+                      child: ElevatedButton(
+                        onPressed: submitting
+                            ? null
+                            : () async {
+                                if (!formKey.currentState!.validate()) return;
+                                setSheetState(() => submitting = true);
+
+                                final amount =
+                                    double.parse(amountController.text.trim());
+
+                                bool success;
+                                if (isEditing) {
+                                  success = await ref
+                                      .read(incomesProvider.notifier)
+                                      .updateIncome(
+                                        id: existing.id!,
+                                        incomeType: selectedType,
+                                        payFrequency: selectedFreq,
+                                        baseIncome: amount,
+                                      );
+                                } else {
+                                  success = await ref
+                                      .read(incomesProvider.notifier)
+                                      .addIncome(
+                                        incomeType: selectedType,
+                                        payFrequency: selectedFreq,
+                                        baseIncome: amount,
+                                      );
+                                }
+
+                                if (ctx.mounted) {
+                                  Navigator.pop(ctx);
+                                }
+                                if (context.mounted) {
+                                  Utils.showToast(
+                                    message: success
+                                        ? (isEditing
+                                            ? "Income updated"
+                                            : "Income added")
+                                        : "Failed to save income",
+                                    backgroundColor: success
+                                        ? ColorManager.successColor
+                                        : ColorManager.errorColor,
+                                    textColor: ColorManager.whiteColor,
+                                  );
+                                }
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorManager.brown,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                        ),
+                        child: submitting
+                            ? SizedBox(
+                                width: 20.r,
+                                height: 20.r,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Text(
+                                isEditing ? 'Update' : 'Add',
+                                style: getMediumStyle18(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class DashedRectPainter extends CustomPainter {
+  final Color color;
+  DashedRectPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    double dashWidth = 5, dashSpace = 3, startX = 0;
+    final paint = Paint()
+      ..color = color.withValues(alpha: 0.5)
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
+
+    var path = Path();
+    path.addRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(0, 0, size.width, size.height),
+        const Radius.circular(20),
+      ),
+    );
+
+    for (PathMetric pathMetric in path.computeMetrics()) {
+      while (startX < pathMetric.length) {
+        canvas.drawPath(
+          pathMetric.extractPath(startX, startX + dashWidth),
+          paint,
+        );
+        startX += dashWidth + dashSpace;
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

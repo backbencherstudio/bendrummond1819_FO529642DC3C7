@@ -15,6 +15,7 @@ import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/outline_button.dart';
 import '../../../widgets/primary_button.dart';
 import '../viewmodel/signin_viewmodel.dart';
+import '../../../../core/services/revenuecat_service.dart';
 
 class SigningScreen extends ConsumerStatefulWidget {
   const SigningScreen({super.key});
@@ -36,11 +37,21 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
         );
 
     if (success && mounted) {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        RoutesName.setUpScreen,
-        (route) => false,
-      );
+      final isPro = await RevenueCatService.isPro();
+      if (!mounted) return;
+      if (isPro) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          RoutesName.bottomNavRoute,
+          (route) => false,
+        );
+      } else {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          RoutesName.setUpScreen,
+          (route) => false,
+        );
+      }
     } else if (mounted) {
       final state = ref.read(signInViewModelProvider);
       ScaffoldMessenger.of(context).showSnackBar(

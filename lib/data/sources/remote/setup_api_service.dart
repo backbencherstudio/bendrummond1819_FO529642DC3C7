@@ -373,7 +373,7 @@ class SetupApiService {
   }
 
   Future<bool> updateIncome({
-    required int id,
+    required String id,
     String? incomeType,
     String? payFrequency,
     double? baseIncome,
@@ -402,6 +402,63 @@ class SetupApiService {
       return true;
     } catch (e) {
       log("Update income error: ${e.toString()}");
+      rethrow;
+    }
+  }
+
+  Future<bool> deleteIncome(String id) async {
+    try {
+      final response = await ApiClient.deleteRequest(
+        endpoints: ApiEndpoints.deleteIncomeById(id),
+      );
+
+      if (response == null) return false;
+
+      log("Delete income response: $response");
+
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          return false;
+        }
+      }
+
+      return true;
+    } catch (e) {
+      log("Delete income error: ${e.toString()}");
+      rethrow;
+    }
+  }
+
+  Future<bool> addIncome({
+    required String incomeType,
+    required String payFrequency,
+    required double baseIncome,
+  }) async {
+    try {
+      final body = {
+        'income_type': incomeType,
+        'pay_frequency': payFrequency,
+        'base_income': baseIncome,
+      };
+
+      final response = await apiClient.postRequest(
+        endpoints: ApiEndpoints.addIncome,
+        body: body,
+      );
+
+      if (response == null) return false;
+
+      log("Add income response: $response");
+
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          return false;
+        }
+      }
+
+      return true;
+    } catch (e) {
+      log("Add income error: ${e.toString()}");
       rethrow;
     }
   }
@@ -467,6 +524,97 @@ class SetupApiService {
       return true;
     } catch (e) {
       log("Add bill error: ${e.toString()}");
+      rethrow;
+    }
+  }
+
+  Future<bool> addDebt({
+    required String name,
+    required double amount,
+    int? dueDay,
+  }) async {
+    try {
+      final body = <String, dynamic>{
+        'name': name,
+        'amount': amount,
+        if (dueDay != null) 'due_day': dueDay,
+      };
+
+      final response = await apiClient.postRequest(
+        endpoints: ApiEndpoints.addDebt,
+        body: body,
+      );
+
+      if (response == null) return false;
+
+      log("Add debt response: $response");
+
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          return false;
+        }
+      }
+
+      return true;
+    } catch (e) {
+      log("Add debt error: ${e.toString()}");
+      rethrow;
+    }
+  }
+
+  Future<bool> deleteDebt(String id) async {
+    try {
+      final response = await ApiClient.deleteRequest(
+        endpoints: ApiEndpoints.debtById(id),
+      );
+
+      if (response == null) return false;
+
+      log("Delete debt response: $response");
+
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          return false;
+        }
+      }
+
+      return true;
+    } catch (e) {
+      log("Delete debt error: ${e.toString()}");
+      rethrow;
+    }
+  }
+
+  Future<bool> updateDebt({
+    required String id,
+    String? name,
+    double? amount,
+    int? dueDay,
+  }) async {
+    try {
+      final body = <String, dynamic>{};
+      if (name != null) body['name'] = name;
+      if (amount != null) body['amount'] = amount;
+      if (dueDay != null) body['due_day'] = dueDay;
+
+      final response = await ApiClient.patchRequest(
+        endpoints: ApiEndpoints.debtById(id),
+        body: body,
+      );
+
+      if (response == null) return false;
+
+      log("Update debt response: $response");
+
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          return false;
+        }
+      }
+
+      return true;
+    } catch (e) {
+      log("Update debt error: ${e.toString()}");
       rethrow;
     }
   }

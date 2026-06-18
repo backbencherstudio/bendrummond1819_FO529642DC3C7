@@ -1,6 +1,7 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/utils.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/user_provider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
@@ -166,12 +167,21 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                     child: _buildButton("Cancel", () {}, isSecondary: true),
                   ),
                   SizedBox(width: 15.w),
-                  Expanded(child: _buildButton("Save", () {
-                    ref.read(userProvider.notifier).updateProfile(
+                  Expanded(child: _buildButton("Save", () async {
+                    final success = await ref.read(userProvider.notifier).updateProfile(
                       name: _nameController.text,
                       phoneNumber: _phoneController.text,
                       dateOfBirth: _dobController.text,
                     );
+                    if (context.mounted) {
+                      Utils.showToast(
+                        message: success ? "Profile updated" : "Failed to update profile",
+                        backgroundColor: success
+                            ? ColorManager.successColor
+                            : ColorManager.errorColor,
+                        textColor: ColorManager.whiteColor,
+                      );
+                    }
                   })),
                 ],
               ),
