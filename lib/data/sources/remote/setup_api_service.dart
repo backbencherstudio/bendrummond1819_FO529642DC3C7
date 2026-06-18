@@ -439,13 +439,19 @@ class SetupApiService {
   }) async {
     try {
       final body = {
-        'income_type': incomeType,
-        'pay_frequency': payFrequency,
-        'base_income': baseIncome,
+        'incomes': [
+          {
+            'income_type': incomeType,
+            'pay_frequency': payFrequency,
+            'base_income': baseIncome,
+          },
+        ],
+        'financialCommitments': <dynamic>[],
+        'savingsGoals': <dynamic>[],
       };
 
       final response = await apiClient.postRequest(
-        endpoints: ApiEndpoints.addIncome,
+        endpoints: ApiEndpoints.setUp,
         body: body,
       );
 
@@ -462,6 +468,52 @@ class SetupApiService {
       return true;
     } catch (e) {
       log("Add income error: ${e.toString()}");
+      rethrow;
+    }
+  }
+
+  Future<bool> addCommitment({
+    required String category,
+    required String name,
+    required double amount,
+    int? dueDay,
+    String? frequency,
+    bool isRecurring = false,
+  }) async {
+    try {
+      final body = {
+        'incomes': <dynamic>[],
+        'financialCommitments': [
+          {
+            'category': category,
+            'name': name,
+            'amount': amount,
+            if (dueDay != null) 'due_day': dueDay,
+            if (frequency != null) 'frequency': frequency,
+            'is_recurring': isRecurring,
+          },
+        ],
+        'savingsGoals': <dynamic>[],
+      };
+
+      final response = await apiClient.postRequest(
+        endpoints: ApiEndpoints.setUp,
+        body: body,
+      );
+
+      if (response == null) return false;
+
+      log("Add commitment response: $response");
+
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          return false;
+        }
+      }
+
+      return true;
+    } catch (e) {
+      log("Add commitment error: ${e.toString()}");
       rethrow;
     }
   }

@@ -130,6 +130,24 @@ class SetupRepository {
     );
   }
 
+  Future<bool> addCommitment({
+    required String category,
+    required String name,
+    required double amount,
+    int? dueDay,
+    String? frequency,
+    bool isRecurring = false,
+  }) {
+    return remoteSource.addCommitment(
+      category: category,
+      name: name,
+      amount: amount,
+      dueDay: dueDay,
+      frequency: frequency,
+      isRecurring: isRecurring,
+    );
+  }
+
   Future<bool> addBill({
     required String category,
     required String name,

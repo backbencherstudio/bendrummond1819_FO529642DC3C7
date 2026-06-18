@@ -154,6 +154,33 @@ class IncomesNotifier extends Notifier<IncomesState> {
       return false;
     }
   }
+
+  Future<bool> addCommitment({
+    required String category,
+    required String name,
+    required double amount,
+    int? dueDay,
+    String? frequency,
+    bool isRecurring = false,
+  }) async {
+    try {
+      final repository = SetupRepository(
+        remoteSource: SetupApiService(apiClient: ApiClient()),
+      );
+      final success = await repository.addCommitment(
+        category: category,
+        name: name,
+        amount: amount,
+        dueDay: dueDay,
+        frequency: frequency,
+        isRecurring: isRecurring,
+      );
+      if (success) refresh();
+      return success;
+    } catch (e) {
+      return false;
+    }
+  }
 }
 
 final incomesProvider = NotifierProvider<IncomesNotifier, IncomesState>(
