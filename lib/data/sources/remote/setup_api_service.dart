@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
+
 import '../../../core/network/api_clients.dart';
 import '../../../core/network/api_endpoints.dart';
 import '../../models/setup_models.dart';
@@ -123,9 +125,11 @@ class SetupApiService {
 
       if (response is Map<String, dynamic>) {
         if (response['success'] == true && response['data'] != null) {
-          return SetupResponse.fromJson(
+          final testJson = SetupResponse.fromJson(
             response['data'] as Map<String, dynamic>,
           );
+          debugPrint("TEST JSON $testJson");
+          return testJson;
         }
       }
 

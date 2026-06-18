@@ -15,7 +15,7 @@ class IncomeData {
     id: json['id']?.toString(),
     incomeType: json['income_type'] ?? '',
     payFrequency: json['pay_frequency'] ?? '',
-    baseIncome: (json['base_income'] ?? 0).toDouble(),
+    baseIncome: double.tryParse(json['base_income']?.toString() ?? '') ?? 0,
   );
 
   Map<String, dynamic> toJson() => {

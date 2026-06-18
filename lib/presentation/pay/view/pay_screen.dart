@@ -9,11 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-const List<String> _incomeTypes = [
-  'SAME_EVERY_PAYCHECK',
-  'FIXED',
-  'VARIABLE',
-];
+const List<String> _incomeTypes = ['SAME_EVERY_PAYCHECK', 'FIXED', 'VARIABLE'];
 
 const List<String> _frequencies = [
   'WEEKLY',
@@ -23,8 +19,14 @@ const List<String> _frequencies = [
 ];
 
 String _formatLabel(String value) {
-  return value.replaceAll('_', ' ').split(' ').map((w) =>
-      w.isNotEmpty ? '${w[0].toUpperCase()}${w.substring(1).toLowerCase()}' : '')
+  return value
+      .replaceAll('_', ' ')
+      .split(' ')
+      .map(
+        (w) => w.isNotEmpty
+            ? '${w[0].toUpperCase()}${w.substring(1).toLowerCase()}'
+            : '',
+      )
       .join(' ');
 }
 
@@ -45,11 +47,17 @@ class _PayScreenState extends ConsumerState<PayScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(incomesProvider);
+    debugPrint("Pay screen $state");
 
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.only(left: 20.0.r, right: 20.0.r, top: 32.r, bottom: 100.h),
+          padding: EdgeInsets.only(
+            left: 20.0.r,
+            right: 20.0.r,
+            top: 32.r,
+            bottom: 100.h,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -122,21 +130,20 @@ class _PayScreenState extends ConsumerState<PayScreen> {
                         ),
                       )
                     : state.incomes.isEmpty
-                        ? Center(
-                            child: Text(
-                              "No incomes yet",
-                              style: getRegularStyle16_400(
-                                color: ColorManager.brown400,
-                              ),
-                            ),
-                          )
-                        : ListView.separated(
-                            itemCount: state.incomes.length,
-                            separatorBuilder: (_, _) =>
-                                SizedBox(height: 12.h),
-                            itemBuilder: (_, i) =>
-                                _buildIncomeCard(state.incomes[i]),
+                    ? Center(
+                        child: Text(
+                          "No incomes yet",
+                          style: getRegularStyle16_400(
+                            color: ColorManager.brown400,
                           ),
+                        ),
+                      )
+                    : ListView.separated(
+                        itemCount: state.incomes.length,
+                        separatorBuilder: (_, _) => SizedBox(height: 12.h),
+                        itemBuilder: (_, i) =>
+                            _buildIncomeCard(state.incomes[i]),
+                      ),
               ),
 
               SizedBox(height: 16.h),
@@ -193,10 +200,7 @@ class _PayScreenState extends ConsumerState<PayScreen> {
         decoration: BoxDecoration(
           color: ColorManager.secondaryBackGround,
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(
-            color: ColorManager.borderE0D9D1,
-            width: 2,
-          ),
+          border: Border.all(color: ColorManager.borderE0D9D1, width: 2),
         ),
         child: Row(
           children: [
@@ -246,13 +250,13 @@ class _PayScreenState extends ConsumerState<PayScreen> {
 
   Future<void> _deleteIncome(String? id) async {
     if (id == null) return;
-    final success =
-        await ref.read(incomesProvider.notifier).deleteIncome(id);
+    final success = await ref.read(incomesProvider.notifier).deleteIncome(id);
     if (context.mounted) {
       Utils.showToast(
         message: success ? "Income deleted" : "Failed to delete income",
-        backgroundColor:
-            success ? ColorManager.successColor : ColorManager.errorColor,
+        backgroundColor: success
+            ? ColorManager.successColor
+            : ColorManager.errorColor,
         textColor: ColorManager.whiteColor,
       );
     }
@@ -265,9 +269,7 @@ class _PayScreenState extends ConsumerState<PayScreen> {
     String selectedType = existing?.incomeType ?? _incomeTypes[0];
     String selectedFreq = existing?.payFrequency ?? _frequencies[0];
     final amountController = TextEditingController(
-      text: existing != null
-          ? existing.baseIncome.toStringAsFixed(0)
-          : '',
+      text: existing != null ? existing.baseIncome.toStringAsFixed(0) : '',
     );
 
     showModalBottomSheet(
@@ -312,10 +314,12 @@ class _PayScreenState extends ConsumerState<PayScreen> {
                     DropdownButtonFormField<String>(
                       initialValue: selectedType,
                       items: _incomeTypes
-                          .map((t) => DropdownMenuItem(
-                                value: t,
-                                child: Text(_formatLabel(t)),
-                              ))
+                          .map(
+                            (t) => DropdownMenuItem(
+                              value: t,
+                              child: Text(_formatLabel(t)),
+                            ),
+                          )
                           .toList(),
                       onChanged: (v) {
                         if (v == null) return;
@@ -338,10 +342,12 @@ class _PayScreenState extends ConsumerState<PayScreen> {
                     DropdownButtonFormField<String>(
                       initialValue: selectedFreq,
                       items: _frequencies
-                          .map((f) => DropdownMenuItem(
-                                value: f,
-                                child: Text(_formatLabel(f)),
-                              ))
+                          .map(
+                            (f) => DropdownMenuItem(
+                              value: f,
+                              child: Text(_formatLabel(f)),
+                            ),
+                          )
                           .toList(),
                       onChanged: (v) {
                         if (v == null) return;
@@ -387,8 +393,9 @@ class _PayScreenState extends ConsumerState<PayScreen> {
                                 if (!formKey.currentState!.validate()) return;
                                 setSheetState(() => submitting = true);
 
-                                final amount =
-                                    double.parse(amountController.text.trim());
+                                final amount = double.parse(
+                                  amountController.text.trim(),
+                                );
 
                                 bool success;
                                 if (isEditing) {
@@ -417,8 +424,8 @@ class _PayScreenState extends ConsumerState<PayScreen> {
                                   Utils.showToast(
                                     message: success
                                         ? (isEditing
-                                            ? "Income updated"
-                                            : "Income added")
+                                              ? "Income updated"
+                                              : "Income added")
                                         : "Failed to save income",
                                     backgroundColor: success
                                         ? ColorManager.successColor
