@@ -15,7 +15,9 @@ import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/outline_button.dart';
 import '../../../widgets/primary_button.dart';
 import '../viewmodel/signin_viewmodel.dart';
-import '../../../../core/services/revenuecat_service.dart';
+import '../../../../core/network/api_clients.dart';
+import '../../../../data/repositories/setup_repository.dart';
+import '../../../../data/sources/remote/setup_api_service.dart';
 
 class SigningScreen extends ConsumerStatefulWidget {
   const SigningScreen({super.key});
@@ -37,9 +39,9 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
         );
 
     if (success && mounted) {
-      final isPro = await RevenueCatService.isPro();
+      final setupComplete = await _isSetupComplete();
       if (!mounted) return;
-      if (isPro) {
+      if (setupComplete) {
         Navigator.pushNamedAndRemoveUntil(
           context,
           RoutesName.bottomNavRoute,
@@ -57,6 +59,21 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(state.errorMessage ?? "Login failed")),
       );
+    }
+  }
+
+  Future<bool> _isSetupComplete() async {
+    try {
+      final repository = SetupRepository(
+        remoteSource: SetupApiService(apiClient: ApiClient()),
+      );
+      final data = await repository.getSetupData();
+      if (data == null) return false;
+      return data.incomes.isNotEmpty ||
+          data.financialCommitments.isNotEmpty ||
+          data.savingsGoals.isNotEmpty;
+    } catch (_) {
+      return false;
     }
   }
 
