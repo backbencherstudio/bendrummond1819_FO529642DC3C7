@@ -192,10 +192,7 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
                   CustomFromField(
                     hintText: "Your password",
                     controller: _passwordController,
-                    suffixIcon: Icon(
-                      Icons.remove_red_eye_outlined,
-                      color: ColorManager.brown,
-                    ),
+                    isSecured: true,
                   ),
 
                   SizedBox(height: 25.h),

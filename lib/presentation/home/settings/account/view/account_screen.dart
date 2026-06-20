@@ -192,7 +192,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
               SizedBox(height: 6.h),
               CustomFromField(
                 hintText: 'Your Password',
-                suffixIcon: Icon(Icons.remove_red_eye_outlined),
+                isSecured: true,
               ),
 
               SizedBox(height: 12.h),
@@ -200,7 +200,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
               SizedBox(height: 6.h),
               CustomFromField(
                 hintText: 'Confirm your password',
-                suffixIcon: Icon(Icons.remove_red_eye_outlined),
+                isSecured: true,
               ),
 
               SizedBox(height: 12.h),

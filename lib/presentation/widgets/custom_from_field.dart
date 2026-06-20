@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/resource/constants/color_manger.dart';
 
-class CustomFromField extends StatelessWidget {
+class CustomFromField extends StatefulWidget {
   final String? hintText;
   final String? labelText;
   final TextEditingController? controller;
@@ -50,64 +50,92 @@ class CustomFromField extends StatelessWidget {
   });
 
   @override
+  State<CustomFromField> createState() => _CustomFromFieldState();
+}
+
+class _CustomFromFieldState extends State<CustomFromField> {
+  bool _obscured = true;
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
-      keyboardType: keyboardType ?? TextInputType.text,
-      obscureText: isSecured,
-      validator: validator,
-      onChanged: onChanged,
-      onTap: onTap,
-      maxLines: maxLines ?? 1,
-      readOnly: readOnly,
-      style: style ?? getRegularStyle16_400(color: ColorManager.brown400),
+      controller: widget.controller,
+      keyboardType: widget.keyboardType ?? TextInputType.text,
+      obscureText: widget.isSecured ? _obscured : false,
+      validator: widget.validator,
+      onChanged: widget.onChanged,
+      onTap: widget.onTap,
+      maxLines: widget.maxLines ?? 1,
+      readOnly: widget.readOnly,
+      style: widget.style ?? getRegularStyle16_400(color: ColorManager.brown400),
       decoration: InputDecoration(
-        contentPadding: contentPadding ??
+        contentPadding: widget.contentPadding ??
             EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-        filled: filled ?? true,
-        fillColor: fillColor ?? ColorManager.backgroundSecondary,
-        hintText: hintText,
-        labelText: labelText,
+        filled: widget.filled ?? true,
+        fillColor: widget.fillColor ?? ColorManager.backgroundSecondary,
+        hintText: widget.hintText,
+        labelText: widget.labelText,
         hintStyle: getRegularStyle16_400(color: ColorManager.brown300),
 
         // Prefix Icon setup with constraints
-        prefixIcon: prefixIcon != null
+        prefixIcon: widget.prefixIcon != null
             ? Padding(
           padding: EdgeInsets.symmetric(horizontal: 12.w),
           child: SizedBox(
             width: 20.w,
             height: 20.h,
-            child: FittedBox(fit: BoxFit.contain, child: prefixIcon!),
+            child: FittedBox(fit: BoxFit.contain, child: widget.prefixIcon!),
           ),
         )
             : null,
-        prefixIconConstraints: prefixIconConstraints ?? BoxConstraints(
+        prefixIconConstraints: widget.prefixIconConstraints ?? BoxConstraints(
           minWidth: 44.w,
           minHeight: 20.h,
         ),
 
         // Suffix Icon setup with constraints
-        suffixIcon: suffixIcon != null
-            ? Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12.w),
-          child: SizedBox(
-            width: 20.w,
-            height: 20.h,
-            child: FittedBox(fit: BoxFit.contain, child: suffixIcon!),
-          ),
-        )
-            : null,
-        suffixIconConstraints: suffixIconConstraints ?? BoxConstraints(
+        suffixIcon: widget.isSecured
+            ? GestureDetector(
+                onTap: () => setState(() => _obscured = !_obscured),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  child: SizedBox(
+                    width: 20.w,
+                    height: 20.h,
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Icon(
+                        _obscured
+                            ? Icons.visibility_off_outlined
+                            : Icons.remove_red_eye_outlined,
+                        color: ColorManager.brown,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            : widget.suffixIcon != null
+                ? Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                    child: SizedBox(
+                      width: 20.w,
+                      height: 20.h,
+                      child:
+                          FittedBox(fit: BoxFit.contain, child: widget.suffixIcon!),
+                    ),
+                  )
+                : null,
+        suffixIconConstraints: widget.suffixIconConstraints ?? BoxConstraints(
           minWidth: 44.w,
           minHeight: 20.h,
         ),
 
-        enabledBorder: enabledBorder ??
+        enabledBorder: widget.enabledBorder ??
             OutlineInputBorder(
               borderRadius: BorderRadius.circular(16.r),
               borderSide: BorderSide(color: ColorManager.borderColor1),
             ),
-        focusedBorder: focusedBorder ??
+        focusedBorder: widget.focusedBorder ??
             OutlineInputBorder(
               borderRadius: BorderRadius.circular(16.r),
               borderSide: BorderSide(

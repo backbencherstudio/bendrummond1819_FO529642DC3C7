@@ -164,10 +164,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   CustomFromField(
                     hintText: "Your password",
                     controller: _passwordController,
-                    suffixIcon: Icon(
-                      Icons.remove_red_eye_outlined,
-                      color: ColorManager.brown,
-                    ),
+                    isSecured: true,
                   ),
 
                   SizedBox(height: 12.h),

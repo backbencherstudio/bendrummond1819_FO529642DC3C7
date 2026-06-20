@@ -116,10 +116,7 @@ class _SetNewPasswordScreenState extends ConsumerState<SetNewPasswordScreen> {
                     CustomFromField(
                       hintText: "Enter your password",
                       controller: _passwordController,
-                      suffixIcon: Icon(
-                        Icons.remove_red_eye_outlined,
-                        color: ColorManager.brown500,
-                      ),
+                      isSecured: true,
                     ),
 
                     SizedBox(height: 15.h),
@@ -134,10 +131,7 @@ class _SetNewPasswordScreenState extends ConsumerState<SetNewPasswordScreen> {
                     CustomFromField(
                       hintText: "Confirm your password",
                       controller: _confirmPasswordController,
-                      suffixIcon: Icon(
-                        Icons.remove_red_eye_outlined,
-                        color: ColorManager.brown500,
-                      ),
+                      isSecured: true,
                     ),
                   ],
                 ),

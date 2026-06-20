@@ -29,7 +29,6 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
 
   double get _totalDeductions => _rent + _carPayment + _billsTotal + _debtsTotal;
   double get _monthlyRemaining => _monthlyIncome - _totalDeductions - _savingsTotal;
-  double get _weeklySafeToSpend => _monthlyRemaining / 4.33;
 
   void _computeValues() {
     final data = ref.read(setupDataProvider);
@@ -84,7 +83,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
     ref.watch(setupDataProvider);
     _computeValues();
 
-    final safeToSpend = _weeklySafeToSpend;
+    final safeToSpend = _monthlyRemaining;
 
     return Scaffold(
       backgroundColor: ColorManager.secondaryBackGround,
@@ -126,7 +125,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                     ),
                     SizedBox(height: 12.h),
                     Text(
-                      "safe to spend every week",
+                      "safe to spend every month",
                       style: getLightStyle14_400(color: ColorManager.brown300),
                     ),
                     SizedBox(height: 16.h),

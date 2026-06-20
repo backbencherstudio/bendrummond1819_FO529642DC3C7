@@ -88,6 +88,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     double breakdownBills;
     String payFrequencyLabel;
     int billsCount;
+    debugPrint("incomeState: ${incomeState.safeToSpend}");
 
     if (incomeState.incomes.isNotEmpty) {
       final monthlyIncome = incomeState.incomes.fold<double>(
@@ -102,8 +103,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         0,
         (sum, g) => sum + g.contribution,
       );
-      final monthlyRemaining = monthlyIncome - totalBills - totalSavings;
-      safeToSpend = monthlyRemaining / 4.33;
+      safeToSpend = monthlyIncome - totalBills - totalSavings;
       breakdownMonthlyIncome = monthlyIncome;
       breakdownBills = totalBills;
       payFrequencyLabel =
@@ -127,18 +127,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       for (final goal in setupData.savings) {
         savingsTotal += double.tryParse(goal['amount'] ?? '0') ?? 0;
       }
-      final monthlyRemaining =
+      safeToSpend =
           monthlyIncomeVal -
           rent -
           carPayment -
           billsTotal -
           debtsTotal -
           savingsTotal;
-      safeToSpend = monthlyRemaining / 4.33;
       breakdownMonthlyIncome = monthlyIncomeVal;
       breakdownBills = rent + carPayment + billsTotal + debtsTotal;
       payFrequencyLabel = _payFrequencyLabel(setupData.payFrequencyIndex);
       billsCount = setupData.bills.length + setupData.debts.length;
+      debugPrint("safet to spend $safeToSpend");
     } else {
       safeToSpend = 0;
       breakdownMonthlyIncome = 0;

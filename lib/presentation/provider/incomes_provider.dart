@@ -76,14 +76,16 @@ class IncomesNotifier extends Notifier<IncomesState> {
         (sum, i) => sum + i.baseIncome * _monthlyMultiplier(i.payFrequency),
       );
       final totalCommitments = commitments.fold<double>(
-        0, (sum, c) => sum + c.amount,
+        0,
+        (sum, c) => sum + c.amount,
       );
       final totalSavings = savings.fold<double>(
-        0, (sum, g) => sum + g.contribution,
+        0,
+        (sum, g) => sum + g.contribution,
       );
 
       final safeToSpend = monthlyIncome > 0
-          ? (monthlyIncome - totalCommitments - totalSavings) / 4.33
+          ? (monthlyIncome - totalCommitments - totalSavings)
           : 0.0;
 
       state = IncomesState(
