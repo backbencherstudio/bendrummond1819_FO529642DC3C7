@@ -39,28 +39,28 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
 
   Future<void> _onBillRemindersChanged(bool val) async {
     setState(() => _billReminders = val);
-    final success = await ref
+    final errorMessage = await ref
         .read(userProvider.notifier)
         .updateProfile(billRemainders: val);
     if (!mounted) return;
-    if (!success) {
+    if (errorMessage != null) {
       setState(() => _billReminders = !val);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Failed to update bill reminders")),
+        SnackBar(content: Text(errorMessage)),
       );
     }
   }
 
   Future<void> _onNotificationReminderChanged(bool val) async {
     setState(() => _notificationReminder = val);
-    final success = await ref
+    final errorMessage = await ref
         .read(userProvider.notifier)
         .updateProfile(notificationRemainder: val);
     if (!mounted) return;
-    if (!success) {
+    if (errorMessage != null) {
       setState(() => _notificationReminder = !val);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Failed to update notification reminder")),
+        SnackBar(content: Text(errorMessage)),
       );
     }
   }

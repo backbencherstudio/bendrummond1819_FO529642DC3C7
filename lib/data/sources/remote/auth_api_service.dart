@@ -207,7 +207,7 @@ class AuthApiService {
 
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
-          return null;
+          throw Exception(response['message'] ?? response['error'] ?? 'Update failed');
         }
         if (response['data'] != null) {
           return UserModel.fromJson(response['data'] as Map<String, dynamic>);

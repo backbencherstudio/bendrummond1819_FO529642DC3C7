@@ -33,7 +33,12 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
-    final picked = await picker.pickImage(source: ImageSource.gallery);
+    final picked = await picker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 800,
+      maxHeight: 800,
+      imageQuality: 70,
+    );
     if (picked != null) {
       setState(() => _pickedImage = File(picked.path));
     }
@@ -216,7 +221,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: _buildButton("Cancel", () {}, isSecondary: true),
+                    child: _buildButton("Cancel", () => Navigator.pop(context), isSecondary: true),
                   ),
                   SizedBox(width: 15.w),
                   Expanded(
@@ -226,7 +231,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                         final bytes = await _pickedImage!.readAsBytes();
                         avatarBase64 = base64Encode(bytes);
                       }
-                      final success = await ref
+                      final errorMessage = await ref
                           .read(userProvider.notifier)
                           .updateProfile(
                             name: _nameController.text,
@@ -236,11 +241,12 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                           );
                       if (context.mounted) {
                         setState(() => _pickedImage = null);
+                        final isSuccess = errorMessage == null;
                         Utils.showToast(
-                          message: success
+                          message: isSuccess
                               ? "Profile updated"
-                              : "Failed to update profile",
-                          backgroundColor: success
+                              : errorMessage,
+                          backgroundColor: isSuccess
                               ? ColorManager.successColor
                               : ColorManager.errorColor,
                           textColor: ColorManager.whiteColor,

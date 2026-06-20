@@ -133,8 +133,10 @@ class ApiClient {
     } catch (e) {
       if (e is DioException) {
         ErrorHandle.handleDioError(e);
+        rethrow;
       } else {
         log('Non-Dio error: $e');
+        rethrow;
       }
     }
   }

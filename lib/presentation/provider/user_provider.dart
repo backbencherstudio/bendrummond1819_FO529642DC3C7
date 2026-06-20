@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/network/api_clients.dart';
 import '../../data/models/user_model.dart';
@@ -36,7 +37,7 @@ class UserNotifier extends Notifier<UserState> {
     }
   }
 
-  Future<bool> updateProfile({
+  Future<String?> updateProfile({
     String? name,
     String? avatar,
     String? address,
@@ -63,14 +64,32 @@ class UserNotifier extends Notifier<UserState> {
       );
       if (updatedUser != null) {
         state = UserState(user: updatedUser, isLoading: false);
+        return null;
       } else {
         await loadUser();
+        return null;
       }
-      return true;
     } catch (e) {
-      state = UserState(isLoading: false, error: e.toString());
-      return false;
+      final msg = _extractMessage(e);
+      state = UserState(isLoading: false, error: msg);
+      return _friendlyError(msg);
     }
+  }
+
+  String _extractMessage(Object e) {
+    if (e is DioException && e.response?.data is Map<String, dynamic>) {
+      return (e.response!.data as Map<String, dynamic>)['message']
+              ?.toString() ??
+          e.toString();
+    }
+    return e.toString().replaceFirst('Exception: ', '');
+  }
+
+  String _friendlyError(String serverMsg) {
+    if (serverMsg.toLowerCase().contains('request entity too large')) {
+      return 'The image is too large. Please choose a smaller one.';
+    }
+    return 'Something went wrong. Please try again.';
   }
 }
 
