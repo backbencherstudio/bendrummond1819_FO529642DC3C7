@@ -51,7 +51,7 @@ class UserNotifier extends Notifier<UserState> {
       final repository = AuthRepository(
         remoteSource: AuthApiService(apiClient: ApiClient()),
       );
-      await repository.updateProfile(
+      final updatedUser = await repository.updateProfile(
         name: name,
         avatar: avatar,
         address: address,
@@ -61,7 +61,11 @@ class UserNotifier extends Notifier<UserState> {
         gender: gender,
         dateOfBirth: dateOfBirth,
       );
-      await loadUser();
+      if (updatedUser != null) {
+        state = UserState(user: updatedUser, isLoading: false);
+      } else {
+        await loadUser();
+      }
       return true;
     } catch (e) {
       state = UserState(isLoading: false, error: e.toString());

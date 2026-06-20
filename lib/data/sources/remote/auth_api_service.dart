@@ -191,8 +191,8 @@ class AuthApiService {
       if (avatar != null) body['avatar'] = avatar;
       if (address != null) body['address'] = address;
       if (phoneNumber != null) body['phone_number'] = phoneNumber;
-      if (billRemainders != null) body['bill_remainders'] = billRemainders;
-      if (notificationRemainder != null) body['notification_remainder'] = notificationRemainder;
+      if (billRemainders != null) body['bill_remainders'] = billRemainders ? "1" : "0";
+      if (notificationRemainder != null) body['notification_remainder'] = notificationRemainder ? "1" : "0";
       if (gender != null) body['gender'] = gender;
       if (dateOfBirth != null) body['date_of_birth'] = dateOfBirth;
 
