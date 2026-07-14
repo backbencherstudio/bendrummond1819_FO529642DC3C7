@@ -14,6 +14,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../widgets/cached_image.dart';
+
 class AccountScreen extends ConsumerStatefulWidget {
   const AccountScreen({super.key});
 
@@ -30,6 +32,12 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
   final _dobController = TextEditingController();
   bool _initialized = false;
   File? _pickedImage;
+  int _avatarVersion = 0;
+
+  String? _avatarUrl(String? url) {
+    if (url == null) return null;
+    return '$url?t=$_avatarVersion';
+  }
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -39,6 +47,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
       maxHeight: 800,
       imageQuality: 70,
     );
+    debugPrint("Image is picked : $picked");
     if (picked != null) {
       setState(() => _pickedImage = File(picked.path));
     }
@@ -135,10 +144,13 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                                 color: ColorManager.whiteColor,
                                 width: 2,
                               ),
-                              image: DecorationImage(
-                                image: NetworkImage(user!.avatar!),
-                                fit: BoxFit.cover,
-                              ),
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            child: CachedImage(
+                              imgUrl: _avatarUrl(user!.avatar!)!,
+                              height: 80.h,
+                              width: 80.w,
+                              fit: BoxFit.cover,
                             ),
                           )
                         : Container(
@@ -195,10 +207,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
 
               _buildLabel("Password"),
               SizedBox(height: 6.h),
-              CustomFromField(
-                hintText: 'Your Password',
-                isSecured: true,
-              ),
+              CustomFromField(hintText: 'Your Password', isSecured: true),
 
               SizedBox(height: 12.h),
               _buildLabel("Confirm Password"),
@@ -221,7 +230,11 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: _buildButton("Cancel", () => Navigator.pop(context), isSecondary: true),
+                    child: _buildButton(
+                      "Cancel",
+                      () => Navigator.pop(context),
+                      isSecondary: true,
+                    ),
                   ),
                   SizedBox(width: 15.w),
                   Expanded(
@@ -240,12 +253,13 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                             avatar: avatarBase64,
                           );
                       if (context.mounted) {
-                        setState(() => _pickedImage = null);
                         final isSuccess = errorMessage == null;
+                        setState(() {
+                          _pickedImage = null;
+                          if (isSuccess) _avatarVersion++;
+                        });
                         Utils.showToast(
-                          message: isSuccess
-                              ? "Profile updated"
-                              : errorMessage,
+                          message: isSuccess ? "Profile updated" : errorMessage,
                           backgroundColor: isSuccess
                               ? ColorManager.successColor
                               : ColorManager.errorColor,

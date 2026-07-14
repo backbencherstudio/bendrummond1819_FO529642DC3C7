@@ -209,12 +209,9 @@ class AuthApiService {
         if (response['success'] == false || response['error'] != null) {
           throw Exception(response['message'] ?? response['error'] ?? 'Update failed');
         }
-        if (response['data'] != null) {
-          return UserModel.fromJson(response['data'] as Map<String, dynamic>);
-        }
       }
 
-      return null;
+      return await loadUser();
     } catch (e) {
       log("Update profile error: ${e.toString()}");
       rethrow;

@@ -11,6 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../widgets/cached_image.dart';
+
 class HomeSettingsScreen extends ConsumerStatefulWidget {
   const HomeSettingsScreen({super.key});
 
@@ -126,21 +128,25 @@ class _HomeSettingsScreenState extends ConsumerState<HomeSettingsScreen> {
                 child: Row(
                   children: [
                     // =========  Profile Image ===========
-                    CircleAvatar(
-                      radius: 30.r,
-                      backgroundImage: user?.avatar != null
-                          ? NetworkImage(user!.avatar!)
-                          : null,
-                      backgroundColor: ColorManager.brown,
-                      child: user?.avatar == null
-                          ? Text(
+                    user?.avatar != null
+                        ? ClipOval(
+                            child: CachedImage(
+                              imgUrl: user!.avatar!,
+                              height: 60.r,
+                              width: 60.r,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : CircleAvatar(
+                            radius: 30.r,
+                            backgroundColor: ColorManager.brown,
+                            child: Text(
                               _getInitial(user?.name),
                               style: getBoldStyle32(
                                 color: ColorManager.whiteColor,
                               ).copyWith(fontSize: 24.sp),
-                            )
-                          : null,
-                    ),
+                            ),
+                          ),
                     SizedBox(width: 15.w),
                     // ========  Profile Info =============
                     Expanded(
