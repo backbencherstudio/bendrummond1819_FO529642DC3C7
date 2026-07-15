@@ -219,7 +219,7 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
                   /// ************ Sign in Button *****************
                   PrimaryButton(
                     title: "Sign In",
-                    isLoading: signInState.isLoading,
+                    isLoading: signInState.isEmailLoading,
                     onTap: () => handleSignIn(),
                   ),
 
@@ -229,7 +229,7 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
                   CustomOutlinedButton(
                     title: "Continue with Google",
                     icon: SvgPicture.asset(IconManager.googleIcon),
-                    isLoading: signInState.isLoading,
+                    isLoading: signInState.isGoogleLoading,
                     onTap: () => handleGoogleSignIn(),
                   ),
 

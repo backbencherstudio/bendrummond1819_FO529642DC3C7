@@ -18,61 +18,65 @@ class SignInModelview extends StateNotifier<SignInState> {
   final AuthRepository repository;
 
   SignInModelview({required this.repository})
-    : super(SignInState(isLoading: false));
+    : super(SignInState(isEmailLoading: false, isGoogleLoading: false));
 
   Future<bool> signIn({required String email, required String password}) async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
+    state = state.copyWith(isEmailLoading: true, errorMessage: null);
 
     try {
       final success = await repository.login(email: email, password: password);
 
-      state = state.copyWith(isLoading: false, isSuccess: success);
+      state = state.copyWith(isEmailLoading: false, isSuccess: success);
 
       return success;
     } catch (e) {
-      state = state.copyWith(isLoading: false, errorMessage: e.toString().replaceFirst('Exception: ', ''));
+      state = state.copyWith(isEmailLoading: false, errorMessage: e.toString().replaceFirst('Exception: ', ''));
 
       return false;
     }
   }
 
   Future<bool> googleSignIn() async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
+    state = state.copyWith(isGoogleLoading: true, errorMessage: null);
 
     try {
       final userCredential = await FirebaseService.signInWithGoogle();
       if (userCredential == null) {
-        state = state.copyWith(isLoading: false);
+        state = state.copyWith(isGoogleLoading: false);
         return false;
       }
 
-      state = state.copyWith(isLoading: false, isSuccess: true);
+      state = state.copyWith(isGoogleLoading: false, isSuccess: true);
       return true;
     } catch (e) {
-      state = state.copyWith(isLoading: false, errorMessage: e.toString().replaceFirst('Exception: ', ''));
+      state = state.copyWith(isGoogleLoading: false, errorMessage: e.toString().replaceFirst('Exception: ', ''));
       return false;
     }
   }
 }
 
 class SignInState {
-  final bool isLoading;
+  final bool isEmailLoading;
+  final bool isGoogleLoading;
   final bool isSuccess;
   final String? errorMessage;
 
   const SignInState({
-    required this.isLoading,
+    required this.isEmailLoading,
+    required this.isGoogleLoading,
     this.isSuccess = false,
     this.errorMessage,
   });
 
   SignInState copyWith({
-    bool? isLoading,
+    bool? isEmailLoading,
+    bool? isGoogleLoading,
     bool? isSuccess,
     String? errorMessage,
   }) {
     return SignInState(
-      isLoading: isLoading ?? this.isLoading,
+      isEmailLoading: isEmailLoading ?? this.isEmailLoading,
+      isGoogleLoading: isGoogleLoading ?? this.isGoogleLoading,
       isSuccess: isSuccess ?? this.isSuccess,
       errorMessage: errorMessage,
     );

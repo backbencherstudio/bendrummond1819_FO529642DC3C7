@@ -9,7 +9,10 @@ class FirebaseService {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    await GoogleSignIn.instance.initialize();
+    await GoogleSignIn.instance.initialize(
+      serverClientId:
+          '160078582396-r5md49isqvgs33eqphreiopvs53fi85v.apps.googleusercontent.com',
+    );
   }
 
   static Future<UserCredential?> signInWithGoogle() async {
