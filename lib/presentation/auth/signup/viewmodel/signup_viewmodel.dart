@@ -55,8 +55,15 @@ class SignUpModelview extends StateNotifier<SignUpState> {
         return false;
       }
 
-      state = state.copyWith(isGoogleLoading: false, isSuccess: true);
-      return true;
+      final idToken = await userCredential.user?.getIdToken();
+      if (idToken == null) {
+        state = state.copyWith(isGoogleLoading: false, errorMessage: "Failed to get ID token");
+        return false;
+      }
+
+      final success = await repository.googleLogin(idToken: idToken);
+      state = state.copyWith(isGoogleLoading: false, isSuccess: success);
+      return success;
     } catch (e) {
       state = state.copyWith(
         isGoogleLoading: false,
