@@ -26,6 +26,41 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
   final amountController = TextEditingController();
   final frequencyController = TextEditingController();
 
+  String? _selectedFrequency;
+
+  static const List<Map<String, String>> _frequencyOptions = [
+    {'label': 'Weekly', 'value': 'WEEKLY'},
+    {'label': 'Every 2 weeks', 'value': 'EVERY_2_WEEKS'},
+    {'label': 'Twice a month', 'value': 'TWICE_A_MONTH'},
+    {'label': 'Monthly', 'value': 'MONTHLY'},
+  ];
+
+  void _showFrequencyPicker() {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: _frequencyOptions.map((opt) {
+            return ListTile(
+              title: Text(opt['label']!),
+              trailing: _selectedFrequency == opt['value']
+                  ? const Icon(Icons.check)
+                  : null,
+              onTap: () {
+                setState(() {
+                  _selectedFrequency = opt['value'];
+                  frequencyController.text = opt['label']!;
+                });
+                Navigator.pop(ctx);
+              },
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     savingNameController.dispose();
@@ -35,24 +70,28 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
   }
 
   void _addNewGoal() {
-    if (savingNameController.text.isNotEmpty &&
-        amountController.text.isNotEmpty) {
-      final savings = List<Map<String, String>>.from(
-        ref.read(setupDataProvider).savings,
-      );
-      savings.add({
-        'savingName': savingNameController.text,
-        'amount': amountController.text,
-        'frequently': frequencyController.text,
-      });
-      ref.read(setupDataProvider.notifier).setSavings(savings);
-      setState(() {
-        isAdding = false;
-        savingNameController.clear();
-        amountController.clear();
-        frequencyController.clear();
-      });
-    }
+    final name = savingNameController.text.trim();
+    final amount = amountController.text.trim();
+    if (name.isEmpty || amount.isEmpty) return;
+
+    final frequency = _selectedFrequency ?? 'MONTHLY';
+
+    final savings = List<Map<String, String>>.from(
+      ref.read(setupDataProvider).savings,
+    );
+    savings.add({
+      'savingName': name,
+      'amount': amount,
+      'frequency': frequency,
+    });
+    ref.read(setupDataProvider.notifier).setSavings(savings);
+    setState(() {
+      isAdding = false;
+      savingNameController.clear();
+      amountController.clear();
+      frequencyController.clear();
+      _selectedFrequency = null;
+    });
   }
 
   void _removeGoal(Map<String, String> goal) {
@@ -124,7 +163,7 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
                 style: getRegularStyle18_400(color: ColorManager.brown400),
               ),
               Text(
-                "Monthly",
+                _frequencyLabel(save['frequency'] ?? ''),
                 style: getRegularStyle14_400(color: ColorManager.grayBlack400),
               ),
             ],
@@ -149,6 +188,13 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
         ],
       ),
     );
+  }
+
+  String _frequencyLabel(String value) {
+    for (final opt in _frequencyOptions) {
+      if (opt['value'] == value) return opt['label']!;
+    }
+    return 'Monthly';
   }
 
   Widget _buildInputForm() {
@@ -244,13 +290,36 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
                       ),
                     ),
                     SizedBox(height: 6.h),
-                    CustomFromField(
-                      hintText: "Per month",
-                      controller: frequencyController,
-                      keyboardType: TextInputType.text,
-                      suffixIcon: Icon(
-                        Icons.keyboard_arrow_down_outlined,
-                        color: ColorManager.brown400,
+                    GestureDetector(
+                      onTap: _showFrequencyPicker,
+                      child: Container(
+                        height: 52.h,
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        decoration: BoxDecoration(
+                          color: ColorManager.backgroundSecondary,
+                          borderRadius: BorderRadius.circular(16.r),
+                          border: Border.all(color: ColorManager.borderColor1),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                frequencyController.text.isEmpty
+                                    ? "Select frequency"
+                                    : frequencyController.text,
+                                style: getRegularStyle16_400(
+                                  color: frequencyController.text.isEmpty
+                                      ? ColorManager.brown300
+                                      : ColorManager.brown400,
+                                ),
+                              ),
+                            ),
+                            Icon(
+                              Icons.keyboard_arrow_down_outlined,
+                              color: ColorManager.brown400,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],

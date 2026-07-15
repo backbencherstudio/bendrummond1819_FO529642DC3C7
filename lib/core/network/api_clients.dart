@@ -7,8 +7,6 @@ import 'api_endpoints.dart';
 import 'error_handle.dart';
 import 'response_handle.dart';
 
-
-
 class ApiClient {
   static final Dio _dio = Dio(
     BaseOptions(
@@ -18,32 +16,32 @@ class ApiClient {
       receiveTimeout: Duration(seconds: 10),
     ),
   );
-  static Map<String, String>? headers;
 
-  static Future<void> headerSet() async {
+  static Future<Map<String, String>> _authHeaders() async {
     final token = await SharedPreferenceData.getToken();
-    log(token ?? 'no token found');
-    headers = {
+    return {
       'Content-Type': 'application/json',
       if (token != null && token.isNotEmpty) 'Authorization': 'Bearer $token',
     };
   }
 
+  static Future<void> headerSet() async {
+    // kept for callers that await it, but no longer needed
+    await _authHeaders();
+  }
+
   /// GET request
  Future<dynamic> getRequest({
     required String endpoints,
-    // Map<String, String>? headers,
   }) async {
-   
     try {
       log("\n\n\n\nurl :${ApiEndpoints.baseUrl}/$endpoints \n\n\n\n");
       final response = await _dio.get(
         '/$endpoints',
         options: Options(
-          headers: headers ?? {"Content-Type": "application/json"},
+          headers: await _authHeaders(),
         ),
       );
-      // log("\n\n\nGET Request Successful: ${response.data}\n\n\n");
       return ResposeHandle.handleResponse(response);
     } catch (e) {
       if (e is DioException) {
@@ -58,7 +56,6 @@ class ApiClient {
    Future<dynamic> postRequest({
     required String endpoints,
     Map<String, dynamic>? body,
-
     FormData? formData,
   }) async {
     try {
@@ -67,10 +64,9 @@ class ApiClient {
         '/$endpoints',
         data: body ?? formData,
         options: Options(
-          headers: headers ?? {"Content-Type": "application/json"},
+          headers: await _authHeaders(),
         ),
       );
-      //log("\nPOST Request Successful: ${response.data}\n");
       return ResposeHandle.handleResponse(response);
     } catch (e) {
       if (e is DioException) {
@@ -94,10 +90,9 @@ class ApiClient {
         '/$endpoints',
         data: body,
         options: Options(
-          headers: headers ?? {"Content-Type": "application/json"},
+          headers: await _authHeaders(),
         ),
       );
-      // debugPrint("\nPUT Request Successful: ${response.data}\n");
       return ResposeHandle.handleResponse(response);
     } catch (e) {
       if (e is DioException) {
@@ -112,7 +107,6 @@ class ApiClient {
   static Future<dynamic> patchRequest({
     required String endpoints,
     Map<String, dynamic>? body,
-    // Map<String, String>? headers,
     FormData? formData,
   }) async {
     try {
@@ -121,7 +115,7 @@ class ApiClient {
         '/$endpoints',
         data: body ?? formData,
         options: Options(
-          headers: headers ?? {"Content-Type": "multipart/form-data"},
+          headers: await _authHeaders(),
         ),
       );
 
@@ -141,18 +135,16 @@ class ApiClient {
     }
   }
 
-  /// PATCH request
+  /// DELETE request
   static Future<dynamic> deleteRequest({
     required String endpoints,
-
-    // Map<String, String>? headers,
   }) async {
     try {
       log("\n\nurl :${ApiEndpoints.baseUrl}/$endpoints\n\n");
       final response = await _dio.delete(
         '/$endpoints',
         options: Options(
-          headers: headers ?? {"Content-Type": "multipart/form-data"},
+          headers: await _authHeaders(),
         ),
       );
 

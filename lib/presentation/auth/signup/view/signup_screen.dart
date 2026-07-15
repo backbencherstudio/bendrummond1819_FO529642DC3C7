@@ -219,7 +219,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   /// ************ Sign up Button *****************
                   PrimaryButton(
                     title: "Create account",
-                    isLoading: ref.watch(signUpViewModelProvider).isLoading,
+                    isLoading: ref.watch(signUpViewModelProvider).isEmailLoading,
                     onTap: () => _handleRegister(),
                   ),
 
@@ -229,7 +229,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   CustomOutlinedButton(
                     title: "Continue with Google",
                     icon: SvgPicture.asset(IconManager.googleIcon),
-                    isLoading: ref.watch(signUpViewModelProvider).isLoading,
+                    isLoading: ref.watch(signUpViewModelProvider).isGoogleLoading,
                     onTap: () => _handleGoogleSignIn(),
                   ),
                   SizedBox(height: 20.h),

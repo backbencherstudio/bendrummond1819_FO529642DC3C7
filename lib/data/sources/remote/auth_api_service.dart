@@ -272,7 +272,6 @@ class AuthApiService {
 
       await SharedPreferenceData.removeToken();
       await SharedPreferenceData.removeRole();
-      ApiClient.headers = null;
 
       return true;
     } catch (e) {
@@ -280,7 +279,6 @@ class AuthApiService {
 
       await SharedPreferenceData.removeToken();
       await SharedPreferenceData.removeRole();
-      ApiClient.headers = null;
 
       return true;
     }
@@ -297,7 +295,6 @@ class AuthApiService {
 
       await SharedPreferenceData.removeToken();
       await SharedPreferenceData.removeRole();
-      ApiClient.headers = null;
 
       return true;
     } catch (e) {
@@ -305,7 +302,6 @@ class AuthApiService {
 
       await SharedPreferenceData.removeToken();
       await SharedPreferenceData.removeRole();
-      ApiClient.headers = null;
 
       return true;
     }

@@ -1,3 +1,4 @@
+import 'package:bendrummond1819_fo529642dc3c7/core/network/api_clients.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
@@ -70,6 +71,7 @@ class _SplashScreenState extends State<SplashScreen>
             if (mounted) {
               final token = await SharedPreferenceData.getToken();
               if (token != null && token.isNotEmpty) {
+                await ApiClient.headerSet();
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   RoutesName.bottomNavRoute,

@@ -183,7 +183,7 @@ class SetupDataNotifier extends Notifier<SetupDataState> {
           goalName: goal['savingName'] ?? 'Goal',
           targetAmount: double.tryParse(goal['amount'] ?? '0') ?? 0,
           contribution: double.tryParse(goal['amount'] ?? '0') ?? 0,
-          frequency: 'MONTHLY',
+          frequency: goal['frequency'] ?? 'MONTHLY',
         ),
       );
     }

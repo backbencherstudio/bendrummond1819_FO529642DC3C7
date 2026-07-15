@@ -16,7 +16,7 @@ final signUpViewModelProvider =
 class SignUpModelview extends StateNotifier<SignUpState> {
   final AuthRepository repository;
   SignUpModelview({required this.repository})
-    : super(SignUpState(isLoading: false));
+    : super(SignUpState(isEmailLoading: false, isGoogleLoading: false));
 
   Future<bool> register({
     required String name,
@@ -25,7 +25,7 @@ class SignUpModelview extends StateNotifier<SignUpState> {
     required String phone,
     required String dob,
   }) async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
+    state = state.copyWith(isEmailLoading: true, errorMessage: null);
     try {
       final success = await repository.register(
         name: name,
@@ -34,11 +34,11 @@ class SignUpModelview extends StateNotifier<SignUpState> {
         phone: phone,
         dob: dob,
       );
-      state = state.copyWith(isLoading: false, isSuccess: success);
+      state = state.copyWith(isEmailLoading: false, isSuccess: success);
       return success;
     } catch (e) {
       state = state.copyWith(
-        isLoading: false,
+        isEmailLoading: false,
         errorMessage: e.toString().replaceFirst('Exception: ', ''),
       );
       return false;
@@ -46,20 +46,20 @@ class SignUpModelview extends StateNotifier<SignUpState> {
   }
 
   Future<bool> googleSignIn() async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
+    state = state.copyWith(isGoogleLoading: true, errorMessage: null);
 
     try {
       final userCredential = await FirebaseService.signInWithGoogle();
       if (userCredential == null) {
-        state = state.copyWith(isLoading: false);
+        state = state.copyWith(isGoogleLoading: false);
         return false;
       }
 
-      state = state.copyWith(isLoading: false, isSuccess: true);
+      state = state.copyWith(isGoogleLoading: false, isSuccess: true);
       return true;
     } catch (e) {
       state = state.copyWith(
-        isLoading: false,
+        isGoogleLoading: false,
         errorMessage: e.toString().replaceFirst('Exception: ', ''),
       );
       return false;
@@ -68,23 +68,27 @@ class SignUpModelview extends StateNotifier<SignUpState> {
 }
 
 class SignUpState {
-  final bool isLoading;
+  final bool isEmailLoading;
+  final bool isGoogleLoading;
   final bool isSuccess;
   final String? errorMessage;
 
   SignUpState({
-    required this.isLoading,
+    required this.isEmailLoading,
+    required this.isGoogleLoading,
     this.isSuccess = false,
     this.errorMessage,
   });
 
   SignUpState copyWith({
-    bool? isLoading,
+    bool? isEmailLoading,
+    bool? isGoogleLoading,
     bool? isSuccess,
     String? errorMessage,
   }) {
     return SignUpState(
-      isLoading: isLoading ?? this.isLoading,
+      isEmailLoading: isEmailLoading ?? this.isEmailLoading,
+      isGoogleLoading: isGoogleLoading ?? this.isGoogleLoading,
       isSuccess: isSuccess ?? this.isSuccess,
       errorMessage: errorMessage,
     );
