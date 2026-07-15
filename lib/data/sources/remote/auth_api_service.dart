@@ -102,6 +102,49 @@ class AuthApiService {
     }
   }
 
+  // google login
+  Future<bool> googleLogin({required String idToken}) async {
+    try {
+      final body = {"id_token": idToken};
+      final dynamic response = await apiClient.postRequest(
+        body: body,
+        endpoints: ApiEndpoints.googleLogin,
+      );
+
+      if (response == null) return false;
+
+      log("Google login response: $response");
+
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          throw Exception(
+            response['message'] ?? response['error'] ?? 'Google login failed',
+          );
+        }
+
+        try {
+          final token = response['authorization']?['access_token'];
+          if (token != null) {
+            await SharedPreferenceData.setToken(token);
+            await ApiClient.headerSet();
+          }
+        } catch (_) {
+          log("Failed to save token from google login");
+        }
+      }
+
+      return true;
+    } catch (error) {
+      if (error is DioException &&
+          error.response?.data is Map<String, dynamic>) {
+        final msg =
+            (error.response?.data as Map)['message'] ?? 'Google login failed';
+        throw Exception(msg);
+      }
+      rethrow;
+    }
+  }
+
   //load user
   Future<UserModel?> loadUser() async {
     try {

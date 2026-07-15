@@ -1,6 +1,6 @@
 class ApiEndpoints {
   static const String baseUrl =
-      "https://mean-drainage-belfast-likewise.trycloudflare.com/api";
+      "https://hometown-shoppers-compromise-dim.trycloudflare.com/api";
   //===================== auth ApiEndpoints ===========================//
   static const String register = '/auth/register';
   static const String login = '/auth/login';
@@ -13,6 +13,7 @@ class ApiEndpoints {
   static const String verifyResetOtp = '/auth/verify-email';
   static const String resetPassword = '/auth/reset-password';
   static const String logout = '/auth/logout';
+  static const String googleLogin = '/auth/google';
   static const String createAndagetJob = '/jobs';
   static const String deleteAccount = '/auth/delete-account';
   //========================set-up ApiEndpoints=========================//

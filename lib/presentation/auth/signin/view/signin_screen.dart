@@ -39,25 +39,44 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
         );
 
     if (success && mounted) {
-      final setupComplete = await _isSetupComplete();
-      if (!mounted) return;
-      if (setupComplete) {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          RoutesName.bottomNavRoute,
-          (route) => false,
-        );
-      } else {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          RoutesName.setUpScreen,
-          (route) => false,
-        );
-      }
+      await _onSignInSuccess();
     } else if (mounted) {
       final state = ref.read(signInViewModelProvider);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(state.errorMessage ?? "Login failed")),
+      );
+    }
+  }
+
+  Future<void> handleGoogleSignIn() async {
+    final success = await ref
+        .read(signInViewModelProvider.notifier)
+        .googleSignIn();
+
+    if (success && mounted) {
+      await _onSignInSuccess();
+    } else if (mounted) {
+      final state = ref.read(signInViewModelProvider);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(state.errorMessage ?? "Google sign in failed")),
+      );
+    }
+  }
+
+  Future<void> _onSignInSuccess() async {
+    final setupComplete = await _isSetupComplete();
+    if (!mounted) return;
+    if (setupComplete) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        RoutesName.bottomNavRoute,
+        (route) => false,
+      );
+    } else {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        RoutesName.setUpScreen,
+        (route) => false,
       );
     }
   }
@@ -210,9 +229,8 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
                   CustomOutlinedButton(
                     title: "Continue with Google",
                     icon: SvgPicture.asset(IconManager.googleIcon),
-                    onTap: () {
-                      /// google sign in
-                    },
+                    isLoading: signInState.isLoading,
+                    onTap: () => handleGoogleSignIn(),
                   ),
 
                   SizedBox(height: 10.h),

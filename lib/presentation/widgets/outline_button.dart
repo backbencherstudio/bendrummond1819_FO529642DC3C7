@@ -10,6 +10,7 @@ class CustomOutlinedButton extends StatelessWidget {
   final Color? fillColor;
   final Widget? icon;
   final TextStyle? textStyle;
+  final bool isLoading;
 
   const CustomOutlinedButton({
     super.key,
@@ -19,6 +20,7 @@ class CustomOutlinedButton extends StatelessWidget {
     this.fillColor,
     this.icon,
     this.textStyle,
+    this.isLoading = false,
   });
 
   @override
@@ -26,7 +28,7 @@ class CustomOutlinedButton extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: onTap,
+        onTap: isLoading ? null : onTap,
         borderRadius: BorderRadius.circular(12.r),
         child: Container(
           width: double.infinity,
@@ -43,7 +45,7 @@ class CustomOutlinedButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (icon != null) ...[
+              if (icon != null && !isLoading) ...[
                 SizedBox(
                   width: 20.w,
                   height: 20.h,
@@ -52,18 +54,27 @@ class CustomOutlinedButton extends StatelessWidget {
                 SizedBox(width: 10.w),
               ],
               Flexible(
-                child: Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style:
-                      textStyle ??
-                      getRegularStyle20_500(
-                        color: ColorManager.grayBlack400,
-                        fontSize: 18.sp,
+                child: isLoading
+                    ? SizedBox(
+                        width: 24.w,
+                        height: 24.h,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          color: color ?? ColorManager.grayBlack400,
+                        ),
+                      )
+                    : Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        style:
+                            textStyle ??
+                            getRegularStyle20_500(
+                              color: ColorManager.grayBlack400,
+                              fontSize: 18.sp,
+                            ),
                       ),
-                ),
               ),
             ],
           ),

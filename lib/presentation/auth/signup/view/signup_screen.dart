@@ -60,6 +60,25 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     }
   }
 
+  Future<void> _handleGoogleSignIn() async {
+    final success = await ref
+        .read(signUpViewModelProvider.notifier)
+        .googleSignIn();
+
+    if (success && mounted) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        RoutesName.bottomNavRoute,
+        (route) => false,
+      );
+    } else if (mounted) {
+      final state = ref.read(signUpViewModelProvider);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(state.errorMessage ?? "Google sign in failed")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -210,9 +229,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   CustomOutlinedButton(
                     title: "Continue with Google",
                     icon: SvgPicture.asset(IconManager.googleIcon),
-                    onTap: () {
-                      /// google sign in
-                    },
+                    isLoading: ref.watch(signUpViewModelProvider).isLoading,
+                    onTap: () => _handleGoogleSignIn(),
                   ),
                   SizedBox(height: 20.h),
                   customDivider(),

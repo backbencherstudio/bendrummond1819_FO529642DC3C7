@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/legacy.dart';
 import '../../../../core/network/api_clients.dart';
+import '../../../../core/services/firebase_service.dart';
 import '../../../../data/repositories/auth_repository.dart';
 import '../../../../data/sources/remote/auth_api_service.dart';
 
@@ -35,6 +36,27 @@ class SignUpModelview extends StateNotifier<SignUpState> {
       );
       state = state.copyWith(isLoading: false, isSuccess: success);
       return success;
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: e.toString().replaceFirst('Exception: ', ''),
+      );
+      return false;
+    }
+  }
+
+  Future<bool> googleSignIn() async {
+    state = state.copyWith(isLoading: true, errorMessage: null);
+
+    try {
+      final userCredential = await FirebaseService.signInWithGoogle();
+      if (userCredential == null) {
+        state = state.copyWith(isLoading: false);
+        return false;
+      }
+
+      state = state.copyWith(isLoading: false, isSuccess: true);
+      return true;
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
