@@ -105,7 +105,7 @@ class AuthApiService {
   // google login
   Future<bool> googleLogin({required String idToken}) async {
     try {
-      final body = {"id_token": idToken};
+      final body = {"idToken": idToken};
       final dynamic response = await apiClient.postRequest(
         body: body,
         endpoints: ApiEndpoints.googleLogin,
@@ -234,8 +234,10 @@ class AuthApiService {
       if (avatar != null) body['avatar'] = avatar;
       if (address != null) body['address'] = address;
       if (phoneNumber != null) body['phone_number'] = phoneNumber;
-      if (billRemainders != null) body['bill_remainders'] = billRemainders ? "1" : "0";
-      if (notificationRemainder != null) body['notification_remainder'] = notificationRemainder ? "1" : "0";
+      if (billRemainders != null)
+        body['bill_remainders'] = billRemainders ? "1" : "0";
+      if (notificationRemainder != null)
+        body['notification_remainder'] = notificationRemainder ? "1" : "0";
       if (gender != null) body['gender'] = gender;
       if (dateOfBirth != null) body['date_of_birth'] = dateOfBirth;
 
@@ -250,7 +252,9 @@ class AuthApiService {
 
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
-          throw Exception(response['message'] ?? response['error'] ?? 'Update failed');
+          throw Exception(
+            response['message'] ?? response['error'] ?? 'Update failed',
+          );
         }
       }
 
@@ -308,10 +312,7 @@ class AuthApiService {
   }
 
   //verify email (signup otp)
-  Future<bool> verifyEmail({
-    required String email,
-    required String otp,
-  }) async {
+  Future<bool> verifyEmail({required String email, required String otp}) async {
     try {
       final body = {"email": email, "token": otp};
       final dynamic response = await apiClient.postRequest(

@@ -1,6 +1,6 @@
 class ApiEndpoints {
   static const String baseUrl =
-      "https://hometown-shoppers-compromise-dim.trycloudflare.com/api";
+      "https://meeting-muscles-shift-premiere.trycloudflare.com/api";
   //===================== auth ApiEndpoints ===========================//
   static const String register = '/auth/register';
   static const String login = '/auth/login';

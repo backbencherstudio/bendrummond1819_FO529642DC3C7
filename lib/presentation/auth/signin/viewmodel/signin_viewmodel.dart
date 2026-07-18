@@ -1,62 +1,93 @@
-import 'package:flutter_riverpod/legacy.dart';
-
+import 'package:bendrummond1819_fo529642dc3c7/core/logger/logger.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/network/api_clients.dart';
 import '../../../../core/services/firebase_service.dart';
 import '../../../../data/repositories/auth_repository.dart';
 import '../../../../data/sources/remote/auth_api_service.dart';
 
 final signInViewModelProvider =
-    StateNotifierProvider<SignInModelview, SignInState>(
-      (ref) => SignInModelview(
-        repository: AuthRepository(
-          remoteSource: AuthApiService(apiClient: ApiClient()),
-        ),
-      ),
+    AsyncNotifierProvider<SignInModelview, SignInState>(SignInModelview.new);
+
+class SignInModelview extends AsyncNotifier<SignInState> {
+  late final AuthRepository repository;
+
+  @override
+  Future<SignInState> build() async {
+    repository = AuthRepository(
+      remoteSource: AuthApiService(apiClient: ApiClient()),
     );
-
-class SignInModelview extends StateNotifier<SignInState> {
-  final AuthRepository repository;
-
-  SignInModelview({required this.repository})
-    : super(SignInState(isEmailLoading: false, isGoogleLoading: false));
+    return SignInState(isEmailLoading: false, isGoogleLoading: false);
+  }
 
   Future<bool> signIn({required String email, required String password}) async {
-    state = state.copyWith(isEmailLoading: true, errorMessage: null);
-
+    final current =
+        state.value ??
+        const SignInState(isEmailLoading: false, isGoogleLoading: false);
+    state = AsyncData(
+      current.copyWith(isEmailLoading: true, errorMessage: null),
+    );
     try {
       final success = await repository.login(email: email, password: password);
-
-      state = state.copyWith(isEmailLoading: false, isSuccess: success);
-
+      state = AsyncData(
+        (state.value ?? current).copyWith(
+          isEmailLoading: false,
+          isSuccess: success,
+        ),
+      );
       return success;
     } catch (e) {
-      state = state.copyWith(isEmailLoading: false, errorMessage: e.toString().replaceFirst('Exception: ', ''));
-
+      state = AsyncData(
+        (state.value ?? current).copyWith(
+          isEmailLoading: false,
+          errorMessage: e.toString().replaceFirst('Exception: ', ''),
+        ),
+      );
       return false;
     }
   }
 
   Future<bool> googleSignIn() async {
-    state = state.copyWith(isGoogleLoading: true, errorMessage: null);
-
+    final current =
+        state.value ??
+        const SignInState(isEmailLoading: false, isGoogleLoading: false);
+    state = AsyncData(
+      current.copyWith(isGoogleLoading: true, errorMessage: null),
+    );
     try {
       final userCredential = await FirebaseService.signInWithGoogle();
+
       if (userCredential == null) {
-        state = state.copyWith(isGoogleLoading: false);
+        state = AsyncData(
+          (state.value ?? current).copyWith(isGoogleLoading: false),
+        );
         return false;
       }
-
       final idToken = await userCredential.user?.getIdToken();
+
       if (idToken == null) {
-        state = state.copyWith(isGoogleLoading: false, errorMessage: "Failed to get ID token");
+        state = AsyncData(
+          (state.value ?? current).copyWith(
+            isGoogleLoading: false,
+            errorMessage: "Failed to get ID token",
+          ),
+        );
         return false;
       }
-
       final success = await repository.googleLogin(idToken: idToken);
-      state = state.copyWith(isGoogleLoading: false, isSuccess: success);
+      state = AsyncData(
+        (state.value ?? current).copyWith(
+          isGoogleLoading: false,
+          isSuccess: success,
+        ),
+      );
       return success;
     } catch (e) {
-      state = state.copyWith(isGoogleLoading: false, errorMessage: e.toString().replaceFirst('Exception: ', ''));
+      state = AsyncData(
+        (state.value ?? current).copyWith(
+          isGoogleLoading: false,
+          errorMessage: e.toString().replaceFirst('Exception: ', ''),
+        ),
+      );
       return false;
     }
   }
@@ -89,3 +120,4 @@ class SignInState {
     );
   }
 }
+

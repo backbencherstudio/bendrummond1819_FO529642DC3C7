@@ -1,4 +1,5 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signin/view/cutom_divider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -30,75 +31,11 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  Future<void> handleSignIn() async {
-    final success = await ref
-        .read(signInViewModelProvider.notifier)
-        .signIn(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-        );
-
-    if (success && mounted) {
-      await _onSignInSuccess();
-    } else if (mounted) {
-      final state = ref.read(signInViewModelProvider);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(state.errorMessage ?? "Login failed")),
-      );
-    }
-  }
-
-  Future<void> handleGoogleSignIn() async {
-    final success = await ref
-        .read(signInViewModelProvider.notifier)
-        .googleSignIn();
-
-    if (success && mounted) {
-      await _onSignInSuccess();
-    } else if (mounted) {
-      final state = ref.read(signInViewModelProvider);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(state.errorMessage ?? "Google sign in failed")),
-      );
-    }
-  }
-
-  Future<void> _onSignInSuccess() async {
-    final setupComplete = await _isSetupComplete();
-    if (!mounted) return;
-    if (setupComplete) {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        RoutesName.bottomNavRoute,
-        (route) => false,
-      );
-    } else {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        RoutesName.setUpScreen,
-        (route) => false,
-      );
-    }
-  }
-
-  Future<bool> _isSetupComplete() async {
-    try {
-      final repository = SetupRepository(
-        remoteSource: SetupApiService(apiClient: ApiClient()),
-      );
-      final data = await repository.getSetupData();
-      if (data == null) return false;
-      return data.incomes.isNotEmpty ||
-          data.financialCommitments.isNotEmpty ||
-          data.savingsGoals.isNotEmpty;
-    } catch (_) {
-      return false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final signInState = ref.watch(signInViewModelProvider);
+    final signInState =
+        ref.watch(signInViewModelProvider).value ??
+        const SignInState(isEmailLoading: false, isGoogleLoading: false);
     final double screenHeight = MediaQuery.of(context).size.height;
     final double imageSectionHeight = screenHeight * 0.58;
 
@@ -220,7 +157,7 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
                   PrimaryButton(
                     title: "Sign In",
                     isLoading: signInState.isEmailLoading,
-                    onTap: () => handleSignIn(),
+                    onTap: () => handleCredentialsSignIn(),
                   ),
 
                   SizedBox(height: 16.h),
@@ -234,7 +171,7 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
                   ),
 
                   SizedBox(height: 10.h),
-                  customDivider(),
+                  CustomDivider(),
                   SizedBox(height: 10.h),
 
                   /// ************ rich text ******************
@@ -277,26 +214,71 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
     );
   }
 
-  /// ************* custom widget **************
-  Widget customDivider() {
-    return Row(
-      children: [
-        Expanded(child: Divider(color: ColorManager.brown200, thickness: 2)),
+  //***************** Helper Methods***********************
+  Future<void> handleCredentialsSignIn() async {
+    final success = await ref
+        .read(signInViewModelProvider.notifier)
+        .signIn(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
 
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Container(
-            width: 4.r,
-            height: 6.r,
-            decoration: BoxDecoration(
-              color: ColorManager.gold2,
-              borderRadius: BorderRadius.circular(999.r),
-            ),
-          ),
-        ),
+    if (success && mounted) {
+      await _onSignInSuccess();
+    } else if (mounted) {
+      final state = ref.read(signInViewModelProvider).value;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(state?.errorMessage ?? "Login failed")),
+      );
+    }
+  }
 
-        Expanded(child: Divider(color: ColorManager.brown200, thickness: 2)),
-      ],
-    );
+  Future<void> handleGoogleSignIn() async {
+    final success = await ref
+        .read(signInViewModelProvider.notifier)
+        .googleSignIn();
+
+    // log.d("Success $success");
+
+    if (success && mounted) {
+      await _onSignInSuccess();
+    } else if (mounted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Google sign in failed")));
+    }
+  }
+
+  Future<void> _onSignInSuccess() async {
+    final setupComplete = await _isSetupComplete();
+    if (!mounted) return;
+    if (setupComplete) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        RoutesName.bottomNavRoute,
+        (route) => false,
+      );
+    } else {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        RoutesName.setUpScreen,
+        (route) => false,
+      );
+    }
+  }
+
+  Future<bool> _isSetupComplete() async {
+    try {
+      final repository = SetupRepository(
+        remoteSource: SetupApiService(apiClient: ApiClient()),
+      );
+      final data = await repository.getSetupData();
+      if (data == null) return false;
+      return data.incomes.isNotEmpty ||
+          data.financialCommitments.isNotEmpty ||
+          data.savingsGoals.isNotEmpty;
+    } catch (_) {
+      return false;
+    }
   }
 }

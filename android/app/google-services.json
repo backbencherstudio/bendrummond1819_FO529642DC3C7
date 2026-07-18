@@ -12,20 +12,7 @@
           "package_name": "com.innova.stabilityapp"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "160078582396-fqe0192efdm52d2fkuffq865rjdn2519.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.innova.stabilityapp",
-            "certificate_hash": "b2b06f9b1cd45219652a002a2c7bdb589b335e1c"
-          }
-        },
-        {
-          "client_id": "160078582396-r5md49isqvgs33eqphreiopvs53fi85v.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
           "current_key": "AIzaSyBXAHbiF21zUSNbTTJirSwZgXK-SRjL5yM"
@@ -33,19 +20,7 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "160078582396-r5md49isqvgs33eqphreiopvs53fi85v.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "160078582396-grluklhb9sime3a4hmjr51373jpt2u7f.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.innova.stabilityapp"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
