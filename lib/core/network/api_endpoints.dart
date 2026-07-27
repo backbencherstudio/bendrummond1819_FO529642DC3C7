@@ -1,6 +1,5 @@
 class ApiEndpoints {
-  static const String baseUrl =
-      "https://meeting-muscles-shift-premiere.trycloudflare.com/api";
+  static const String baseUrl = "https://backend.stabilityus.com/api";
   //===================== auth ApiEndpoints ===========================//
   static const String register = '/auth/register';
   static const String login = '/auth/login';

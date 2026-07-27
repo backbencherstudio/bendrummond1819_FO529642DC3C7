@@ -1,9 +1,13 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferenceData {
-static Future<void> setToken(String? token) async {
+  static Future<void> setToken(String? token) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString('auth_token', "$token");
+    if (token != null) {
+      prefs.setString('auth_token', token);
+    } else {
+      prefs.remove('auth_token');
+    }
   }
 
   static Future<String?> getToken() async {
@@ -23,7 +27,11 @@ static Future<void> setToken(String? token) async {
 
   Future<void> setRole(String? role) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString('role', "$role");
+    if (role != null) {
+      prefs.setString('role', role);
+    } else {
+      prefs.remove('role');
+    }
   }
 
   static Future<void> removeRole() async {

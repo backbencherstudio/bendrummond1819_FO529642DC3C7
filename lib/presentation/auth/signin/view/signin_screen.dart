@@ -252,22 +252,30 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
   Future<void> _onSignInSuccess() async {
     final setupComplete = await _isSetupComplete();
     if (!mounted) return;
-    if (setupComplete) {
+    if (setupComplete == true) {
       Navigator.pushNamedAndRemoveUntil(
         context,
         RoutesName.bottomNavRoute,
         (route) => false,
       );
-    } else {
+    } else if (setupComplete == false) {
       Navigator.pushNamedAndRemoveUntil(
         context,
         RoutesName.setUpScreen,
         (route) => false,
       );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Unable to verify account status. Please try again later.",
+          ),
+        ),
+      );
     }
   }
 
-  Future<bool> _isSetupComplete() async {
+  Future<bool?> _isSetupComplete() async {
     try {
       final repository = SetupRepository(
         remoteSource: SetupApiService(apiClient: ApiClient()),
@@ -278,7 +286,7 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
           data.financialCommitments.isNotEmpty ||
           data.savingsGoals.isNotEmpty;
     } catch (_) {
-      return false;
+      return null;
     }
   }
 }

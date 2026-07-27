@@ -1,4 +1,3 @@
-import 'package:bendrummond1819_fo529642dc3c7/core/logger/logger.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/network/api_clients.dart';
 import '../../../../core/services/firebase_service.dart';
@@ -120,4 +119,3 @@ class SignInState {
     );
   }
 }
-

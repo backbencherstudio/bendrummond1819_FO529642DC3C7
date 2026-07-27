@@ -26,6 +26,7 @@ class CachedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Imageurl $imgUrl");
     return ClipRRect(
       borderRadius:
           specificBorderRadius ?? BorderRadius.circular(borderRadius ?? 0),

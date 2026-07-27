@@ -176,7 +176,7 @@ class _SetUpMainViewState extends ConsumerState<SetUpScreen> {
                                 );
                               } else if (mounted) {
                                 Utils.showToast(
-                                  message: ref.read(setupDataProvider).errorMessage ?? "Setup failed. Please try again.",
+                                  message: "Something went wrong while setting up your account. Please try again.",
                                   backgroundColor: ColorManager.errorColor,
                                   textColor: ColorManager.whiteColor,
                                 );

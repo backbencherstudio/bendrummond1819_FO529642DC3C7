@@ -3,9 +3,26 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/sources/local/shared_preference/shared_preference.dart';
+import '../navigator_key.dart';
 import 'api_endpoints.dart';
 import 'error_handle.dart';
 import 'response_handle.dart';
+import '../route/routes_name.dart';
+
+class _AuthInterceptor extends Interceptor {
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    if (err.response?.statusCode == 401) {
+      SharedPreferenceData.removeToken();
+      SharedPreferenceData.removeRole();
+      navigatorKey.currentState?.pushNamedAndRemoveUntil(
+        RoutesName.signInRoute,
+        (route) => false,
+      );
+    }
+    handler.next(err);
+  }
+}
 
 class ApiClient {
   static final Dio _dio = Dio(
@@ -15,7 +32,7 @@ class ApiClient {
       sendTimeout: Duration(seconds: 10),
       receiveTimeout: Duration(seconds: 10),
     ),
-  );
+  )..interceptors.add(_AuthInterceptor());
 
   static Future<Map<String, String>> _authHeaders() async {
     final token = await SharedPreferenceData.getToken();
@@ -46,8 +63,10 @@ class ApiClient {
     } catch (e) {
       if (e is DioException) {
         ErrorHandle.handleDioError(e);
+        rethrow;
       } else {
         log('Non-Dio error: $e');
+        rethrow;
       }
     }
   }

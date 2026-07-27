@@ -87,6 +87,8 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
       _phoneController.text = user.phoneNumber ?? '';
       _dobController.text = user.dateOfBirth ?? '';
     }
+
+    print("|Account $user");
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(

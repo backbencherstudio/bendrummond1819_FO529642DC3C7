@@ -1,3 +1,4 @@
+import 'package:bendrummond1819_fo529642dc3c7/core/navigator_key.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/network/api_clients.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/services/revenuecat_service.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
       ensureScreenSize: true,
       builder: (context, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
+        navigatorKey: navigatorKey,
         theme: ThemeData(scaffoldBackgroundColor: ColorManager.scaffoldLight),
         onGenerateRoute: RouteGenerator.getRoute,
         initialRoute: RoutesName.splashRoute,

@@ -1,8 +1,11 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/network/api_clients.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/network/api_endpoints.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
+import 'package:bendrummond1819_fo529642dc3c7/data/repositories/setup_repository.dart';
 import 'package:bendrummond1819_fo529642dc3c7/data/sources/local/shared_preference/shared_preference.dart';
+import 'package:bendrummond1819_fo529642dc3c7/data/sources/remote/setup_api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -70,19 +73,64 @@ class _SplashScreenState extends State<SplashScreen>
 
             if (mounted) {
               final token = await SharedPreferenceData.getToken();
-              if (token != null && token.isNotEmpty) {
-                await ApiClient.headerSet();
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  RoutesName.bottomNavRoute,
-                  (predicate) => false,
+              if (token == null || token.isEmpty || token == "null") {
+                await SharedPreferenceData.removeToken();
+                if (mounted) {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    RoutesName.onBoardingRoute,
+                    (predicate) => false,
+                  );
+                }
+                return;
+              }
+              try {
+                final apiClient = ApiClient();
+                await apiClient.getRequest(
+                  endpoints: ApiEndpoints.loadUser,
                 );
-              } else {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  RoutesName.onBoardingRoute,
-                  (predicate) => false,
-                );
+              } catch (_) {
+                await SharedPreferenceData.removeToken();
+                if (mounted) {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    RoutesName.onBoardingRoute,
+                    (predicate) => false,
+                  );
+                }
+                return;
+              }
+              final repository = SetupRepository(
+                remoteSource: SetupApiService(apiClient: ApiClient()),
+              );
+              try {
+                final data = await repository.getSetupData();
+                if (mounted) {
+                  if (data != null &&
+                      (data.incomes.isNotEmpty ||
+                          data.financialCommitments.isNotEmpty ||
+                          data.savingsGoals.isNotEmpty)) {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      RoutesName.bottomNavRoute,
+                      (predicate) => false,
+                    );
+                  } else {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      RoutesName.setUpScreen,
+                      (predicate) => false,
+                    );
+                  }
+                }
+              } catch (_) {
+                if (mounted) {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    RoutesName.setUpScreen,
+                    (predicate) => false,
+                  );
+                }
               }
             }
           });
