@@ -219,7 +219,17 @@ class _HomeSettingsScreenState extends ConsumerState<HomeSettingsScreen> {
                   Expanded(
                     child: _buildActionButton(
                       onTap: () {
-                        Navigator.pushNamed(context, RoutesName.signInRoute);
+                        final repository = AuthRepository(
+                          remoteSource: AuthApiService(
+                            apiClient: ApiClient(),
+                          ),
+                        );
+                        repository.logout();
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          RoutesName.signInRoute,
+                          (_) => false,
+                        );
                       },
                       label: "Sign out",
                       icon: IconManager.exitIcon,
