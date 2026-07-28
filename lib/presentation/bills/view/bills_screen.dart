@@ -31,7 +31,7 @@ class _BillsScreenState extends ConsumerState<BillsScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.0.r, vertical: 32.r),
+          padding: EdgeInsets.only(right: 20.0.r, left: 20.0.r, top: 20.0.r),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

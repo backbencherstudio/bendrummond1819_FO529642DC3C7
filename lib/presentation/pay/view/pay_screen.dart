@@ -52,12 +52,7 @@ class _PayScreenState extends ConsumerState<PayScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.only(
-            left: 20.0.r,
-            right: 20.0.r,
-            top: 32.r,
-            bottom: 100.h,
-          ),
+          padding: EdgeInsets.only(right: 20.0.r, left: 20.0.r, top: 20.0.r),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
