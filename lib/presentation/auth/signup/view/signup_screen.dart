@@ -1,3 +1,4 @@
+import 'package:bendrummond1819_fo529642dc3c7/presentation/mixins/keyboard_aware_scroll_mixin.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +10,7 @@ import '../../../../core/resource/constants/icon_manager.dart';
 import '../../../../core/resource/constants/image_manager.dart';
 import '../../../../core/resource/constants/style_manager.dart';
 import '../../../../core/route/routes_name.dart';
+import '../../../mixins/keyboard_aware_header.dart';
 import '../../../widgets/custom_back_button.dart';
 import '../../../widgets/custom_from_field.dart';
 import '../../../widgets/custom_logo_text.dart';
@@ -23,76 +25,58 @@ class SignupScreen extends ConsumerStatefulWidget {
   ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends ConsumerState<SignupScreen> {
+class _SignupScreenState extends ConsumerState<SignupScreen>
+    with KeyboardAwareScrollMixin {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _fullNameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _dobController = TextEditingController();
+  final _fullNameFocusNode = FocusNode();
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
+  final _phoneFocusNode = FocusNode();
+  final _dobFocusNode = FocusNode();
+  final _signUpButtonKey = GlobalKey();
+
   String? _emailError;
 
-  Future<void> _handleRegister() async {
-    setState(() {
-      _emailError = null;
-    });
-
-    final success = await ref
-        .read(signUpViewModelProvider.notifier)
-        .register(
-          name: _fullNameController.text.trim(),
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-          phone: _phoneController.text.trim(),
-          dob: _dobController.text.trim(),
-        );
-    print(success);
-    if (success && mounted) {
-      Navigator.pushReplacementNamed(
-        context,
-        RoutesName.signupOtpScreen,
-        arguments: _emailController.text.trim(),
-      );
-    } else if (!success && mounted) {
-      final state = ref.read(signUpViewModelProvider);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(state.errorMessage ?? "Registration failed")),
-      );
-    }
+  @override
+  void initState() {
+    super.initState();
+    registerAutoScrollFocus(_fullNameFocusNode, _signUpButtonKey);
+    registerAutoScrollFocus(_emailFocusNode, _signUpButtonKey);
+    registerAutoScrollFocus(_passwordFocusNode, _signUpButtonKey);
+    registerAutoScrollFocus(_phoneFocusNode, _signUpButtonKey);
+    registerAutoScrollFocus(_dobFocusNode, _signUpButtonKey);
   }
 
-  Future<void> _handleGoogleSignIn() async {
-    final success = await ref
-        .read(signUpViewModelProvider.notifier)
-        .googleSignIn();
-
-    if (success && mounted) {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        RoutesName.bottomNavRoute,
-        (route) => false,
-      );
-    } else if (mounted) {
-      final state = ref.read(signUpViewModelProvider);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(state.errorMessage ?? "Google sign in failed")),
-      );
-    }
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    _fullNameFocusNode.dispose();
+    _emailController.dispose();
+    _emailFocusNode.dispose();
+    _passwordController.dispose();
+    _passwordFocusNode.dispose();
+    _phoneController.dispose();
+    _phoneFocusNode.dispose();
+    _dobController.dispose();
+    _dobFocusNode.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double imageSectionHeight = screenHeight * 0.58;
-
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: ColorManager.primary,
       body: SingleChildScrollView(
+        controller: scrollController,
         physics: const ClampingScrollPhysics(),
         child: Column(
           children: [
-            SizedBox(
-              height: imageSectionHeight,
-              width: double.infinity,
+            KeyboardAwareHeader(
               child: Stack(
                 children: [
                   Positioned.fill(
@@ -155,6 +139,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   CustomFromField(
                     hintText: "What should we call you?",
                     controller: _fullNameController,
+                    focusNode: _fullNameFocusNode,
                   ),
 
                   SizedBox(height: 12.h),
@@ -169,6 +154,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   CustomFromField(
                     hintText: "you@example.com",
                     controller: _emailController,
+                    focusNode: _emailFocusNode,
                   ),
 
                   SizedBox(height: 12.h),
@@ -184,6 +170,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     hintText: "Your password",
                     controller: _passwordController,
                     isSecured: true,
+                    focusNode: _passwordFocusNode,
                   ),
 
                   SizedBox(height: 12.h),
@@ -198,6 +185,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   CustomFromField(
                     hintText: "(123) 456-7890",
                     controller: _phoneController,
+                    focusNode: _phoneFocusNode,
                   ),
 
                   SizedBox(height: 12.h),
@@ -212,15 +200,21 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   CustomFromField(
                     hintText: "MM/DD/YYYY",
                     controller: _dobController,
+                    focusNode: _dobFocusNode,
                   ),
 
                   SizedBox(height: 25.h),
 
                   /// ************ Sign up Button *****************
-                  PrimaryButton(
-                    title: "Create account",
-                    isLoading: ref.watch(signUpViewModelProvider).isEmailLoading,
-                    onTap: () => _handleRegister(),
+                  KeyedSubtree(
+                    key: _signUpButtonKey,
+                    child: PrimaryButton(
+                      title: "Create account",
+                      isLoading: ref
+                          .watch(signUpViewModelProvider)
+                          .isEmailLoading,
+                      onTap: () => _handleRegister(),
+                    ),
                   ),
 
                   SizedBox(height: 12.h),
@@ -229,7 +223,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   CustomOutlinedButton(
                     title: "Continue with Google",
                     icon: SvgPicture.asset(IconManager.googleIcon),
-                    isLoading: ref.watch(signUpViewModelProvider).isGoogleLoading,
+                    isLoading: ref
+                        .watch(signUpViewModelProvider)
+                        .isGoogleLoading,
                     onTap: () => _handleGoogleSignIn(),
                   ),
                   SizedBox(height: 20.h),
@@ -290,7 +286,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             decoration: BoxDecoration(
               color: ColorManager.gold2,
               borderRadius: BorderRadius.circular(999.r),
-              //shape: BoxShape.circle,
             ),
           ),
         ),
@@ -299,4 +294,55 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       ],
     );
   }
+
+  //******** Helper Methods**************
+
+  Future<void> _handleRegister() async {
+    setState(() {
+      _emailError = null;
+    });
+
+    final success = await ref
+        .read(signUpViewModelProvider.notifier)
+        .register(
+          name: _fullNameController.text.trim(),
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+          phone: _phoneController.text.trim(),
+          dob: _dobController.text.trim(),
+        );
+    print(success);
+    if (success && mounted) {
+      Navigator.pushReplacementNamed(
+        context,
+        RoutesName.signupOtpScreen,
+        arguments: _emailController.text.trim(),
+      );
+    } else if (!success && mounted) {
+      final state = ref.read(signUpViewModelProvider);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(state.errorMessage ?? "Registration failed")),
+      );
+    }
+  }
+
+  Future<void> _handleGoogleSignIn() async {
+    final success = await ref
+        .read(signUpViewModelProvider.notifier)
+        .googleSignIn();
+
+    if (success && mounted) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        RoutesName.bottomNavRoute,
+        (route) => false,
+      );
+    } else if (mounted) {
+      final state = ref.read(signUpViewModelProvider);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(state.errorMessage ?? "Google sign in failed")),
+      );
+    }
+  }
 }
+
