@@ -24,9 +24,11 @@ class CustomFromField extends StatefulWidget {
   final BoxConstraints? suffixIconConstraints;
   final BoxConstraints? prefixIconConstraints;
   final int? maxLines;
+  final FocusNode? focusNode;
 
   const CustomFromField({
     super.key,
+    this.focusNode,
     this.hintText,
     this.labelText,
     this.controller,
@@ -67,9 +69,12 @@ class _CustomFromFieldState extends State<CustomFromField> {
       onTap: widget.onTap,
       maxLines: widget.maxLines ?? 1,
       readOnly: widget.readOnly,
-      style: widget.style ?? getRegularStyle16_400(color: ColorManager.brown400),
+      focusNode: widget.focusNode,
+      style:
+          widget.style ?? getRegularStyle16_400(color: ColorManager.brown400),
       decoration: InputDecoration(
-        contentPadding: widget.contentPadding ??
+        contentPadding:
+            widget.contentPadding ??
             EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         filled: widget.filled ?? true,
         fillColor: widget.fillColor ?? ColorManager.backgroundSecondary,
@@ -80,18 +85,20 @@ class _CustomFromFieldState extends State<CustomFromField> {
         // Prefix Icon setup with constraints
         prefixIcon: widget.prefixIcon != null
             ? Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12.w),
-          child: SizedBox(
-            width: 20.w,
-            height: 20.h,
-            child: FittedBox(fit: BoxFit.contain, child: widget.prefixIcon!),
-          ),
-        )
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                child: SizedBox(
+                  width: 20.w,
+                  height: 20.h,
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: widget.prefixIcon!,
+                  ),
+                ),
+              )
             : null,
-        prefixIconConstraints: widget.prefixIconConstraints ?? BoxConstraints(
-          minWidth: 44.w,
-          minHeight: 20.h,
-        ),
+        prefixIconConstraints:
+            widget.prefixIconConstraints ??
+            BoxConstraints(minWidth: 44.w, minHeight: 20.h),
 
         // Suffix Icon setup with constraints
         suffixIcon: widget.isSecured
@@ -115,27 +122,30 @@ class _CustomFromFieldState extends State<CustomFromField> {
                 ),
               )
             : widget.suffixIcon != null
-                ? Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w),
-                    child: SizedBox(
-                      width: 20.w,
-                      height: 20.h,
-                      child:
-                          FittedBox(fit: BoxFit.contain, child: widget.suffixIcon!),
-                    ),
-                  )
-                : null,
-        suffixIconConstraints: widget.suffixIconConstraints ?? BoxConstraints(
-          minWidth: 44.w,
-          minHeight: 20.h,
-        ),
+            ? Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                child: SizedBox(
+                  width: 20.w,
+                  height: 20.h,
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: widget.suffixIcon!,
+                  ),
+                ),
+              )
+            : null,
+        suffixIconConstraints:
+            widget.suffixIconConstraints ??
+            BoxConstraints(minWidth: 44.w, minHeight: 20.h),
 
-        enabledBorder: widget.enabledBorder ??
+        enabledBorder:
+            widget.enabledBorder ??
             OutlineInputBorder(
               borderRadius: BorderRadius.circular(16.r),
               borderSide: BorderSide(color: ColorManager.borderColor1),
             ),
-        focusedBorder: widget.focusedBorder ??
+        focusedBorder:
+            widget.focusedBorder ??
             OutlineInputBorder(
               borderRadius: BorderRadius.circular(16.r),
               borderSide: BorderSide(
@@ -155,3 +165,4 @@ class _CustomFromFieldState extends State<CustomFromField> {
     );
   }
 }
+

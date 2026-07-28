@@ -11,6 +11,8 @@ import '../../../../core/resource/constants/color_manger.dart';
 import '../../../../core/resource/constants/image_manager.dart';
 import '../../../../core/resource/constants/style_manager.dart';
 import '../../../../core/route/routes_name.dart';
+import '../../../mixins/keyboard_aware_header.dart';
+import '../../../mixins/keyboard_aware_scroll_mixin.dart';
 import '../../../widgets/custom_back_button.dart';
 import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/outline_button.dart';
@@ -27,27 +29,45 @@ class SigningScreen extends ConsumerStatefulWidget {
   ConsumerState<SigningScreen> createState() => _SigningScreenState();
 }
 
-class _SigningScreenState extends ConsumerState<SigningScreen> {
+class _SigningScreenState extends ConsumerState<SigningScreen>
+    with KeyboardAwareScrollMixin {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _signInButtonKey = GlobalKey();
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    registerAutoScrollFocus(_emailFocusNode, _signInButtonKey);
+    registerAutoScrollFocus(_passwordFocusNode, _signInButtonKey);
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final signInState =
         ref.watch(signInViewModelProvider).value ??
         const SignInState(isEmailLoading: false, isGoogleLoading: false);
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double imageSectionHeight = screenHeight * 0.58;
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: ColorManager.primary,
       body: SingleChildScrollView(
+        controller: scrollController,
         physics: const ClampingScrollPhysics(),
         child: Column(
           children: [
-            SizedBox(
-              height: imageSectionHeight,
-              width: double.infinity,
+            KeyboardAwareHeader(
               child: Stack(
                 children: [
                   Positioned.fill(
@@ -109,6 +129,7 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
                   CustomFromField(
                     hintText: "you@example.com",
                     controller: _emailController,
+                    focusNode: _emailFocusNode,
                   ),
 
                   SizedBox(height: 12.h),
@@ -149,15 +170,19 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
                     hintText: "Your password",
                     controller: _passwordController,
                     isSecured: true,
+                    focusNode: _passwordFocusNode,
                   ),
 
                   SizedBox(height: 25.h),
 
                   /// ************ Sign in Button *****************
-                  PrimaryButton(
-                    title: "Sign In",
-                    isLoading: signInState.isEmailLoading,
-                    onTap: () => handleCredentialsSignIn(),
+                  KeyedSubtree(
+                    key: _signInButtonKey,
+                    child: PrimaryButton(
+                      title: "Sign In",
+                      isLoading: signInState.isEmailLoading,
+                      onTap: () => handleCredentialsSignIn(),
+                    ),
                   ),
 
                   SizedBox(height: 16.h),
@@ -237,8 +262,6 @@ class _SigningScreenState extends ConsumerState<SigningScreen> {
     final success = await ref
         .read(signInViewModelProvider.notifier)
         .googleSignIn();
-
-    // log.d("Success $success");
 
     if (success && mounted) {
       await _onSignInSuccess();
