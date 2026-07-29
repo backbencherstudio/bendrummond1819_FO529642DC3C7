@@ -2,14 +2,18 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_mang
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/data/models/setup_models.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/incomes_provider.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/utils/stagger_delay_for.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/utils/staggered_fade_slide.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'widgets/add_edit_income_sheet.dart';
-import 'widgets/pay_commitments_section.dart';
-import 'widgets/pay_incomes_section.dart';
+import 'widgets/add_income_button.dart';
+import 'widgets/commitment_card.dart';
+import 'widgets/empty_section_text.dart';
+import 'widgets/income_card.dart';
 import 'widgets/safe_to_spend.dart';
+import 'widgets/section_label.dart';
 
 class PayScreen extends ConsumerStatefulWidget {
   const PayScreen({super.key});
@@ -73,7 +77,7 @@ class _PayScreenState extends ConsumerState<PayScreen>
                     ),
                   )
                 else
-                  _buildContent(state),
+                  ..._buildContent(state),
               ],
             ),
           ),
@@ -82,31 +86,43 @@ class _PayScreenState extends ConsumerState<PayScreen>
     );
   }
 
-  Widget _buildContent(IncomesState state) {
+  Widget _item(int index, int total, Widget child) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 12.h),
+      child: StaggeredFadeSlide(
+        controller: _controller,
+        delay: staggerDelayFor(index, total),
+        child: child,
+      ),
+    );
+  }
+
+  List<Widget> _buildContent(IncomesState state) {
     final incomes = state.incomes;
     final commitments = state.financialCommitments;
     final total = incomes.length + commitments.length + 1;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        PayIncomesSection(
-          controller: _controller,
-          incomes: incomes,
-          totalItems: total,
-          startIndex: 0,
-          onEdit: (income) => _showAddEditSheet(existing: income),
-        ),
-        SizedBox(height: 24.h),
-        PayCommitmentsSection(
-          controller: _controller,
-          commitments: commitments,
-          totalItems: total,
-          startIndex: incomes.isEmpty ? 1 : incomes.length,
-          onAdd: () => _showAddEditSheet(),
-        ),
-      ],
-    );
+    int idx = 0;
+    return [
+      const SectionLabel('Your incomes'),
+      SizedBox(height: 12.h),
+      if (incomes.isEmpty)
+        _item(idx++, total, const EmptySectionText('No incomes yet'))
+      else
+        ...incomes.map((income) => _item(idx++, total, IncomeCard(
+              income: income,
+              onTap: () => _showAddEditSheet(existing: income),
+            ))),
+      SizedBox(height: 24.h),
+      const SectionLabel('Your pay'),
+      SizedBox(height: 12.h),
+      if (commitments.isEmpty)
+        _item(idx++, total, const EmptySectionText('No commitments yet'))
+      else
+        ...commitments.map((c) => _item(idx++, total, CommitmentCard(commitment: c))),
+      SizedBox(height: 16.h),
+      _item(idx++, total, AddIncomeButton(onTap: () => _showAddEditSheet())),
+    ];
   }
 
   void _showAddEditSheet({IncomeData? existing}) {
@@ -120,3 +136,4 @@ class _PayScreenState extends ConsumerState<PayScreen>
     );
   }
 }
+

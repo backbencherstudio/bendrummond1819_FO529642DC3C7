@@ -1,4 +1,5 @@
 import 'package:bendrummond1819_fo529642dc3c7/data/models/setup_models.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/utils/stagger_delay_for.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/utils/staggered_fade_slide.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,13 +45,11 @@ class PayCommitmentsSection extends StatelessWidget {
   }
 
   Widget _item(int index, Widget child) {
-    final step = totalItems > 0 ? (0.5 / totalItems).clamp(0.0, 0.08) : 0.08;
-    final delay = (index * step).clamp(0.0, 0.6);
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h),
       child: StaggeredFadeSlide(
         controller: controller,
-        delay: delay,
+        delay: staggerDelayFor(index, totalItems),
         child: child,
       ),
     );

@@ -3,6 +3,8 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_mana
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/utils.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/setup_data_api_provider.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/utils/stagger_delay_for.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/utils/staggered_fade_slide.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,11 +16,27 @@ class GoalsScreen extends ConsumerStatefulWidget {
   ConsumerState<GoalsScreen> createState() => _GoalsScreenState();
 }
 
-class _GoalsScreenState extends ConsumerState<GoalsScreen> {
+class _GoalsScreenState extends ConsumerState<GoalsScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(savingGoalsProvider.notifier).fetchGoals());
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+    Future.microtask(() async {
+      await ref.read(savingGoalsProvider.notifier).fetchGoals();
+      _controller.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -83,15 +101,22 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen> {
                   ),
                 )
               else
-                ...goals.map(
-                  (g) => Padding(
-                    padding: EdgeInsets.only(bottom: 12.h),
-                    child: _buildGoalCard(
-                      g.id,
-                      g.goalName,
-                      "\$${g.contribution.toStringAsFixed(0)}/${g.frequency.toLowerCase()}",
-                    ),
-                  ),
+                ...goals.asMap().entries.map(
+                  (e) {
+                    final g = e.value;
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: 12.h),
+                      child: StaggeredFadeSlide(
+                        controller: _controller,
+                        delay: staggerDelayFor(e.key, goals.length),
+                        child: _buildGoalCard(
+                          g.id,
+                          g.goalName,
+                          "\$${g.contribution.toStringAsFixed(0)}/${g.frequency.toLowerCase()}",
+                        ),
+                      ),
+                    );
+                  },
                 ),
             ],
           ),
