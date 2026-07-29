@@ -41,9 +41,6 @@ class _BillsScreenState extends ConsumerState<BillsScreen>
     super.dispose();
   }
 
-  /// How much each successive item's entrance is delayed, as a fraction
-  /// of the controller's total duration. Capped so the stagger window
-  /// still fits within 0.0–1.0 even for longer lists.
   double _delayFor(int index, int itemCount) {
     final step = itemCount > 0 ? (0.5 / itemCount).clamp(0.0, 0.08) : 0.08;
     return (index * step).clamp(0.0, 0.6);

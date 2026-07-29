@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../utils/staggered_fade_slide.dart';
 import 'add_debt_sheet.dart';
 import 'dashed_rect_painter.dart' show DashedRectPainter;
 import 'debt_card.dart';
@@ -19,11 +20,32 @@ class BalancesScreen extends ConsumerStatefulWidget {
   ConsumerState<BalancesScreen> createState() => _BalancesScreenState();
 }
 
-class _BalancesScreenState extends ConsumerState<BalancesScreen> {
+class _BalancesScreenState extends ConsumerState<BalancesScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(balancesProvider.notifier).fetchDebts());
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+    Future.microtask(() async {
+      await ref.read(balancesProvider.notifier).fetchDebts();
+      _controller.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  double _delayFor(int index, int itemCount) {
+    final step = itemCount > 0 ? (0.5 / itemCount).clamp(0.0, 0.08) : 0.08;
+    return (index * step).clamp(0.0, 0.6);
   }
 
   @override
@@ -78,10 +100,14 @@ class _BalancesScreenState extends ConsumerState<BalancesScreen> {
     return ListView.separated(
       itemCount: debts.length,
       separatorBuilder: (_, __) => SizedBox(height: 12.h),
-      itemBuilder: (_, i) => DebtCard(
-        debt: debts[i],
-        onTap: () => _showAddEditSheet(existing: debts[i]),
-        onDelete: () => _deleteDebt(debts[i].id),
+      itemBuilder: (_, i) => StaggeredFadeSlide(
+        controller: _controller,
+        delay: _delayFor(i, debts.length),
+        child: DebtCard(
+          debt: debts[i],
+          onTap: () => _showAddEditSheet(existing: debts[i]),
+          onDelete: () => _deleteDebt(debts[i].id),
+        ),
       ),
     );
   }
