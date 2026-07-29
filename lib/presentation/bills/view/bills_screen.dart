@@ -1,5 +1,4 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
-import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/utils.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
@@ -8,7 +7,9 @@ import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/bills_provid
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../utils/staggered_fade_slide.dart';
+import 'widgets/bills_card.dart';
 
 class BillsScreen extends ConsumerStatefulWidget {
   const BillsScreen({super.key});
@@ -17,11 +18,35 @@ class BillsScreen extends ConsumerStatefulWidget {
   ConsumerState<BillsScreen> createState() => _BillsScreenState();
 }
 
-class _BillsScreenState extends ConsumerState<BillsScreen> {
+class _BillsScreenState extends ConsumerState<BillsScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(billsProvider.notifier).fetchBills());
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+    Future.microtask(() async {
+      await ref.read(billsProvider.notifier).fetchBills();
+      _controller.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  /// How much each successive item's entrance is delayed, as a fraction
+  /// of the controller's total duration. Capped so the stagger window
+  /// still fits within 0.0–1.0 even for longer lists.
+  double _delayFor(int index, int itemCount) {
+    final step = itemCount > 0 ? (0.5 / itemCount).clamp(0.0, 0.08) : 0.08;
+    return (index * step).clamp(0.0, 0.6);
   }
 
   @override
@@ -42,110 +67,10 @@ class _BillsScreenState extends ConsumerState<BillsScreen> {
                   fontSize: 32,
                 ),
               ),
-
               SizedBox(height: 24.h),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    state.bills.isNotEmpty
-                        ? '\$${state.bills.fold<double>(0, (sum, c) => sum + c.amount).toStringAsFixed(0)}/month'
-                        : '\$0/month',
-                    style: getRegularStyle16_400(color: ColorManager.brown400),
-                  ),
-                  InkWell(
-                    onTap: () =>
-                        Navigator.pushNamed(context, RoutesName.addBillScreen),
-                    child: Container(
-                      padding: EdgeInsets.all(6.r),
-                      decoration: BoxDecoration(
-                        color: ColorManager.backgroundCard,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.add,
-                        color: ColorManager.primaryButton,
-                        size: 20.sp,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
+              _BillsSummaryRow(bills: state.bills),
               SizedBox(height: 16.h),
-
-              Expanded(
-                child: state.isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: ColorManager.textPrimary,
-                        ),
-                      )
-                    : state.error != null
-                    ? Center(
-                        child: Text(
-                          "Error loading bills",
-                          style: getRegularStyle16_400(
-                            color: ColorManager.errorColor,
-                          ),
-                        ),
-                      )
-                    : state.bills.isEmpty
-                    ? Center(
-                        child: Text(
-                          "No bills yet",
-                          style: getRegularStyle16_400(
-                            color: ColorManager.brown400,
-                          ),
-                        ),
-                      )
-                    : ListView(
-                        padding: EdgeInsets.zero,
-                        children: state.bills.map((c) {
-                          final subtitle = c.dueDay != null
-                              ? "Due day ${c.dueDay}"
-                              : (c.frequency ?? "Monthly");
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: 12.h),
-                            child: Dismissible(
-                              key: ValueKey(c.id),
-                              direction: DismissDirection.endToStart,
-                              background: Container(
-                                alignment: Alignment.centerRight,
-                                padding: EdgeInsets.only(right: 24.w),
-                                decoration: BoxDecoration(
-                                  color: ColorManager.errorColor,
-                                  borderRadius: BorderRadius.circular(12.r),
-                                ),
-                                child: Icon(
-                                  Icons.delete_outline,
-                                  color: ColorManager.whiteColor,
-                                  size: 24.sp,
-                                ),
-                              ),
-                              onDismissed: (_) async {
-                                final success = await ref
-                                    .read(billsProvider.notifier)
-                                    .deleteBill(c.id!);
-                                if (context.mounted) {
-                                  Utils.showToast(
-                                    message: success
-                                        ? "Bill deleted"
-                                        : "Failed to delete bill",
-                                    backgroundColor: success
-                                        ? ColorManager.successColor
-                                        : ColorManager.errorColor,
-                                    textColor: ColorManager.whiteColor,
-                                  );
-                                }
-                              },
-                              child: _buildBillCard(c, subtitle),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-              ),
+              Expanded(child: _buildBody(state)),
             ],
           ),
         ),
@@ -153,73 +78,125 @@ class _BillsScreenState extends ConsumerState<BillsScreen> {
     );
   }
 
-  Widget _buildBillCard(FinancialCommitmentData bill, String subtitle) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(16.r),
-      decoration: BoxDecoration(
-        color: ColorManager.secondaryBackGround,
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: ColorManager.borderE0D9D1, width: 2),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  bill.name,
-                  style: getMediumStyle18(color: ColorManager.brown500),
+  Widget _buildBody(BillsState state) {
+    if (state.isLoading) {
+      return Center(
+        child: CircularProgressIndicator(color: ColorManager.textPrimary),
+      );
+    }
+    if (state.error != null) {
+      return Center(
+        child: Text(
+          "Error loading bills",
+          style: getRegularStyle16_400(color: ColorManager.errorColor),
+        ),
+      );
+    }
+    if (state.bills.isEmpty) {
+      return Center(
+        child: Text(
+          "No bills yet",
+          style: getRegularStyle16_400(color: ColorManager.brown400),
+        ),
+      );
+    }
+
+    final bills = state.bills;
+
+    return ListView.builder(
+      padding: EdgeInsets.zero,
+      itemCount: bills.length,
+      itemBuilder: (context, index) {
+        final bill = bills[index];
+        final subtitle = bill.dueDay != null
+            ? "Due day ${bill.dueDay}"
+            : (bill.frequency ?? "Monthly");
+
+        return StaggeredFadeSlide(
+          controller: _controller,
+          delay: _delayFor(index, bills.length),
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 12.h),
+            child: Dismissible(
+              key: ValueKey(bill.id),
+              direction: DismissDirection.endToStart,
+              background: Container(
+                alignment: Alignment.centerRight,
+                padding: EdgeInsets.only(right: 24.w),
+                decoration: BoxDecoration(
+                  color: ColorManager.errorColor,
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
-                SizedBox(height: 12.h),
-                Text(
-                  subtitle,
-                  style: getRegularStyle16_400(
-                    color: ColorManager.grayBlack400,
-                    fontSize: 14,
-                  ),
+                child: Icon(
+                  Icons.delete_outline,
+                  color: ColorManager.whiteColor,
+                  size: 24.sp,
                 ),
-              ],
-            ),
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "\$${bill.amount.toStringAsFixed(0)}",
-                style: getMediumStyle18(color: ColorManager.textPrimary),
               ),
-              SizedBox(width: 8.w),
-              InkWell(
-                onTap: () => Navigator.pushNamed(
+              onDismissed: (_) => _handleDismiss(bill),
+              child: BillCard(
+                bill: bill,
+                subtitle: subtitle,
+                onEditTap: () => Navigator.pushNamed(
                   context,
                   RoutesName.editBillScreen,
                   arguments: bill,
                 ),
-                child: Container(
-                  padding: EdgeInsets.all(8.r),
-                  decoration: BoxDecoration(
-                    color: ColorManager.backgroundCard,
-                    shape: BoxShape.circle,
-                  ),
-                  child: SvgPicture.asset(
-                    IconManager.editIcon,
-                    width: 16.sp,
-                    height: 16.sp,
-                    colorFilter: ColorFilter.mode(
-                      ColorManager.primaryButton,
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                ),
               ),
-            ],
+            ),
           ),
-        ],
-      ),
+        );
+      },
+    );
+  }
+
+  Future<void> _handleDismiss(FinancialCommitmentData bill) async {
+    final success = await ref.read(billsProvider.notifier).deleteBill(bill.id!);
+    if (context.mounted) {
+      Utils.showToast(
+        message: success ? "Bill deleted" : "Failed to delete bill",
+        backgroundColor: success
+            ? ColorManager.successColor
+            : ColorManager.errorColor,
+        textColor: ColorManager.whiteColor,
+      );
+    }
+  }
+}
+
+/// Top row showing the total monthly bill amount and the "add bill" button.
+class _BillsSummaryRow extends StatelessWidget {
+  final List<FinancialCommitmentData> bills;
+
+  const _BillsSummaryRow({required this.bills});
+
+  @override
+  Widget build(BuildContext context) {
+    final total = bills.fold<double>(0, (sum, c) => sum + c.amount);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          '\$${total.toStringAsFixed(0)}/month',
+          style: getRegularStyle16_400(color: ColorManager.brown400),
+        ),
+        InkWell(
+          onTap: () => Navigator.pushNamed(context, RoutesName.addBillScreen),
+          child: Container(
+            padding: EdgeInsets.all(6.r),
+            decoration: BoxDecoration(
+              color: ColorManager.backgroundCard,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.add,
+              color: ColorManager.primaryButton,
+              size: 20.sp,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

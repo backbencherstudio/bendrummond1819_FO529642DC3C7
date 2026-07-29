@@ -262,7 +262,6 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
     final success = await ref
         .read(signInViewModelProvider.notifier)
         .googleSignIn();
-
     if (success && mounted) {
       await _onSignInSuccess();
     } else if (mounted) {
