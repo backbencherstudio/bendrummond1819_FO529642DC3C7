@@ -1,35 +1,40 @@
-import 'dart:developer';
+import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import '../logger/logger.dart';
 
 class RevenueCatService {
-  static const String _apiKey = 'appl_zbZpgJctbSRcdUyFTmOeQcXXMXz';
   static const String entitlementId = 'premium';
 
   static Future<void> initialize() async {
     try {
+      final apiKey = Platform.isIOS
+          ? dotenv.env['REVENUECAT_IOS_API_KEY'] ?? ''
+          : dotenv.env['REVENUECAT_ANDROID_API_KEY'] ?? '';
+
       await Purchases.setLogLevel(LogLevel.debug);
       PurchasesConfiguration configuration;
-      configuration = PurchasesConfiguration(_apiKey);
+      configuration = PurchasesConfiguration(apiKey);
       await Purchases.configure(configuration);
-      log("RevenueCat initialized successfully");
+      log.d("RevenueCat initialized successfully");
     } catch (e) {
-      log("RevenueCat initialization failed: $e");
+      log.d("RevenueCat initialization failed: $e");
     }
   }
 
   static Future<Offerings> getOfferings() async {
     final offerings = await Purchases.getOfferings();
-    log("Offerings fetched: ${offerings.current?.identifier}");
+    log.d("Offerings fetched: ${offerings.current?.identifier}");
     return offerings;
   }
 
   static Future<CustomerInfo?> purchasePackage(Package package) async {
     try {
       final result = await Purchases.purchase(PurchaseParams.package(package));
-      log("Purchase successful: ${result.customerInfo.entitlements}");
+      log.d("Purchase successful: ${result.customerInfo.entitlements}");
       return result.customerInfo;
     } catch (e) {
-      log("Purchase failed: $e");
+      log.d("Purchase failed: $e");
       return null;
     }
   }
@@ -39,7 +44,7 @@ class RevenueCatService {
       final customerInfo = await Purchases.getCustomerInfo();
       return customerInfo.entitlements.all[entitlementId]?.isActive == true;
     } catch (e) {
-      log("Failed to check entitlement: $e");
+      log.d("Failed to check entitlement: $e");
       return false;
     }
   }
@@ -47,10 +52,10 @@ class RevenueCatService {
   static Future<CustomerInfo?> restorePurchases() async {
     try {
       final customerInfo = await Purchases.restorePurchases();
-      log("Restore successful: ${customerInfo.entitlements.all}");
+      log.d("Restore successful: ${customerInfo.entitlements.all}");
       return customerInfo;
     } catch (e) {
-      log("Restore failed: $e");
+      log.d("Restore failed: $e");
       return null;
     }
   }
