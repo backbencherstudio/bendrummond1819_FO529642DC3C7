@@ -67,7 +67,7 @@ class SignInModelview extends AsyncNotifier<SignInState> {
       current.copyWith(isGoogleLoading: true, errorMessage: null),
     );
     try {
-      final userCredential = await FirebaseService.signInWithGoogle();
+      final userCredential = await FirebaseServices.signInWithGoogle();
 
       if (userCredential == null) {
         state = AsyncData(
@@ -117,14 +117,8 @@ class SignInModelview extends AsyncNotifier<SignInState> {
       current.copyWith(isAppleLoading: true, errorMessage: null),
     );
     try {
-      final userCredential = await FirebaseService.signInWithApple();
+      final userCredential = await FirebaseServices.signInWithApple();
 
-      if (userCredential == null) {
-        state = AsyncData(
-          (state.value ?? current).copyWith(isAppleLoading: false),
-        );
-        return false;
-      }
       final idToken = await userCredential.user?.getIdToken();
 
       if (idToken == null) {

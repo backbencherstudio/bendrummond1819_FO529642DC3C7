@@ -55,7 +55,7 @@ class SignUpModelview extends StateNotifier<SignUpState> {
     state = state.copyWith(isGoogleLoading: true, errorMessage: null);
 
     try {
-      final userCredential = await FirebaseService.signInWithGoogle();
+      final userCredential = await FirebaseServices.signInWithGoogle();
       if (userCredential == null) {
         state = state.copyWith(isGoogleLoading: false);
         return false;
@@ -86,11 +86,7 @@ class SignUpModelview extends StateNotifier<SignUpState> {
     state = state.copyWith(isAppleLoading: true, errorMessage: null);
 
     try {
-      final userCredential = await FirebaseService.signInWithApple();
-      if (userCredential == null) {
-        state = state.copyWith(isAppleLoading: false);
-        return false;
-      }
+      final userCredential = await FirebaseServices.signInWithApple();
 
       final idToken = await userCredential.user?.getIdToken();
       if (idToken == null) {

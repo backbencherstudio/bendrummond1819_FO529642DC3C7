@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import '../../../core/network/api_clients.dart';
 import '../../../core/network/api_endpoints.dart';
 import '../../models/user_model.dart';
@@ -105,7 +106,11 @@ class AuthApiService {
   // google login
   Future<bool> googleLogin({required String idToken}) async {
     try {
-      final body = {"idToken": idToken};
+      final body = {
+        "idToken": idToken,
+        "fcmToken": "",
+        "platform": _devicePlatform(),
+      };
       final dynamic response = await apiClient.postRequest(
         body: body,
         endpoints: ApiEndpoints.googleLogin,
@@ -148,7 +153,11 @@ class AuthApiService {
   // apple login
   Future<bool> appleLogin({required String idToken}) async {
     try {
-      final body = {"idToken": idToken};
+      final body = {
+        "idToken": idToken,
+        "fcmToken": "",
+        "platform": _devicePlatform(),
+      };
       final dynamic response = await apiClient.postRequest(
         body: body,
         endpoints: ApiEndpoints.appleLogin,
@@ -424,6 +433,24 @@ class AuthApiService {
       return true;
     } catch (error) {
       rethrow;
+    }
+  }
+
+  String _devicePlatform() {
+    if (kIsWeb) return 'web';
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.iOS:
+        return 'ios';
+      case TargetPlatform.android:
+        return 'android';
+      case TargetPlatform.macOS:
+        return 'macos';
+      case TargetPlatform.windows:
+        return 'windows';
+      case TargetPlatform.linux:
+        return 'linux';
+      case TargetPlatform.fuchsia:
+        return 'fuchsia';
     }
   }
 }

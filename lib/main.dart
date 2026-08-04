@@ -15,7 +15,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ApiClient.headerSet();
   await dotenv.load(fileName: '.env');
-  await FirebaseService.initialize();
+  await FirebaseServices.initialize();
   await RevenueCatService.initialize();
   runApp(const ProviderScope(child: MyApp()));
 }
