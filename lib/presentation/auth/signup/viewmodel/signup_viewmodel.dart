@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/legacy.dart';
 import '../../../../core/network/api_clients.dart';
+import '../../../../core/resource/utils.dart';
 import '../../../../core/services/firebase_service.dart';
 import '../../../../data/repositories/auth_repository.dart';
 import '../../../../data/sources/remote/auth_api_service.dart';
@@ -45,7 +46,7 @@ class SignUpModelview extends StateNotifier<SignUpState> {
     } catch (e) {
       state = state.copyWith(
         isEmailLoading: false,
-        errorMessage: e.toString().replaceFirst('Exception: ', ''),
+        errorMessage: Utils.friendlyErrorMessage(e),
       );
       return false;
     }
@@ -76,7 +77,7 @@ class SignUpModelview extends StateNotifier<SignUpState> {
     } catch (e) {
       state = state.copyWith(
         isGoogleLoading: false,
-        errorMessage: e.toString().replaceFirst('Exception: ', ''),
+        errorMessage: Utils.friendlyErrorMessage(e),
       );
       return false;
     }
@@ -103,7 +104,7 @@ class SignUpModelview extends StateNotifier<SignUpState> {
     } catch (e) {
       state = state.copyWith(
         isAppleLoading: false,
-        errorMessage: e.toString().replaceFirst('Exception: ', ''),
+        errorMessage: Utils.friendlyErrorMessage(e),
       );
       return false;
     }

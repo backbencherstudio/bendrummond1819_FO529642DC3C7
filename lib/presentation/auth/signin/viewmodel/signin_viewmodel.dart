@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/network/api_clients.dart';
+import '../../../../core/resource/utils.dart';
 import '../../../../core/services/firebase_service.dart';
 import '../../../../data/repositories/auth_repository.dart';
 import '../../../../data/sources/remote/auth_api_service.dart';
@@ -48,7 +49,7 @@ class SignInModelview extends AsyncNotifier<SignInState> {
       state = AsyncData(
         (state.value ?? current).copyWith(
           isEmailLoading: false,
-          errorMessage: e.toString().replaceFirst('Exception: ', ''),
+          errorMessage: Utils.friendlyErrorMessage(e),
         ),
       );
       return false;
@@ -98,7 +99,7 @@ class SignInModelview extends AsyncNotifier<SignInState> {
       state = AsyncData(
         (state.value ?? current).copyWith(
           isGoogleLoading: false,
-          errorMessage: e.toString().replaceFirst('Exception: ', ''),
+          errorMessage: Utils.friendlyErrorMessage(e),
         ),
       );
       return false;
@@ -142,7 +143,7 @@ class SignInModelview extends AsyncNotifier<SignInState> {
       state = AsyncData(
         (state.value ?? current).copyWith(
           isAppleLoading: false,
-          errorMessage: e.toString().replaceFirst('Exception: ', ''),
+          errorMessage: Utils.friendlyErrorMessage(e),
         ),
       );
       return false;

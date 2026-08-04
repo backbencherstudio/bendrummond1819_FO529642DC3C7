@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -8,6 +11,42 @@ import 'constants/color_manger.dart';
 import 'constants/style_manager.dart';
 
 class Utils {
+  static const String networkErrorMessage =
+      'No internet connection. Please check your network and try again.';
+
+  static String friendlyErrorMessage(
+    Object error, {
+    String fallback = 'Something went wrong. Please try again.',
+  }) {
+    if (error is SocketException) return networkErrorMessage;
+
+    if (error is DioException) {
+      final data = error.response?.data;
+      if (data is Map && data['message'] is String) {
+        return data['message'] as String;
+      }
+    }
+
+    final message = error.toString().replaceFirst('Exception: ', '');
+    if (_looksLikeNetworkError(message)) return networkErrorMessage;
+
+    return message.isEmpty ? fallback : message;
+  }
+
+  static bool _looksLikeNetworkError(String message) {
+    final lower = message.toLowerCase();
+    return lower.contains('network') ||
+        lower.contains('internet') ||
+        lower.contains('connection') ||
+        lower.contains('unreachable') ||
+        lower.contains('timed out') ||
+        lower.contains('timeout') ||
+        lower.contains('socket') ||
+        lower.contains('host is down') ||
+        lower.contains('no such host') ||
+        lower.contains('connectivity');
+  }
+
   static String formatDateTime(DateTime date) {
     final DateFormat formatter = DateFormat(
       'yyyy-MM-dd',
