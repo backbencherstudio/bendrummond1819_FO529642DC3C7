@@ -195,6 +195,12 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
                     onTap: () => handleGoogleSignIn(),
                   ),
 
+                  SizedBox(height: 16.h),
+                  CustomOutlinedButton(
+                    title: "Continue with Apple",
+                    icon: SvgPicture.asset(IconManager.appleIcon),
+                    onTap: () {},
+                  ),
                   SizedBox(height: 10.h),
                   CustomDivider(),
                   SizedBox(height: 10.h),
