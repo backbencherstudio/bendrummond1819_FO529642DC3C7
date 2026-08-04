@@ -13,6 +13,7 @@ class ApiEndpoints {
   static const String resetPassword = '/auth/reset-password';
   static const String logout = '/auth/logout';
   static const String googleLogin = '/auth/google';
+  static const String appleLogin = '/auth/apple';
   static const String createAndagetJob = '/jobs';
   static const String deleteAccount = '/auth/delete-account';
   //========================set-up ApiEndpoints=========================//

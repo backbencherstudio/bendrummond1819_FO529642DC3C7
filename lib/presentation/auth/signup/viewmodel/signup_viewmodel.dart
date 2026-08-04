@@ -16,7 +16,13 @@ final signUpViewModelProvider =
 class SignUpModelview extends StateNotifier<SignUpState> {
   final AuthRepository repository;
   SignUpModelview({required this.repository})
-    : super(SignUpState(isEmailLoading: false, isGoogleLoading: false));
+    : super(
+        SignUpState(
+          isEmailLoading: false,
+          isGoogleLoading: false,
+          isAppleLoading: false,
+        ),
+      );
 
   Future<bool> register({
     required String name,
@@ -75,17 +81,50 @@ class SignUpModelview extends StateNotifier<SignUpState> {
       return false;
     }
   }
+
+  Future<bool> appleSignIn() async {
+    state = state.copyWith(isAppleLoading: true, errorMessage: null);
+
+    try {
+      final userCredential = await FirebaseService.signInWithApple();
+      if (userCredential == null) {
+        state = state.copyWith(isAppleLoading: false);
+        return false;
+      }
+
+      final idToken = await userCredential.user?.getIdToken();
+      if (idToken == null) {
+        state = state.copyWith(
+          isAppleLoading: false,
+          errorMessage: "Failed to get ID token",
+        );
+        return false;
+      }
+
+      final success = await repository.appleLogin(idToken: idToken);
+      state = state.copyWith(isAppleLoading: false, isSuccess: success);
+      return success;
+    } catch (e) {
+      state = state.copyWith(
+        isAppleLoading: false,
+        errorMessage: e.toString().replaceFirst('Exception: ', ''),
+      );
+      return false;
+    }
+  }
 }
 
 class SignUpState {
   final bool isEmailLoading;
   final bool isGoogleLoading;
+  final bool isAppleLoading;
   final bool isSuccess;
   final String? errorMessage;
 
   SignUpState({
     required this.isEmailLoading,
     required this.isGoogleLoading,
+    required this.isAppleLoading,
     this.isSuccess = false,
     this.errorMessage,
   });
@@ -93,12 +132,14 @@ class SignUpState {
   SignUpState copyWith({
     bool? isEmailLoading,
     bool? isGoogleLoading,
+    bool? isAppleLoading,
     bool? isSuccess,
     String? errorMessage,
   }) {
     return SignUpState(
       isEmailLoading: isEmailLoading ?? this.isEmailLoading,
       isGoogleLoading: isGoogleLoading ?? this.isGoogleLoading,
+      isAppleLoading: isAppleLoading ?? this.isAppleLoading,
       isSuccess: isSuccess ?? this.isSuccess,
       errorMessage: errorMessage,
     );

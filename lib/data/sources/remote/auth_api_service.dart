@@ -145,6 +145,49 @@ class AuthApiService {
     }
   }
 
+  // apple login
+  Future<bool> appleLogin({required String idToken}) async {
+    try {
+      final body = {"idToken": idToken};
+      final dynamic response = await apiClient.postRequest(
+        body: body,
+        endpoints: ApiEndpoints.appleLogin,
+      );
+
+      if (response == null) return false;
+
+      log("Apple login response: $response");
+
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          throw Exception(
+            response['message'] ?? response['error'] ?? 'Apple login failed',
+          );
+        }
+
+        try {
+          final token = response['authorization']?['access_token'];
+          if (token != null) {
+            await SharedPreferenceData.setToken(token);
+            await ApiClient.headerSet();
+          }
+        } catch (_) {
+          log("Failed to save token from apple login");
+        }
+      }
+
+      return true;
+    } catch (error) {
+      if (error is DioException &&
+          error.response?.data is Map<String, dynamic>) {
+        final msg =
+            (error.response?.data as Map)['message'] ?? 'Apple login failed';
+        throw Exception(msg);
+      }
+      rethrow;
+    }
+  }
+
   //load user
   Future<UserModel?> loadUser() async {
     try {

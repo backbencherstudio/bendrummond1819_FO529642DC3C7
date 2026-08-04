@@ -7,20 +7,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../../core/network/api_clients.dart';
 import '../../../../core/resource/constants/color_manger.dart';
 import '../../../../core/resource/constants/image_manager.dart';
 import '../../../../core/resource/constants/style_manager.dart';
 import '../../../../core/route/routes_name.dart';
+import '../../../../data/repositories/setup_repository.dart';
+import '../../../../data/sources/remote/setup_api_service.dart';
 import '../../../mixins/keyboard_aware_header.dart';
 import '../../../mixins/keyboard_aware_scroll_mixin.dart';
 import '../../../widgets/custom_back_button.dart';
 import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/outline_button.dart';
 import '../../../widgets/primary_button.dart';
+import '../../mixins/social_login_mixin.dart';
 import '../viewmodel/signin_viewmodel.dart';
-import '../../../../core/network/api_clients.dart';
-import '../../../../data/repositories/setup_repository.dart';
-import '../../../../data/sources/remote/setup_api_service.dart';
 
 class SigningScreen extends ConsumerStatefulWidget {
   const SigningScreen({super.key});
@@ -30,7 +31,7 @@ class SigningScreen extends ConsumerStatefulWidget {
 }
 
 class _SigningScreenState extends ConsumerState<SigningScreen>
-    with KeyboardAwareScrollMixin {
+    with KeyboardAwareScrollMixin, SocialLoginMixin {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _signInButtonKey = GlobalKey();
@@ -57,7 +58,11 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
   Widget build(BuildContext context) {
     final signInState =
         ref.watch(signInViewModelProvider).value ??
-        const SignInState(isEmailLoading: false, isGoogleLoading: false);
+        const SignInState(
+          isEmailLoading: false,
+          isGoogleLoading: false,
+          isAppleLoading: false,
+        );
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -192,14 +197,15 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
                     title: "Continue with Google",
                     icon: SvgPicture.asset(IconManager.googleIcon),
                     isLoading: signInState.isGoogleLoading,
-                    onTap: () => handleGoogleSignIn(),
+                    onTap: () => handleGoogleLogin(),
                   ),
 
                   SizedBox(height: 16.h),
                   CustomOutlinedButton(
                     title: "Continue with Apple",
                     icon: SvgPicture.asset(IconManager.appleIcon),
-                    onTap: () {},
+                    isLoading: signInState.isAppleLoading,
+                    onTap: () => handleAppleLogin(),
                   ),
                   SizedBox(height: 10.h),
                   CustomDivider(),
@@ -264,17 +270,32 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
     }
   }
 
-  Future<void> handleGoogleSignIn() async {
-    final success = await ref
-        .read(signInViewModelProvider.notifier)
-        .googleSignIn();
-    if (success && mounted) {
-      await _onSignInSuccess();
-    } else if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Google sign in failed")));
-    }
+  //***************** Social Login Mixin ***********************
+  @override
+  bool get isGoogleLoading =>
+      ref.read(signInViewModelProvider).value?.isGoogleLoading ?? false;
+
+  @override
+  bool get isAppleLoading =>
+      ref.read(signInViewModelProvider).value?.isAppleLoading ?? false;
+
+  @override
+  String? get errorMessage =>
+      ref.read(signInViewModelProvider).value?.errorMessage;
+
+  @override
+  Future<bool> googleSignIn() async {
+    return ref.read(signInViewModelProvider.notifier).googleSignIn();
+  }
+
+  @override
+  Future<bool> appleSignIn() async {
+    return ref.read(signInViewModelProvider.notifier).appleSignIn();
+  }
+
+  @override
+  void onSocialLoginSuccess() {
+    _onSignInSuccess();
   }
 
   Future<void> _onSignInSuccess() async {

@@ -16,6 +16,7 @@ import '../../../widgets/custom_from_field.dart';
 import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/outline_button.dart';
 import '../../../widgets/primary_button.dart';
+import '../../mixins/social_login_mixin.dart';
 import '../viewmodel/signup_viewmodel.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
@@ -26,7 +27,7 @@ class SignupScreen extends ConsumerStatefulWidget {
 }
 
 class _SignupScreenState extends ConsumerState<SignupScreen>
-    with KeyboardAwareScrollMixin {
+    with KeyboardAwareScrollMixin, SocialLoginMixin {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _fullNameController = TextEditingController();
@@ -226,7 +227,16 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
                     isLoading: ref
                         .watch(signUpViewModelProvider)
                         .isGoogleLoading,
-                    onTap: () => _handleGoogleSignIn(),
+                    onTap: () => handleGoogleLogin(),
+                  ),
+                  SizedBox(height: 12.h),
+                  CustomOutlinedButton(
+                    title: "Continue with Apple",
+                    icon: SvgPicture.asset(IconManager.appleIcon),
+                    isLoading: ref
+                        .watch(signUpViewModelProvider)
+                        .isAppleLoading,
+                    onTap: () => handleAppleLogin(),
                   ),
                   SizedBox(height: 20.h),
                   customDivider(),
@@ -326,23 +336,34 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
     }
   }
 
-  Future<void> _handleGoogleSignIn() async {
-    final success = await ref
-        .read(signUpViewModelProvider.notifier)
-        .googleSignIn();
+  //***************** Social Login Mixin ***********************
+  @override
+  bool get isGoogleLoading =>
+      ref.read(signUpViewModelProvider).isGoogleLoading;
 
-    if (success && mounted) {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        RoutesName.bottomNavRoute,
-        (route) => false,
-      );
-    } else if (mounted) {
-      final state = ref.read(signUpViewModelProvider);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(state.errorMessage ?? "Google sign in failed")),
-      );
-    }
+  @override
+  bool get isAppleLoading => ref.read(signUpViewModelProvider).isAppleLoading;
+
+  @override
+  String? get errorMessage => ref.read(signUpViewModelProvider).errorMessage;
+
+  @override
+  Future<bool> googleSignIn() async {
+    return ref.read(signUpViewModelProvider.notifier).googleSignIn();
+  }
+
+  @override
+  Future<bool> appleSignIn() async {
+    return ref.read(signUpViewModelProvider.notifier).appleSignIn();
+  }
+
+  @override
+  void onSocialLoginSuccess() {
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      RoutesName.bottomNavRoute,
+      (route) => false,
+    );
   }
 }
 

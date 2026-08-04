@@ -30,6 +30,10 @@ class AuthRepository {
     return await remoteSource.googleLogin(idToken: idToken);
   }
 
+  Future<bool> appleLogin({required String idToken}) async {
+    return await remoteSource.appleLogin(idToken: idToken);
+  }
+
   Future<UserModel?> loadUser() async {
     return await remoteSource.loadUser();
   }
