@@ -1,29 +1,29 @@
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/network/api_clients.dart';
 import '../../../../core/resource/utils.dart';
 import '../../../../core/services/firebase_service.dart';
 import '../../../../data/repositories/auth_repository.dart';
 import '../../../../data/sources/remote/auth_api_service.dart';
 
+//********** Provider ************
 final signUpViewModelProvider =
-    StateNotifierProvider<SignUpModelview, SignUpState>(
-      (ref) => SignUpModelview(
-        repository: AuthRepository(
-          remoteSource: AuthApiService(apiClient: ApiClient()),
-        ),
-      ),
-    );
+    AsyncNotifierProvider<SignUpModelview, SignUpState>(SignUpModelview.new);
 
-class SignUpModelview extends StateNotifier<SignUpState> {
-  final AuthRepository repository;
-  SignUpModelview({required this.repository})
-    : super(
-        SignUpState(
-          isEmailLoading: false,
-          isGoogleLoading: false,
-          isAppleLoading: false,
-        ),
-      );
+//*********** Notifier*************
+class SignUpModelview extends AsyncNotifier<SignUpState> {
+  late final AuthRepository repository;
+
+  @override
+  Future<SignUpState> build() async {
+    repository = AuthRepository(
+      remoteSource: AuthApiService(apiClient: ApiClient()),
+    );
+    return SignUpState(
+      isEmailLoading: false,
+      isGoogleLoading: false,
+      isAppleLoading: false,
+    );
+  }
 
   Future<bool> register({
     required String name,
@@ -32,7 +32,16 @@ class SignUpModelview extends StateNotifier<SignUpState> {
     required String phone,
     required String dob,
   }) async {
-    state = state.copyWith(isEmailLoading: true, errorMessage: null);
+    final current =
+        state.value ??
+        const SignUpState(
+          isEmailLoading: false,
+          isGoogleLoading: false,
+          isAppleLoading: false,
+        );
+    state = AsyncData(
+      current.copyWith(isEmailLoading: true, errorMessage: null),
+    );
     try {
       final success = await repository.register(
         name: name,
@@ -41,76 +50,116 @@ class SignUpModelview extends StateNotifier<SignUpState> {
         phone: phone,
         dob: dob,
       );
-      state = state.copyWith(isEmailLoading: false, isSuccess: success);
+      state = AsyncData(
+        (state.value ?? current).copyWith(
+          isEmailLoading: false,
+          isSuccess: success,
+        ),
+      );
       return success;
     } catch (e) {
-      state = state.copyWith(
-        isEmailLoading: false,
-        errorMessage: Utils.friendlyErrorMessage(e),
+      state = AsyncData(
+        (state.value ?? current).copyWith(
+          isEmailLoading: false,
+          errorMessage: Utils.friendlyErrorMessage(e),
+        ),
       );
       return false;
     }
   }
 
   Future<bool> googleSignIn() async {
-    state = state.copyWith(isGoogleLoading: true, errorMessage: null);
-
+    final current =
+        state.value ??
+        const SignUpState(
+          isEmailLoading: false,
+          isGoogleLoading: false,
+          isAppleLoading: false,
+        );
+    state = AsyncData(
+      current.copyWith(isGoogleLoading: true, errorMessage: null),
+    );
     try {
       final userCredential = await FirebaseServices.signInWithGoogle();
       if (userCredential == null) {
-        state = state.copyWith(isGoogleLoading: false);
-        return false;
-      }
-
-      final idToken = await userCredential.user?.getIdToken();
-      if (idToken == null) {
-        state = state.copyWith(
-          isGoogleLoading: false,
-          errorMessage: "Failed to get ID token",
+        state = AsyncData(
+          (state.value ?? current).copyWith(isGoogleLoading: false),
         );
         return false;
       }
-
+      final idToken = await userCredential.user?.getIdToken();
+      if (idToken == null) {
+        state = AsyncData(
+          (state.value ?? current).copyWith(
+            isGoogleLoading: false,
+            errorMessage: "Failed to get ID token",
+          ),
+        );
+        return false;
+      }
       final success = await repository.googleLogin(idToken: idToken);
-      state = state.copyWith(isGoogleLoading: false, isSuccess: success);
+      state = AsyncData(
+        (state.value ?? current).copyWith(
+          isGoogleLoading: false,
+          isSuccess: success,
+        ),
+      );
       return success;
     } catch (e) {
-      state = state.copyWith(
-        isGoogleLoading: false,
-        errorMessage: Utils.friendlyErrorMessage(e),
+      state = AsyncData(
+        (state.value ?? current).copyWith(
+          isGoogleLoading: false,
+          errorMessage: Utils.friendlyErrorMessage(e),
+        ),
       );
       return false;
     }
   }
 
   Future<bool> appleSignIn() async {
-    state = state.copyWith(isAppleLoading: true, errorMessage: null);
-
+    final current =
+        state.value ??
+        const SignUpState(
+          isEmailLoading: false,
+          isGoogleLoading: false,
+          isAppleLoading: false,
+        );
+    state = AsyncData(
+      current.copyWith(isAppleLoading: true, errorMessage: null),
+    );
     try {
       final userCredential = await FirebaseServices.signInWithApple();
-
       final idToken = await userCredential.user?.getIdToken();
       if (idToken == null) {
-        state = state.copyWith(
-          isAppleLoading: false,
-          errorMessage: "Failed to get ID token",
+        state = AsyncData(
+          (state.value ?? current).copyWith(
+            isAppleLoading: false,
+            errorMessage: "Failed to get ID token",
+          ),
         );
         return false;
       }
-
       final success = await repository.appleLogin(idToken: idToken);
-      state = state.copyWith(isAppleLoading: false, isSuccess: success);
+      state = AsyncData(
+        (state.value ?? current).copyWith(
+          isAppleLoading: false,
+          isSuccess: success,
+        ),
+      );
       return success;
     } catch (e) {
-      state = state.copyWith(
-        isAppleLoading: false,
-        errorMessage: Utils.friendlyErrorMessage(e),
+      state = AsyncData(
+        (state.value ?? current).copyWith(
+          isAppleLoading: false,
+          errorMessage: Utils.friendlyErrorMessage(e),
+        ),
       );
       return false;
     }
   }
 }
 
+//************ State ************
 class SignUpState {
   final bool isEmailLoading;
   final bool isGoogleLoading;
@@ -118,7 +167,7 @@ class SignUpState {
   final bool isSuccess;
   final String? errorMessage;
 
-  SignUpState({
+  const SignUpState({
     required this.isEmailLoading,
     required this.isGoogleLoading,
     required this.isAppleLoading,
@@ -142,3 +191,4 @@ class SignUpState {
     );
   }
 }
+

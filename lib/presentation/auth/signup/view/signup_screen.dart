@@ -9,12 +9,12 @@ import '../../../widgets/primary_button.dart';
 import '../../mixins/social_login_mixin.dart';
 import '../../signin/widgets/cutom_divider.dart';
 import '../viewmodel/signup_viewmodel.dart';
-import '../widgets/auth_header.dart';
-import '../widgets/auth_headline.dart';
-import '../widgets/auth_switch_link.dart';
-import '../widgets/date_of_birth_field.dart';
-import '../widgets/labeled_form_field.dart';
-import '../widgets/social_login_buttons.dart';
+import '../../widgets/auth_header.dart';
+import '../../widgets/auth_headline.dart';
+import '../../widgets/auth_switch_link.dart';
+import '../../widgets/date_of_birth_field.dart';
+import '../../widgets/labeled_form_field.dart';
+import '../../widgets/social_login_buttons.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -64,7 +64,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(signUpViewModelProvider);
+    final state =
+        ref.watch(signUpViewModelProvider).value ??
+        const SignUpState(
+          isEmailLoading: false,
+          isGoogleLoading: false,
+          isAppleLoading: false,
+        );
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -191,22 +197,25 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
         arguments: _emailController.text.trim(),
       );
     } else if (!success && mounted) {
-      final state = ref.read(signUpViewModelProvider);
+      final state = ref.read(signUpViewModelProvider).value;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(state.errorMessage ?? "Registration failed")),
+        SnackBar(content: Text(state?.errorMessage ?? "Registration failed")),
       );
     }
   }
 
   //***************** Social Login Mixin ***********************
   @override
-  bool get isGoogleLoading => ref.read(signUpViewModelProvider).isGoogleLoading;
+  bool get isGoogleLoading =>
+      ref.read(signUpViewModelProvider).value?.isGoogleLoading ?? false;
 
   @override
-  bool get isAppleLoading => ref.read(signUpViewModelProvider).isAppleLoading;
+  bool get isAppleLoading =>
+      ref.read(signUpViewModelProvider).value?.isAppleLoading ?? false;
 
   @override
-  String? get errorMessage => ref.read(signUpViewModelProvider).errorMessage;
+  String? get errorMessage =>
+      ref.read(signUpViewModelProvider).value?.errorMessage;
 
   @override
   Future<bool> googleSignIn() async {
@@ -227,3 +236,4 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
     );
   }
 }
+

@@ -1,27 +1,23 @@
-import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signin/widgets/cutom_divider.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
-import 'package:flutter/gestures.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/mixins/keyboard_aware_scroll_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../../../core/network/api_clients.dart';
 import '../../../../core/resource/constants/color_manger.dart';
-import '../../../../core/resource/constants/image_manager.dart';
 import '../../../../core/resource/constants/style_manager.dart';
 import '../../../../core/route/routes_name.dart';
 import '../../../../data/repositories/setup_repository.dart';
 import '../../../../data/sources/remote/setup_api_service.dart';
-import '../../../mixins/keyboard_aware_header.dart';
-import '../../../mixins/keyboard_aware_scroll_mixin.dart';
-import '../../../widgets/custom_back_button.dart';
-import '../../../widgets/custom_logo_text.dart';
-import '../../../widgets/outline_button.dart';
+import '../../signup/widgets/social_login_buttons.dart';
+import '../../widgets/auth_header.dart';
+import '../../widgets/auth_headline.dart';
+import '../../widgets/auth_switch_link.dart';
+import '../../widgets/labeled_form_field.dart';
 import '../../../widgets/primary_button.dart';
 import '../../mixins/social_login_mixin.dart';
 import '../viewmodel/signin_viewmodel.dart';
+import '../widgets/cutom_divider.dart';
 
 class SigningScreen extends ConsumerStatefulWidget {
   const SigningScreen({super.key});
@@ -72,34 +68,7 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
         physics: const ClampingScrollPhysics(),
         child: Column(
           children: [
-            KeyboardAwareHeader(
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Image.asset(
-                      ImageManager.onBoardingImg,
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                  SafeArea(
-                    child: Padding(
-                      padding: EdgeInsets.all(20.w),
-                      child: Row(
-                        children: [
-                          customBackButton(
-                            context,
-                            borderColor: ColorManager.backgroundPressed100,
-                          ),
-                          SizedBox(width: 12),
-                          customLogoText(),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
+            const AuthHeader(),
             Container(
               width: double.infinity,
               color: ColorManager.cF0EBE3,
@@ -109,78 +78,54 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
                 children: [
                   SizedBox(height: 10.h),
 
-                  Text(
-                    "Welcome back",
-                    style: getBoldStyle32(
+                  AuthHeadline(
+                    title: "Welcome back",
+                    subtitle:
+                        "Access your personalized financial clarity dashboard.",
+                    titleStyle: getBoldStyle32(
                       color: ColorManager.brown,
                     ).copyWith(height: 1.1, letterSpacing: -0.5),
                   ),
 
-                  SizedBox(height: 15.h),
-
-                  Text(
-                    "Access your personalized financial clarity dashboard.",
-                    style: getRegularStyle16_400(color: ColorManager.brown400),
-                  ),
-
                   SizedBox(height: 25.h),
-                  Text(
-                    "Email",
-                    style: getRegularStyle14_400(color: ColorManager.brown300),
-                  ),
-                  SizedBox(height: 12.h),
 
-                  /// ************ Email Field *****************
-                  CustomFromField(
+                  LabeledFormField(
+                    label: "Email",
                     hintText: "you@example.com",
                     controller: _emailController,
                     focusNode: _emailFocusNode,
                   ),
 
                   SizedBox(height: 12.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Password",
-                        style: getRegularStyle14_400(
-                          color: ColorManager.brown300,
-                        ),
-                      ),
 
-                      /// ************ Forgot password Button *****************
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            RoutesName.forgotPasswordRoute,
-                          );
-                        },
-                        child: Text(
-                          "Forgot password?",
-                          style:
-                              getRegularStyle14_500(
-                                color: ColorManager.brown500,
-                              ).copyWith(
-                                decoration: TextDecoration.underline,
-                                decorationColor: ColorManager.brown,
-                              ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  /// ***************** password field ****************
-                  CustomFromField(
+                  LabeledFormField(
+                    label: "Password",
                     hintText: "Your password",
                     controller: _passwordController,
                     isSecured: true,
                     focusNode: _passwordFocusNode,
+                    trailing: TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          RoutesName.forgotPasswordRoute,
+                        );
+                      },
+                      child: Text(
+                        "Forgot password?",
+                        style:
+                            getRegularStyle14_500(
+                              color: ColorManager.brown500,
+                            ).copyWith(
+                              decoration: TextDecoration.underline,
+                              decorationColor: ColorManager.brown,
+                            ),
+                      ),
+                    ),
                   ),
 
                   SizedBox(height: 25.h),
 
-                  /// ************ Sign in Button *****************
                   KeyedSubtree(
                     key: _signInButtonKey,
                     child: PrimaryButton(
@@ -192,55 +137,24 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
 
                   SizedBox(height: 16.h),
 
-                  /// ************ google sign in Button *****************
-                  CustomOutlinedButton(
-                    title: "Continue with Google",
-                    icon: SvgPicture.asset(IconManager.googleIcon),
-                    isLoading: signInState.isGoogleLoading,
-                    onTap: () => handleGoogleLogin(),
+                  SocialLoginButtons(
+                    isGoogleLoading: signInState.isGoogleLoading,
+                    onGoogleTap: () => handleGoogleLogin(),
+                    isAppleLoading: signInState.isAppleLoading,
+                    onAppleTap: () => handleAppleLogin(),
                   ),
 
-                  SizedBox(height: 16.h),
-                  CustomOutlinedButton(
-                    title: "Continue with Apple",
-                    icon: SvgPicture.asset(IconManager.appleIcon),
-                    isLoading: signInState.isAppleLoading,
-                    onTap: () => handleAppleLogin(),
-                  ),
                   SizedBox(height: 10.h),
-                  CustomDivider(),
+                  const CustomDivider(),
                   SizedBox(height: 10.h),
 
-                  /// ************ rich text ******************
-                  Center(
-                    child: RichText(
-                      text: TextSpan(
-                        style: getRegularStyle14_400(
-                          color: ColorManager.brown300,
-                        ),
-                        children: [
-                          TextSpan(text: "New to Stability? "),
-                          TextSpan(
-                            text: "Create an account.",
-                            style:
-                                getRegularStyle14_500(
-                                  color: ColorManager.brown,
-                                ).copyWith(
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: ColorManager.brown,
-                                ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.pushNamed(
-                                  context,
-                                  RoutesName.signUpRoute,
-                                );
-                              },
-                          ),
-                        ],
-                      ),
-                    ),
+                  AuthSwitchLink(
+                    leadingText: "New to Stability? ",
+                    linkText: "Create an account.",
+                    onTap: () =>
+                        Navigator.pushNamed(context, RoutesName.signUpRoute),
                   ),
+
                   SizedBox(height: 60.h),
                 ],
               ),

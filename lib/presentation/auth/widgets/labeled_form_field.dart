@@ -13,6 +13,7 @@ class LabeledFormField extends StatelessWidget {
   final bool readOnly;
   final VoidCallback? onTap;
   final String? Function(String?)? validator;
+  final Widget? trailing;
 
   const LabeledFormField({
     super.key,
@@ -24,6 +25,7 @@ class LabeledFormField extends StatelessWidget {
     this.readOnly = false,
     this.onTap,
     this.validator,
+    this.trailing,
   });
 
   @override
@@ -31,7 +33,22 @@ class LabeledFormField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: getRegularStyle14_400(color: ColorManager.brown300)),
+        if (trailing == null)
+          Text(
+            label,
+            style: getRegularStyle14_400(color: ColorManager.brown300),
+          )
+        else
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                label,
+                style: getRegularStyle14_400(color: ColorManager.brown300),
+              ),
+              trailing!,
+            ],
+          ),
         SizedBox(height: 5.h),
         CustomFromField(
           hintText: hintText,
@@ -46,3 +63,4 @@ class LabeledFormField extends StatelessWidget {
     );
   }
 }
+
