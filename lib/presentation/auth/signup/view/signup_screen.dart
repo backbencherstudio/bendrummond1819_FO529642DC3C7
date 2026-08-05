@@ -1,23 +1,20 @@
 import 'package:bendrummond1819_fo529642dc3c7/presentation/mixins/keyboard_aware_scroll_mixin.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../../../core/resource/constants/color_manger.dart';
-import '../../../../core/resource/constants/icon_manager.dart';
-import '../../../../core/resource/constants/image_manager.dart';
-import '../../../../core/resource/constants/style_manager.dart';
 import '../../../../core/route/routes_name.dart';
-import '../../../mixins/keyboard_aware_header.dart';
-import '../../../widgets/custom_back_button.dart';
-import '../../../widgets/custom_from_field.dart';
-import '../../../widgets/custom_logo_text.dart';
-import '../../../widgets/outline_button.dart';
 import '../../../widgets/primary_button.dart';
 import '../../mixins/social_login_mixin.dart';
+import '../../signin/widgets/cutom_divider.dart';
 import '../viewmodel/signup_viewmodel.dart';
+import '../widgets/auth_header.dart';
+import '../widgets/auth_headline.dart';
+import '../widgets/auth_switch_link.dart';
+import '../widgets/date_of_birth_field.dart';
+import '../widgets/labeled_form_field.dart';
+import '../widgets/social_login_buttons.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -39,8 +36,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
   final _phoneFocusNode = FocusNode();
   final _dobFocusNode = FocusNode();
   final _signUpButtonKey = GlobalKey();
-
-  String? _emailError;
 
   @override
   void initState() {
@@ -69,6 +64,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(signUpViewModelProvider);
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: ColorManager.primary,
@@ -77,34 +74,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
         physics: const ClampingScrollPhysics(),
         child: Column(
           children: [
-            KeyboardAwareHeader(
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Image.asset(
-                      ImageManager.onBoardingImg,
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                  SafeArea(
-                    child: Padding(
-                      padding: EdgeInsets.all(20.w),
-                      child: Row(
-                        children: [
-                          customBackButton(
-                            context,
-                            borderColor: ColorManager.backgroundPressed100,
-                          ),
-                          SizedBox(width: 12),
-                          customLogoText(),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
+            const AuthHeader(),
             Container(
               width: double.infinity,
               color: ColorManager.cF0EBE3,
@@ -114,164 +84,83 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
                 children: [
                   SizedBox(height: 10.h),
 
-                  Text(
-                    "Take control of your finances",
-                    style: getBoldStyle24(
-                      fontSize: 28.sp,
-                      color: ColorManager.brown,
-                    ).copyWith(letterSpacing: -0.5),
-                  ),
-
-                  SizedBox(height: 15.h),
-
-                  Text(
-                    "See what's safe to spend",
-                    style: getRegularStyle16_400(color: ColorManager.brown400),
+                  const AuthHeadline(
+                    title: "Take control of your finances",
+                    subtitle: "See what's safe to spend",
                   ),
 
                   SizedBox(height: 25.h),
 
-                  /// ************ name Field *****************
-                  Text(
-                    "Your full name",
-                    style: getRegularStyle14_400(color: ColorManager.brown300),
-                  ),
-                  SizedBox(height: 5.h),
-                  CustomFromField(
+                  LabeledFormField(
+                    label: "Your full name",
                     hintText: "What should we call you?",
                     controller: _fullNameController,
                     focusNode: _fullNameFocusNode,
                   ),
-
                   SizedBox(height: 12.h),
 
-                  /// ************ email Field *****************
-                  Text(
-                    "Email address",
-                    style: getRegularStyle14_400(color: ColorManager.brown300),
-                  ),
-                  SizedBox(height: 5.h),
-
-                  CustomFromField(
+                  LabeledFormField(
+                    label: "Email address",
                     hintText: "you@example.com",
                     controller: _emailController,
                     focusNode: _emailFocusNode,
                   ),
-
                   SizedBox(height: 12.h),
 
-                  /// ***************** password field ****************
-                  Text(
-                    "Password",
-                    style: getRegularStyle14_400(color: ColorManager.brown300),
-                  ),
-                  SizedBox(height: 5.h),
-
-                  CustomFromField(
+                  LabeledFormField(
+                    label: "Password",
                     hintText: "Your password",
                     controller: _passwordController,
                     isSecured: true,
                     focusNode: _passwordFocusNode,
                   ),
-
                   SizedBox(height: 12.h),
 
-                  /// ************ phone Field *****************
-                  Text(
-                    "Phone number",
-                    style: getRegularStyle14_400(color: ColorManager.brown300),
-                  ),
-                  SizedBox(height: 5.h),
-
-                  CustomFromField(
+                  LabeledFormField(
+                    label: "Phone number",
                     hintText: "(123) 456-7890",
                     controller: _phoneController,
                     focusNode: _phoneFocusNode,
                   ),
-
                   SizedBox(height: 12.h),
 
-                  /// ************ dob Field *****************
-                  Text(
-                    "Date of birth",
-                    style: getRegularStyle14_400(color: ColorManager.brown300),
-                  ),
-                  SizedBox(height: 5.h),
-
-                  CustomFromField(
-                    hintText: "MM/DD/YYYY",
+                  DateOfBirthField(
+                    label: "Date of birth",
                     controller: _dobController,
                     focusNode: _dobFocusNode,
                   ),
 
                   SizedBox(height: 25.h),
 
-                  /// ************ Sign up Button *****************
                   KeyedSubtree(
                     key: _signUpButtonKey,
                     child: PrimaryButton(
                       title: "Create account",
-                      isLoading: ref
-                          .watch(signUpViewModelProvider)
-                          .isEmailLoading,
+                      isLoading: state.isEmailLoading,
                       onTap: () => _handleRegister(),
                     ),
                   ),
 
                   SizedBox(height: 12.h),
 
-                  /// ************ google sign in Button *****************
-                  CustomOutlinedButton(
-                    title: "Continue with Google",
-                    icon: SvgPicture.asset(IconManager.googleIcon),
-                    isLoading: ref
-                        .watch(signUpViewModelProvider)
-                        .isGoogleLoading,
-                    onTap: () => handleGoogleLogin(),
+                  SocialLoginButtons(
+                    isGoogleLoading: state.isGoogleLoading,
+                    onGoogleTap: () => handleGoogleLogin(),
+                    isAppleLoading: state.isAppleLoading,
+                    onAppleTap: () => handleAppleLogin(),
                   ),
-                  SizedBox(height: 12.h),
-                  CustomOutlinedButton(
-                    title: "Continue with Apple",
-                    icon: SvgPicture.asset(IconManager.appleIcon),
-                    isLoading: ref
-                        .watch(signUpViewModelProvider)
-                        .isAppleLoading,
-                    onTap: () => handleAppleLogin(),
-                  ),
+
                   SizedBox(height: 20.h),
-                  customDivider(),
+                  const CustomDivider(),
                   SizedBox(height: 20.h),
 
-                  /// ************ rich text ******************
-                  Center(
-                    child: RichText(
-                      text: TextSpan(
-                        style: getRegularStyle14_400(
-                          color: ColorManager.brown300,
-                        ),
-                        children: [
-                          TextSpan(text: "Already have an account? "),
-                          TextSpan(
-                            text: "Sign in",
-                            style:
-                                getRegularStyle14_500(
-                                  color: ColorManager.brown,
-                                ).copyWith(
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: ColorManager.brown,
-                                ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.pushNamed(
-                                  context,
-                                  RoutesName.signInRoute,
-                                );
-                              },
-                          ),
-                        ],
-                      ),
-                    ),
+                  AuthSwitchLink(
+                    leadingText: "Already have an account? ",
+                    linkText: "Sign in",
+                    onTap: () =>
+                        Navigator.pushNamed(context, RoutesName.signInRoute),
                   ),
+
                   SizedBox(height: 60.h),
                 ],
               ),
@@ -282,36 +171,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
     );
   }
 
-  /// ************* custom widget **************
-  Widget customDivider() {
-    return Row(
-      children: [
-        Expanded(child: Divider(color: ColorManager.brown200, thickness: 2)),
-
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Container(
-            width: 4.r,
-            height: 6.r,
-            decoration: BoxDecoration(
-              color: ColorManager.gold2,
-              borderRadius: BorderRadius.circular(999.r),
-            ),
-          ),
-        ),
-
-        Expanded(child: Divider(color: ColorManager.brown200, thickness: 2)),
-      ],
-    );
-  }
-
   //******** Helper Methods**************
 
   Future<void> _handleRegister() async {
-    setState(() {
-      _emailError = null;
-    });
-
     final success = await ref
         .read(signUpViewModelProvider.notifier)
         .register(
@@ -321,7 +183,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
           phone: _phoneController.text.trim(),
           dob: _dobController.text.trim(),
         );
-    print(success);
+
     if (success && mounted) {
       Navigator.pushReplacementNamed(
         context,
@@ -338,8 +200,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
 
   //***************** Social Login Mixin ***********************
   @override
-  bool get isGoogleLoading =>
-      ref.read(signUpViewModelProvider).isGoogleLoading;
+  bool get isGoogleLoading => ref.read(signUpViewModelProvider).isGoogleLoading;
 
   @override
   bool get isAppleLoading => ref.read(signUpViewModelProvider).isAppleLoading;
@@ -366,4 +227,3 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
     );
   }
 }
-

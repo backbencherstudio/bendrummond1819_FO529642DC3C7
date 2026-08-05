@@ -1,5 +1,5 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signin/view/cutom_divider.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signin/widgets/cutom_divider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -339,3 +339,4 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
     }
   }
 }
+
