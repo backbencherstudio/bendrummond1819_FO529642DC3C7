@@ -88,7 +88,6 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
       _dobController.text = user.dateOfBirth ?? '';
     }
 
-    print("|Account $user");
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(

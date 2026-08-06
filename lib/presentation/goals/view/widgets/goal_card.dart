@@ -34,14 +34,17 @@ class GoalCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: getRegularStyle16_400(color: ColorManager.brown400),
+                  style: getRegularStyle16_400(
+                    color: ColorManager.brown400,
+                    fontSize: 18,
+                  ),
                 ),
                 SizedBox(height: 12.h),
                 Text(
                   subtitle,
                   style: getRegularStyle16_400(
-                    color: ColorManager.grayBlack400,
-                    fontSize: 14.sp,
+                    color: ColorManager.brown400,
+                    fontSize: 14,
                   ),
                 ),
               ],

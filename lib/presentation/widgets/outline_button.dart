@@ -74,7 +74,6 @@ class CustomOutlinedButton extends StatelessWidget {
                               textStyle ??
                               getRegularStyle20_500(
                                 color: ColorManager.grayBlack400,
-                                fontSize: 18.sp,
                               ),
                         ),
                       ),
@@ -86,4 +85,3 @@ class CustomOutlinedButton extends StatelessWidget {
     );
   }
 }
-

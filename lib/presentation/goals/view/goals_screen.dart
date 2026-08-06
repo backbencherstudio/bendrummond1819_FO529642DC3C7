@@ -9,6 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'widgets/goal_card.dart';
+import 'widgets/section_header_add_button.dart';
+import 'widgets/titled_list_section.dart';
+
 class GoalsScreen extends ConsumerStatefulWidget {
   const GoalsScreen({super.key});
 
@@ -52,72 +56,29 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen>
             children: [
               Text(
                 'Goals',
-                style: getSemiBoldStyle22(
-                  color: ColorManager.textPrimary,
-                  fontSize: 32.sp,
-                ),
+                style: getSemiBoldStyle22(color: ColorManager.textPrimary),
               ),
-
               SizedBox(height: 24.h),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Your future goals',
-                    style: getRegularStyle16_400(color: ColorManager.brown400),
-                  ),
-                  InkWell(
-                    onTap: () =>
-                        Navigator.pushNamed(context, RoutesName.addGoalScreen),
-                    child: Container(
-                      padding: EdgeInsets.all(6.r),
-                      decoration: BoxDecoration(
-                        color: ColorManager.backgroundCard,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.add,
-                        color: ColorManager.primaryButton,
-                        size: 20.sp,
-                      ),
-                    ),
-                  ),
-                ],
+              SectionHeaderAddButton(
+                label: 'Your future goals',
+                onAddTap: () =>
+                    Navigator.pushNamed(context, RoutesName.addGoalScreen),
               ),
-
               SizedBox(height: 16.h),
-
-              if (goals.isEmpty)
-                Padding(
-                  padding: EdgeInsets.only(top: 40.h),
-                  child: Center(
-                    child: Text(
-                      "No goals yet",
-                      style: getRegularStyle16_400(
-                        color: ColorManager.brown400,
-                      ),
-                    ),
+              TitledListSection(
+                items: goals,
+                emptyText: 'No goals yet',
+                itemBuilder: (goal, index) => StaggeredFadeSlide(
+                  controller: _controller,
+                  delay: staggerDelayFor(index, goals.length),
+                  child: GoalCard(
+                    title: goal.goalName,
+                    subtitle:
+                        "\$${goal.contribution.toStringAsFixed(0)}/${goal.frequency.toLowerCase()}",
+                    onDelete: () => _deleteGoal(goal.id),
                   ),
-                )
-              else
-                ...goals.asMap().entries.map(
-                  (e) {
-                    final g = e.value;
-                    return Padding(
-                      padding: EdgeInsets.only(bottom: 12.h),
-                      child: StaggeredFadeSlide(
-                        controller: _controller,
-                        delay: staggerDelayFor(e.key, goals.length),
-                        child: _buildGoalCard(
-                          g.id,
-                          g.goalName,
-                          "\$${g.contribution.toStringAsFixed(0)}/${g.frequency.toLowerCase()}",
-                        ),
-                      ),
-                    );
-                  },
                 ),
+              ),
             ],
           ),
         ),
@@ -125,64 +86,17 @@ class _GoalsScreenState extends ConsumerState<GoalsScreen>
     );
   }
 
-  Widget _buildGoalCard(String? id, String title, String subtitle) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(16.r),
-      decoration: BoxDecoration(
-        color: ColorManager.secondaryBackGround,
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: ColorManager.borderColor1),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: getRegularStyle16_400(color: ColorManager.brown400),
-                ),
-                SizedBox(height: 12.h),
-                Text(
-                  subtitle,
-                  style: getRegularStyle16_400(
-                    color: ColorManager.grayBlack400,
-                    fontSize: 14.sp,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          InkWell(
-            onTap: () async {
-              if (id == null) return;
-              final success = await ref
-                  .read(savingGoalsProvider.notifier)
-                  .deleteGoal(id);
-              if (context.mounted) {
-                Utils.showToast(
-                  message: success ? "Goal deleted" : "Failed to delete goal",
-                  backgroundColor: success
-                      ? ColorManager.successColor
-                      : ColorManager.errorColor,
-                  textColor: ColorManager.whiteColor,
-                );
-              }
-            },
-            child: Container(
-              padding: EdgeInsets.all(14.r),
-              child: Icon(
-                Icons.close,
-                color: ColorManager.primaryButton,
-                size: 20.sp,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  Future<void> _deleteGoal(String? id) async {
+    if (id == null) return;
+    final success = await ref.read(savingGoalsProvider.notifier).deleteGoal(id);
+    if (context.mounted) {
+      Utils.showToast(
+        message: success ? "Goal deleted" : "Failed to delete goal",
+        backgroundColor: success
+            ? ColorManager.successColor
+            : ColorManager.errorColor,
+        textColor: ColorManager.whiteColor,
+      );
+    }
   }
 }

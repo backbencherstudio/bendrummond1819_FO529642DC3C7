@@ -117,11 +117,7 @@ class _HomeSettingsScreenState extends ConsumerState<HomeSettingsScreen> {
               // =============  Header ================
               Text(
                 'Settings',
-                style: getRegularStyle16_600(
-                  fontSize: 32.sp,
-
-                  color: ColorManager.textPrimary,
-                ),
+                style: getRegularStyle16_600(color: ColorManager.textPrimary),
               ),
               SizedBox(height: 24.h),
 

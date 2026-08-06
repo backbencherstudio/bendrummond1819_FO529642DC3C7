@@ -3,6 +3,8 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_mana
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/utils.dart';
 import 'package:bendrummond1819_fo529642dc3c7/data/models/setup_models.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/balances_provider.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/utils/stagger_delay_for.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/add_action_button.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +12,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../utils/staggered_fade_slide.dart';
 import 'add_debt_sheet.dart';
-import 'dashed_rect_painter.dart' show DashedRectPainter;
 import 'debt_card.dart';
 
 class BalancesScreen extends ConsumerStatefulWidget {
@@ -43,11 +44,6 @@ class _BalancesScreenState extends ConsumerState<BalancesScreen>
     super.dispose();
   }
 
-  double _delayFor(int index, int itemCount) {
-    final step = itemCount > 0 ? (0.5 / itemCount).clamp(0.0, 0.08) : 0.08;
-    return (index * step).clamp(0.0, 0.6);
-  }
-
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(balancesProvider);
@@ -75,7 +71,10 @@ class _BalancesScreenState extends ConsumerState<BalancesScreen>
 
               SizedBox(height: 16.h),
 
-              _AddDebtButton(onTap: () => _showAddEditSheet()),
+              AddActionButton(
+                label: 'Add a debt payment',
+                onTap: () => _showAddEditSheet(),
+              ),
             ],
           ),
         ),
@@ -99,10 +98,10 @@ class _BalancesScreenState extends ConsumerState<BalancesScreen>
     }
     return ListView.separated(
       itemCount: debts.length,
-      separatorBuilder: (_, __) => SizedBox(height: 12.h),
+      separatorBuilder: (_, _) => SizedBox(height: 12.h),
       itemBuilder: (_, i) => StaggeredFadeSlide(
         controller: _controller,
-        delay: _delayFor(i, debts.length),
+        delay: staggerDelayFor(i, debts.length),
         child: DebtCard(
           debt: debts[i],
           onTap: () => _showAddEditSheet(existing: debts[i]),
@@ -137,49 +136,3 @@ class _BalancesScreenState extends ConsumerState<BalancesScreen>
     );
   }
 }
-
-/// The dashed "Add a debt payment" call-to-action row.
-class _AddDebtButton extends StatelessWidget {
-  final VoidCallback onTap;
-
-  const _AddDebtButton({required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: CustomPaint(
-        painter: DashedRectPainter(color: ColorManager.primaryButton),
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
-          child: Row(
-            children: [
-              Container(
-                padding: EdgeInsets.all(8.w),
-                decoration: BoxDecoration(
-                  color: ColorManager.backgroundCard,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.add,
-                  color: ColorManager.primaryButton,
-                  size: 20.sp,
-                ),
-              ),
-              SizedBox(width: 15.w),
-              Text(
-                'Add a debt payment',
-                style: getRegularStyle16_400(
-                  color: ColorManager.brown400,
-                  fontSize: 18,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-

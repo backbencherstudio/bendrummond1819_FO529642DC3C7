@@ -59,10 +59,7 @@ class _PayScreenState extends ConsumerState<PayScreen>
               children: [
                 Text(
                   'Pay & Income',
-                  style: getSemiBoldStyle22(
-                    color: ColorManager.textPrimary,
-                    fontSize: 32,
-                  ),
+                  style: getSemiBoldStyle22(color: ColorManager.textPrimary),
                 ),
                 SizedBox(height: 24.h),
                 SafeToSpendCard(safeToSpend: state.safeToSpend),
@@ -109,17 +106,25 @@ class _PayScreenState extends ConsumerState<PayScreen>
       if (incomes.isEmpty)
         _item(idx++, total, const EmptySectionText('No incomes yet'))
       else
-        ...incomes.map((income) => _item(idx++, total, IncomeCard(
+        ...incomes.map(
+          (income) => _item(
+            idx++,
+            total,
+            IncomeCard(
               income: income,
               onTap: () => _showAddEditSheet(existing: income),
-            ))),
+            ),
+          ),
+        ),
       SizedBox(height: 24.h),
       const SectionLabel('Your pay'),
       SizedBox(height: 12.h),
       if (commitments.isEmpty)
         _item(idx++, total, const EmptySectionText('No commitments yet'))
       else
-        ...commitments.map((c) => _item(idx++, total, CommitmentCard(commitment: c))),
+        ...commitments.map(
+          (c) => _item(idx++, total, CommitmentCard(commitment: c)),
+        ),
       SizedBox(height: 16.h),
       _item(idx++, total, AddIncomeButton(onTap: () => _showAddEditSheet())),
     ];
@@ -136,4 +141,3 @@ class _PayScreenState extends ConsumerState<PayScreen>
     );
   }
 }
-

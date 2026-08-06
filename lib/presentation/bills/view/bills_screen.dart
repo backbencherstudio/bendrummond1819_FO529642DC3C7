@@ -59,10 +59,7 @@ class _BillsScreenState extends ConsumerState<BillsScreen>
             children: [
               Text(
                 'Bills',
-                style: getSemiBoldStyle22(
-                  color: ColorManager.textPrimary,
-                  fontSize: 32,
-                ),
+                style: getSemiBoldStyle22(color: ColorManager.textPrimary),
               ),
               SizedBox(height: 24.h),
               _BillsSummaryRow(bills: state.bills),
