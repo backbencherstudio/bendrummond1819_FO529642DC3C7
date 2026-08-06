@@ -4,6 +4,7 @@ import '../../data/models/setup_models.dart';
 import '../../data/repositories/setup_repository.dart';
 import '../../data/sources/remote/setup_api_service.dart';
 
+//*********** State ************
 class BillsState {
   final List<FinancialCommitmentData> bills;
   final bool isLoading;
@@ -15,14 +16,14 @@ class BillsState {
     List<FinancialCommitmentData>? bills,
     bool? isLoading,
     String? error,
-  }) =>
-      BillsState(
-        bills: bills ?? this.bills,
-        isLoading: isLoading ?? this.isLoading,
-        error: error,
-      );
+  }) => BillsState(
+    bills: bills ?? this.bills,
+    isLoading: isLoading ?? this.isLoading,
+    error: error,
+  );
 }
 
+//************** Notifier **************
 class BillsNotifier extends Notifier<BillsState> {
   @override
   BillsState build() => const BillsState();
@@ -91,6 +92,7 @@ class BillsNotifier extends Notifier<BillsState> {
   }
 }
 
+//************* Provider ***************
 final billsProvider = NotifierProvider<BillsNotifier, BillsState>(
   BillsNotifier.new,
 );

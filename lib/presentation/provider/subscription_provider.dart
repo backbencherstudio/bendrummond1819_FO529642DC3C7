@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import '../../core/services/revenuecat_service.dart';
 
+//********** State *************
 class SubscriptionState {
   final bool isLoading;
   final bool isPro;
@@ -20,15 +21,15 @@ class SubscriptionState {
     bool? isPro,
     Offerings? offerings,
     String? error,
-  }) =>
-      SubscriptionState(
-        isLoading: isLoading ?? this.isLoading,
-        isPro: isPro ?? this.isPro,
-        offerings: offerings ?? this.offerings,
-        error: error,
-      );
+  }) => SubscriptionState(
+    isLoading: isLoading ?? this.isLoading,
+    isPro: isPro ?? this.isPro,
+    offerings: offerings ?? this.offerings,
+    error: error,
+  );
 }
 
+//************** Notifier **************
 class SubscriptionNotifier extends Notifier<SubscriptionState> {
   @override
   SubscriptionState build() => const SubscriptionState();
@@ -42,7 +43,8 @@ class SubscriptionNotifier extends Notifier<SubscriptionState> {
         state = SubscriptionState(
           isLoading: false,
           isPro: isPro,
-          error: 'No current offering configured. Please set up an offering in the RevenueCat dashboard.',
+          error:
+              'No current offering configured. Please set up an offering in the RevenueCat dashboard.',
         );
         return;
       }
@@ -62,9 +64,11 @@ class SubscriptionNotifier extends Notifier<SubscriptionState> {
       final customerInfo = await RevenueCatService.purchasePackage(package);
       if (customerInfo != null) {
         final isPro =
-            customerInfo.entitlements.all[RevenueCatService.entitlementId]
+            customerInfo
+                .entitlements
+                .all[RevenueCatService.entitlementId]
                 ?.isActive ==
-                true;
+            true;
         state = SubscriptionState(
           isLoading: false,
           isPro: isPro,
@@ -72,10 +76,7 @@ class SubscriptionNotifier extends Notifier<SubscriptionState> {
         );
         return true;
       }
-      state = state.copyWith(
-        isLoading: false,
-        error: 'Purchase failed',
-      );
+      state = state.copyWith(isLoading: false, error: 'Purchase failed');
       return false;
     } catch (e) {
       state = SubscriptionState(isLoading: false, error: e.toString());
@@ -88,9 +89,11 @@ class SubscriptionNotifier extends Notifier<SubscriptionState> {
     try {
       final customerInfo = await RevenueCatService.restorePurchases();
       final isPro =
-          customerInfo?.entitlements.all[RevenueCatService.entitlementId]
+          customerInfo
+              ?.entitlements
+              .all[RevenueCatService.entitlementId]
               ?.isActive ==
-              true;
+          true;
       state = SubscriptionState(
         isLoading: false,
         isPro: isPro,
@@ -104,7 +107,8 @@ class SubscriptionNotifier extends Notifier<SubscriptionState> {
   }
 }
 
+//************ Provider ***************
 final subscriptionProvider =
     NotifierProvider<SubscriptionNotifier, SubscriptionState>(
-  SubscriptionNotifier.new,
-);
+      SubscriptionNotifier.new,
+    );

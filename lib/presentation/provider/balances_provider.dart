@@ -4,25 +4,30 @@ import '../../data/models/setup_models.dart';
 import '../../data/repositories/setup_repository.dart';
 import '../../data/sources/remote/setup_api_service.dart';
 
+//******** State ************
 class BalancesState {
   final List<FinancialCommitmentData> debts;
   final bool isLoading;
   final String? error;
 
-  const BalancesState({this.debts = const [], this.isLoading = false, this.error});
+  const BalancesState({
+    this.debts = const [],
+    this.isLoading = false,
+    this.error,
+  });
 
   BalancesState copyWith({
     List<FinancialCommitmentData>? debts,
     bool? isLoading,
     String? error,
-  }) =>
-      BalancesState(
-        debts: debts ?? this.debts,
-        isLoading: isLoading ?? this.isLoading,
-        error: error,
-      );
+  }) => BalancesState(
+    debts: debts ?? this.debts,
+    isLoading: isLoading ?? this.isLoading,
+    error: error,
+  );
 }
 
+//****** Notifier **********
 class BalancesNotifier extends Notifier<BalancesState> {
   @override
   BalancesState build() => const BalancesState();
@@ -116,6 +121,7 @@ class BalancesNotifier extends Notifier<BalancesState> {
   }
 }
 
+//********* Provider **********
 final balancesProvider = NotifierProvider<BalancesNotifier, BalancesState>(
   BalancesNotifier.new,
 );

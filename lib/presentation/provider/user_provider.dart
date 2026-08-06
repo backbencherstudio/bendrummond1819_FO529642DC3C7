@@ -5,6 +5,7 @@ import '../../data/models/user_model.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../data/sources/remote/auth_api_service.dart';
 
+//*********** State ******
 class UserState {
   final UserModel? user;
   final bool isLoading;
@@ -20,6 +21,7 @@ class UserState {
       );
 }
 
+//*********** Notifier ************
 class UserNotifier extends Notifier<UserState> {
   @override
   UserState build() => const UserState();
@@ -93,6 +95,7 @@ class UserNotifier extends Notifier<UserState> {
   }
 }
 
+//************ provider ***********
 final userProvider = NotifierProvider<UserNotifier, UserState>(
   UserNotifier.new,
 );

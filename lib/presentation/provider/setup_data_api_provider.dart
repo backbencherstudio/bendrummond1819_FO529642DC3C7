@@ -5,6 +5,7 @@ import '../../../data/models/setup_models.dart';
 import '../../../data/repositories/setup_repository.dart';
 import '../../../data/sources/remote/setup_api_service.dart';
 
+//************ State ************
 class SetupApiDataState {
   final SetupResponse? data;
   final bool isLoading;
@@ -23,6 +24,7 @@ class SetupApiDataState {
   );
 }
 
+//************ Notifier *****************
 class SetupApiDataNotifier extends Notifier<SetupApiDataState> {
   @override
   SetupApiDataState build() => const SetupApiDataState();
@@ -35,7 +37,6 @@ class SetupApiDataNotifier extends Notifier<SetupApiDataState> {
         remoteSource: SetupApiService(apiClient: ApiClient()),
       );
       final data = await repository.getSetupData();
-      debugPrint("Data inside $data");
       state = SetupApiDataState(data: data, isLoading: false);
     } catch (e) {
       state = SetupApiDataState(isLoading: false, error: e.toString());
@@ -67,6 +68,7 @@ class SetupApiDataNotifier extends Notifier<SetupApiDataState> {
   }
 }
 
+//*********** Provider ************
 final setupApiDataProvider =
     NotifierProvider<SetupApiDataNotifier, SetupApiDataState>(
       SetupApiDataNotifier.new,
