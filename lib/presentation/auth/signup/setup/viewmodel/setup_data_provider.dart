@@ -4,6 +4,7 @@ import '../../../../../data/models/setup_models.dart';
 import '../../../../../data/repositories/setup_repository.dart';
 import '../../../../../data/sources/remote/setup_api_service.dart';
 
+//************** State***************
 class SetupDataState {
   final int incomeTypeIndex;
   final int payFrequencyIndex;
@@ -64,6 +65,7 @@ class SetupDataState {
   }
 }
 
+//************** Notifier*****************
 class SetupDataNotifier extends Notifier<SetupDataState> {
   @override
   SetupDataState build() => SetupDataState();
@@ -248,6 +250,7 @@ class SetupDataNotifier extends Notifier<SetupDataState> {
   }
 }
 
+//*************** Provider ******************
 final setupDataProvider = NotifierProvider<SetupDataNotifier, SetupDataState>(
   SetupDataNotifier.new,
 );

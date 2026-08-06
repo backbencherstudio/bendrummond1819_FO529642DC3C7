@@ -3,6 +3,7 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_mana
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/utils.dart';
 import 'package:bendrummond1819_fo529642dc3c7/data/models/setup_models.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/balances_provider.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/incomes_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -150,7 +151,7 @@ class _AddEditDebtSheetState extends ConsumerState<AddEditDebtSheet> {
     final dueDayText = _dueDayController.text.trim();
     final dueDay = dueDayText.isNotEmpty ? int.parse(dueDayText) : null;
 
-    bool success;
+    bool success = false;
     try {
       if (widget.isEditing) {
         success = await ref
@@ -168,6 +169,10 @@ class _AddEditDebtSheetState extends ConsumerState<AddEditDebtSheet> {
       }
     } catch (_) {
       success = false;
+    } finally {
+      if (success) {
+        ref.read(incomesProvider.notifier).fetchIncomes();
+      }
     }
 
     if (!mounted) return;

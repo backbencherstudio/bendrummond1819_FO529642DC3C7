@@ -24,6 +24,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     Future.microtask(() {
+      print("yyyyyyyy");
       ref.read(incomesProvider.notifier).fetchIncomes();
       ref.read(userProvider.notifier).loadUser();
     });
@@ -38,6 +39,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       setupData: ref.watch(setupDataProvider),
     );
 
+    final isLoading = incomeState.isLoading && summary.safeToSpend <= 0;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -51,13 +54,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               SizedBox(height: 32.h),
               SafeToSpendCard(
-                isLoading: incomeState.isLoading,
+                isLoading: isLoading,
                 safeToSpend: summary.safeToSpend,
                 payFrequencyLabel: summary.payFrequencyLabel,
               ),
               SizedBox(height: 32.h),
               PaydayBreakdownSection(
-                isLoading: incomeState.isLoading,
+                isLoading: isLoading,
                 monthlyIncome: summary.monthlyIncome,
                 bills: summary.bills,
                 billsCount: summary.billsCount,
