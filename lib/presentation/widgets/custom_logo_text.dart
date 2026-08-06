@@ -9,7 +9,8 @@ Widget customLogoText() {
     "STABILITY",
     style: getSemiBoldStyle22(
       color: ColorManager.brown500,
-      fontSize: 24.sp
+      fontSize: (24.sp).clamp(24.0, 34.0),
     ).copyWith(letterSpacing: 6),
   );
 }
+

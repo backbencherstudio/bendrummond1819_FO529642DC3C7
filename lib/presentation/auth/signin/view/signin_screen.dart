@@ -9,13 +9,13 @@ import '../../../../core/resource/constants/style_manager.dart';
 import '../../../../core/route/routes_name.dart';
 import '../../../../data/repositories/setup_repository.dart';
 import '../../../../data/sources/remote/setup_api_service.dart';
-import '../../signup/widgets/social_login_buttons.dart';
 import '../../widgets/auth_header.dart';
 import '../../widgets/auth_headline.dart';
 import '../../widgets/auth_switch_link.dart';
 import '../../widgets/labeled_form_field.dart';
 import '../../../widgets/primary_button.dart';
 import '../../mixins/social_login_mixin.dart';
+import '../../widgets/social_login_buttons.dart';
 import '../viewmodel/signin_viewmodel.dart';
 import '../widgets/cutom_divider.dart';
 
@@ -253,4 +253,3 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
     }
   }
 }
-

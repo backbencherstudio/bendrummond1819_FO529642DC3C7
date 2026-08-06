@@ -25,6 +25,7 @@ class SignupScreen extends ConsumerStatefulWidget {
 
 class _SignupScreenState extends ConsumerState<SignupScreen>
     with KeyboardAwareScrollMixin, SocialLoginMixin {
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _fullNameController = TextEditingController();
@@ -36,6 +37,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
   final _phoneFocusNode = FocusNode();
   final _dobFocusNode = FocusNode();
   final _signUpButtonKey = GlobalKey();
+
+  bool get _isFormValid =>
+      _fullNameController.text.trim().isNotEmpty &&
+      _emailController.text.trim().isNotEmpty &&
+      _passwordController.text.isNotEmpty &&
+      _phoneController.text.trim().isNotEmpty &&
+      _dobController.text.trim().isNotEmpty;
 
   @override
   void initState() {
@@ -97,53 +105,92 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
 
                   SizedBox(height: 25.h),
 
-                  LabeledFormField(
-                    label: "Your full name",
-                    hintText: "What should we call you?",
-                    controller: _fullNameController,
-                    focusNode: _fullNameFocusNode,
-                  ),
-                  SizedBox(height: 12.h),
+                  Form(
+                    key: _formKey,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        LabeledFormField(
+                          label: "Your full name",
+                          hintText: "What should we call you?",
+                          controller: _fullNameController,
+                          focusNode: _fullNameFocusNode,
+                          onChanged: (_) => setState(() {}),
+                          validator: (value) =>
+                              (value == null || value.trim().isEmpty)
+                              ? "Full name is required"
+                              : null,
+                        ),
+                        SizedBox(height: 12.h),
 
-                  LabeledFormField(
-                    label: "Email address",
-                    hintText: "you@example.com",
-                    controller: _emailController,
-                    focusNode: _emailFocusNode,
-                  ),
-                  SizedBox(height: 12.h),
+                        LabeledFormField(
+                          label: "Email address",
+                          hintText: "you@example.com",
+                          controller: _emailController,
+                          focusNode: _emailFocusNode,
+                          onChanged: (_) => setState(() {}),
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return "Email is required";
+                            }
+                            final emailRegex = RegExp(
+                              r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
+                            );
+                            if (!emailRegex.hasMatch(value.trim())) {
+                              return "Enter a valid email";
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 12.h),
 
-                  LabeledFormField(
-                    label: "Password",
-                    hintText: "Your password",
-                    controller: _passwordController,
-                    isSecured: true,
-                    focusNode: _passwordFocusNode,
-                  ),
-                  SizedBox(height: 12.h),
+                        LabeledFormField(
+                          label: "Password",
+                          hintText: "Your password",
+                          controller: _passwordController,
+                          isSecured: true,
+                          focusNode: _passwordFocusNode,
+                          onChanged: (_) => setState(() {}),
+                          validator: (value) =>
+                              (value == null || value.isEmpty)
+                              ? "Password is required"
+                              : null,
+                        ),
+                        SizedBox(height: 12.h),
 
-                  LabeledFormField(
-                    label: "Phone number",
-                    hintText: "(123) 456-7890",
-                    controller: _phoneController,
-                    focusNode: _phoneFocusNode,
-                  ),
-                  SizedBox(height: 12.h),
+                        LabeledFormField(
+                          label: "Phone number",
+                          hintText: "(123) 456-7890",
+                          controller: _phoneController,
+                          focusNode: _phoneFocusNode,
+                          onChanged: (_) => setState(() {}),
+                          validator: (value) =>
+                              (value == null || value.trim().isEmpty)
+                              ? "Phone number is required"
+                              : null,
+                        ),
+                        SizedBox(height: 12.h),
 
-                  DateOfBirthField(
-                    label: "Date of birth",
-                    controller: _dobController,
-                    focusNode: _dobFocusNode,
-                  ),
+                        DateOfBirthField(
+                          label: "Date of birth",
+                          controller: _dobController,
+                          focusNode: _dobFocusNode,
+                          onChanged: (_) => setState(() {}),
+                        ),
 
-                  SizedBox(height: 25.h),
+                        SizedBox(height: 25.h),
 
-                  KeyedSubtree(
-                    key: _signUpButtonKey,
-                    child: PrimaryButton(
-                      title: "Create account",
-                      isLoading: state.isEmailLoading,
-                      onTap: () => _handleRegister(),
+                        KeyedSubtree(
+                          key: _signUpButtonKey,
+                          child: PrimaryButton(
+                            title: "Create account",
+                            isLoading: state.isEmailLoading,
+                            isEnabled: _isFormValid,
+                            onTap: () => _handleRegister(),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
 
@@ -180,6 +227,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
   //******** Helper Methods**************
 
   Future<void> _handleRegister() async {
+    if (_formKey.currentState?.validate() != true) {
+      return;
+    }
     final success = await ref
         .read(signUpViewModelProvider.notifier)
         .register(

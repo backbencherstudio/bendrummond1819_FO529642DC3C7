@@ -14,6 +14,7 @@ class LabeledFormField extends StatelessWidget {
   final VoidCallback? onTap;
   final String? Function(String?)? validator;
   final Widget? trailing;
+  final void Function(String)? onChanged;
 
   const LabeledFormField({
     super.key,
@@ -26,6 +27,7 @@ class LabeledFormField extends StatelessWidget {
     this.onTap,
     this.validator,
     this.trailing,
+    this.onChanged,
   });
 
   @override
@@ -58,6 +60,7 @@ class LabeledFormField extends StatelessWidget {
           readOnly: readOnly,
           onTap: onTap,
           validator: validator,
+          onChanged: onChanged,
         ),
       ],
     );

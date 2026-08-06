@@ -15,6 +15,7 @@ class PrimaryButton extends StatelessWidget {
   final Border? border;
   final bool isLoading;
   final bool isActive;
+  final bool isEnabled;
 
   const PrimaryButton({
     super.key,
@@ -29,19 +30,24 @@ class PrimaryButton extends StatelessWidget {
     this.border,
     this.isLoading = false,
     this.isActive = false,
+    this.isEnabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: isLoading ? null : onTap,
+      onTap: (isLoading || !isEnabled) ? null : onTap,
       child: Container(
         width: width ?? double.infinity,
         height: height ?? 52.h,
         padding: padding ?? EdgeInsets.symmetric(horizontal: 16.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius ?? 12.r),
-          color: isActive ? Color(0xFFFBF8F2) : ColorManager.primaryButton,
+          color: isActive
+              ? Color(0xFFFBF8F2)
+              : isEnabled
+              ? containerColor ?? ColorManager.primaryButton
+              : ColorManager.greyColor,
           border: border ?? Border.all(color: ColorManager.transparentColor),
         ),
         child: Center(
@@ -61,7 +67,9 @@ class PrimaryButton extends StatelessWidget {
                     style:
                         textStyle ??
                         getRegularStyle20_500(
-                          color: ColorManager.whiteColor,
+                          color: isEnabled
+                              ? ColorManager.whiteColor
+                              : ColorManager.brown400,
                           fontSize: 18.sp,
                         ),
                   ),

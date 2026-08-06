@@ -29,7 +29,7 @@ class CustomOutlinedButton extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: isLoading ? null : onTap,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(12),
         child: Container(
           width: double.infinity,
           height: 56.h,
@@ -63,17 +63,20 @@ class CustomOutlinedButton extends StatelessWidget {
                           color: color ?? ColorManager.grayBlack400,
                         ),
                       )
-                    : Text(
-                        title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        style:
-                            textStyle ??
-                            getRegularStyle20_500(
-                              color: ColorManager.grayBlack400,
-                              fontSize: 18.sp,
-                            ),
+                    : FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style:
+                              textStyle ??
+                              getRegularStyle20_500(
+                                color: ColorManager.grayBlack400,
+                                fontSize: 18.sp,
+                              ),
+                        ),
                       ),
               ),
             ],

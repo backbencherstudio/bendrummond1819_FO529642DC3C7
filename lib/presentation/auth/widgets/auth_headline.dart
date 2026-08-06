@@ -25,7 +25,7 @@ class AuthHeadline extends StatelessWidget {
           style:
               (titleStyle ??
                       getBoldStyle24(
-                        fontSize: 28.sp,
+                        fontSize: (28.sp).clamp(28.0, 34.0),
                         color: ColorManager.brown,
                       ))
                   .copyWith(letterSpacing: -0.5),

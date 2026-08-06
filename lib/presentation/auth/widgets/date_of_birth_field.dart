@@ -11,6 +11,7 @@ class DateOfBirthField extends StatelessWidget {
   final DateTime? firstDate;
   final DateTime? lastDate;
   final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
 
   const DateOfBirthField({
     super.key,
@@ -22,6 +23,7 @@ class DateOfBirthField extends StatelessWidget {
     this.firstDate,
     this.lastDate,
     this.validator,
+    this.onChanged,
   });
 
   Future<void> _selectDate(BuildContext context) async {
@@ -33,6 +35,7 @@ class DateOfBirthField extends StatelessWidget {
     );
     if (picked != null) {
       controller.text = "${picked.day}/${picked.month}/${picked.year}";
+      onChanged?.call(controller.text);
     }
   }
 
@@ -50,6 +53,7 @@ class DateOfBirthField extends StatelessWidget {
           (value) => (value == null || value.isEmpty)
               ? "Please select your date of birth"
               : null,
+      onChanged: onChanged,
     );
   }
 }

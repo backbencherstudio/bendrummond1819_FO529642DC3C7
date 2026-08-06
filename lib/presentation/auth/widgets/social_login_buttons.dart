@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/outline_button.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +32,7 @@ class SocialLoginButtons extends StatelessWidget {
           isLoading: isGoogleLoading,
           onTap: onGoogleTap,
         ),
-        if (showApple && onAppleTap != null) ...[
+        if (Platform.isIOS && showApple && onAppleTap != null) ...[
           SizedBox(height: 12.h),
           CustomOutlinedButton(
             title: "Continue with Apple",
