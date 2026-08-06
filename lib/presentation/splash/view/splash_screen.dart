@@ -1,27 +1,24 @@
-import 'package:bendrummond1819_fo529642dc3c7/core/network/api_clients.dart';
-import 'package:bendrummond1819_fo529642dc3c7/core/network/api_endpoints.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
-import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
-import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
-import 'package:bendrummond1819_fo529642dc3c7/data/repositories/setup_repository.dart';
-import 'package:bendrummond1819_fo529642dc3c7/data/sources/local/shared_preference/shared_preference.dart';
-import 'package:bendrummond1819_fo529642dc3c7/data/sources/remote/setup_api_service.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/splash/viewmodel/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SplashScreen extends StatefulWidget {
+import '../widgets/splash_logo.dart';
+import '../widgets/splash_progress_section.dart';
+
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with TickerProviderStateMixin {
   late AnimationController _progressController;
   late AnimationController _shimmerController;
   late AnimationController _punchEffectController;
-
   late Animation<double> _bounceAnimation;
 
   bool _moveUp = false;
@@ -64,78 +61,23 @@ class _SplashScreenState extends State<SplashScreen>
     });
 
     Future.delayed(const Duration(milliseconds: 2000), () {
-      if (mounted) {
-        setState(() => _showColorEffect = true);
-
-        _progressController.forward().then((_) {
-          _punchEffectController.forward().then((_) async {
-            await Future.delayed(const Duration(seconds: 3));
-
-            if (mounted) {
-              final token = await SharedPreferenceData.getToken();
-              if (token == null || token.isEmpty || token == "null") {
-                await SharedPreferenceData.removeToken();
-                if (mounted) {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    RoutesName.onBoardingRoute,
-                    (predicate) => false,
-                  );
-                }
-                return;
-              }
-              try {
-                final apiClient = ApiClient();
-                await apiClient.getRequest(
-                  endpoints: ApiEndpoints.loadUser,
-                );
-              } catch (_) {
-                await SharedPreferenceData.removeToken();
-                if (mounted) {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    RoutesName.onBoardingRoute,
-                    (predicate) => false,
-                  );
-                }
-                return;
-              }
-              final repository = SetupRepository(
-                remoteSource: SetupApiService(apiClient: ApiClient()),
-              );
-              try {
-                final data = await repository.getSetupData();
-                if (mounted) {
-                  if (data != null &&
-                      (data.incomes.isNotEmpty ||
-                          data.financialCommitments.isNotEmpty ||
-                          data.savingsGoals.isNotEmpty)) {
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      RoutesName.bottomNavRoute,
-                      (predicate) => false,
-                    );
-                  } else {
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      RoutesName.setUpScreen,
-                      (predicate) => false,
-                    );
-                  }
-                }
-              } catch (_) {
-                if (mounted) {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    RoutesName.setUpScreen,
-                    (predicate) => false,
-                  );
-                }
-              }
-            }
-          });
-        });
-      }
+      if (!mounted) return;
+      setState(() => _showColorEffect = true);
+      _progressController.forward().then((_) async {
+        await _punchEffectController.forward();
+        await Future.delayed(const Duration(seconds: 3));
+        if (!mounted) return;
+        final route = await ref
+            .read(splashProvider.notifier)
+            .decideInitialRoute();
+        if (mounted) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            route,
+            (predicate) => false,
+          );
+        }
+      });
     });
   }
 
@@ -162,99 +104,21 @@ class _SplashScreenState extends State<SplashScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                AnimatedBuilder(
-                  animation: Listenable.merge([
-                    _shimmerController,
-                    _punchEffectController,
-                  ]),
-                  builder: (context, child) {
-                    return Transform.translate(
-                      offset: Offset(0, _bounceAnimation.value),
-                      child: _showColorEffect
-                          ? ShaderMask(
-                              shaderCallback: (Rect bounds) {
-                                return LinearGradient(
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
-                                  colors: const [
-                                    Color(0xFF4A3A2F),
-                                    Color(0xFFB08A70),
-                                    Color(0xFF4A3A2F),
-                                  ],
-                                  stops: [
-                                    _shimmerController.value - 0.3,
-                                    _shimmerController.value,
-                                    _shimmerController.value + 0.3,
-                                  ],
-                                ).createShader(bounds);
-                              },
-                              child: _buildText(Colors.white),
-                            )
-                          : _buildText(const Color(0xFF4A3A2F)),
-                    );
-                  },
+                SplashLogo(
+                  showColorEffect: _showColorEffect,
+                  shimmerController: _shimmerController,
+                  punchEffectController: _punchEffectController,
+                  bounceAnimation: _bounceAnimation,
                 ),
-
-                AnimatedOpacity(
-                  opacity: _showColorEffect ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 600),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 25.h),
-                      SizedBox(
-                        width: 220.w,
-                        child: AnimatedBuilder(
-                          animation: _progressController,
-                          builder: (context, child) {
-                            return ClipRRect(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.r),
-                              ),
-                              child: ShaderMask(
-                                shaderCallback: (Rect bounds) {
-                                  return ColorManager.metallicGradient
-                                      .createShader(bounds);
-                                },
-                                blendMode: BlendMode.srcIn,
-                                child: LinearProgressIndicator(
-                                  value: _progressController.value,
-                                  backgroundColor: ColorManager.primary
-                                      .withAlpha(30),
-                                  valueColor:
-                                      const AlwaysStoppedAnimation<Color>(
-                                        Colors.white,
-                                      ),
-                                  minHeight: 5.h,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 15.h),
-                      Text(
-                        "Know what's safe to spend.",
-                        textAlign: TextAlign.center,
-                        style: getLight300Style16(color: ColorManager.gold),
-                      ),
-                    ],
-                  ),
+                SplashProgressSection(
+                  showColorEffect: _showColorEffect,
+                  progressController: _progressController,
                 ),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildText(Color color) {
-    return Text(
-      "STABILITY",
-      style: getBoldStyle32(
-        color:color,
-        fontSize: 42.sp,
-      ).copyWith(letterSpacing: 8),
     );
   }
 }

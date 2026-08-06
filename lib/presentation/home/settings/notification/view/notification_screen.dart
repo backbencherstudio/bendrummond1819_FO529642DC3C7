@@ -10,8 +10,7 @@ class NotificationScreen extends ConsumerStatefulWidget {
   const NotificationScreen({super.key});
 
   @override
-  ConsumerState<NotificationScreen> createState() =>
-      _NotificationScreenState();
+  ConsumerState<NotificationScreen> createState() => _NotificationScreenState();
 }
 
 class _NotificationScreenState extends ConsumerState<NotificationScreen> {
@@ -45,9 +44,9 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
     if (!mounted) return;
     if (errorMessage != null) {
       setState(() => _billReminders = !val);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(errorMessage)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(errorMessage)));
     }
   }
 
@@ -59,9 +58,9 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
     if (!mounted) return;
     if (errorMessage != null) {
       setState(() => _notificationReminder = !val);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(errorMessage)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(errorMessage)));
     }
   }
 

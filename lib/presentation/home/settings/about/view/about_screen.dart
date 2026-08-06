@@ -120,7 +120,9 @@ class _AboutScreenState extends State<AboutScreen> {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.r),
+        ),
         child: ConstrainedBox(
           constraints: BoxConstraints(maxHeight: 0.8.sh),
           child: Padding(
@@ -130,15 +132,11 @@ class _AboutScreenState extends State<AboutScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: getBoldStyle32(color: ColorManager.brown),
-                  ),
+                  Text(title, style: getBoldStyle32(color: ColorManager.brown)),
                   SizedBox(height: 16.h),
                   Text(
                     body,
-                    style:
-                        getRegularStyle16_400(color: ColorManager.brown400),
+                    style: getRegularStyle16_400(color: ColorManager.brown400),
                   ),
                   SizedBox(height: 24.h),
                   Center(
@@ -160,8 +158,11 @@ class _AboutScreenState extends State<AboutScreen> {
   }
 
   // Reusable Widget for the About rows
-  Widget _buildAboutTile(String title,
-      {required Widget trailing, VoidCallback? onTap}) {
+  Widget _buildAboutTile(
+    String title, {
+    required Widget trailing,
+    VoidCallback? onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -177,8 +178,10 @@ class _AboutScreenState extends State<AboutScreen> {
           children: [
             Text(
               title,
-              style:
-                  getMediumStyle18(color: ColorManager.c201F2E, fontSize: 16),
+              style: getMediumStyle18(
+                color: ColorManager.c201F2E,
+                fontSize: 16,
+              ),
             ),
             trailing,
           ],

@@ -33,8 +33,18 @@ class _HomeSettingsScreenState extends ConsumerState<HomeSettingsScreen> {
     try {
       final parsed = DateTime.parse(date);
       final months = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
       ];
       return '${months[parsed.month - 1]} ${parsed.year}';
     } catch (_) {
@@ -220,9 +230,7 @@ class _HomeSettingsScreenState extends ConsumerState<HomeSettingsScreen> {
                     child: _buildActionButton(
                       onTap: () {
                         final repository = AuthRepository(
-                          remoteSource: AuthApiService(
-                            apiClient: ApiClient(),
-                          ),
+                          remoteSource: AuthApiService(apiClient: ApiClient()),
                         );
                         repository.logout();
                         Navigator.pushNamedAndRemoveUntil(
