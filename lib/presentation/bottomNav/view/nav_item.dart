@@ -31,7 +31,6 @@ class NavItem extends ConsumerWidget {
       onTap: () => ref.read(bottomNavBarProvider.notifier).onItemTapped(index),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        height: 62.h,
         width: 62.2.w,
         padding: EdgeInsets.symmetric(horizontal: 1.r, vertical: 10.r),
         decoration: BoxDecoration(
