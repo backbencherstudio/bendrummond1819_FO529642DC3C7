@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'labeled_form_field.dart';
 
@@ -34,7 +35,7 @@ class DateOfBirthField extends StatelessWidget {
       lastDate: lastDate ?? DateTime.now(),
     );
     if (picked != null) {
-      controller.text = "${picked.day}/${picked.month}/${picked.year}";
+      controller.text = DateFormat('yyyy-MM-dd').format(picked);
       onChanged?.call(controller.text);
     }
   }
