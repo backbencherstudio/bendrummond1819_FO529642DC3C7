@@ -1,7 +1,7 @@
 class IconManager {
   static String baseUrl = 'assets/icons';
   static String googleIcon = '$baseUrl/google_icon.svg';
-  static String appleIcon = '$baseUrl/apple_icon.svg';
+  static String appleIcon = '$baseUrl/apple_icon.png';
   static String balanceIcon = '$baseUrl/balances.svg';
   static String billsIcon = '$baseUrl/bills.svg';
   static String goalsIcon = '$baseUrl/goals.svg';

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/outline_button.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/test_apple_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -26,20 +27,27 @@ class SocialLoginButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CustomOutlinedButton(
-          title: "Continue with Google",
-          icon: SvgPicture.asset(IconManager.googleIcon),
+        SocialSignInButton(
+          title: "Sign in with Google",
+          provider: SocialProvider.google,
+          style: SocialButtonStyle.white,
           isLoading: isGoogleLoading,
           onTap: onGoogleTap,
         ),
         if (Platform.isIOS && showApple && onAppleTap != null) ...[
           SizedBox(height: 12.h),
-          CustomOutlinedButton(
+          SocialSignInButton(
+            provider: SocialProvider.apple,
             title: "Continue with Apple",
-            icon: SvgPicture.asset(IconManager.appleIcon),
-            isLoading: isAppleLoading,
             onTap: onAppleTap!,
+            style: SocialButtonStyle.white,
           ),
+          // CustomOutlinedButton(
+          //   title: "Continue with Apple",
+          //   icon: Image.asset(IconManager.appleIcon, width: 18, height: 18),
+          //   textStyle: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.w600),
+          //   onTap: onAppleTap!,
+          // ),
         ],
       ],
     );

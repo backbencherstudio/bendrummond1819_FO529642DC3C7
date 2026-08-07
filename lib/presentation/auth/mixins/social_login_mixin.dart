@@ -37,8 +37,8 @@ mixin SocialLoginMixin<T extends ConsumerStatefulWidget> on ConsumerState<T> {
   }
 
   void _showError(String fallback) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(errorMessage ?? fallback)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(fallback)));
   }
 }
