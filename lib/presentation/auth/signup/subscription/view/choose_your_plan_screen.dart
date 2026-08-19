@@ -33,11 +33,10 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
   Widget build(BuildContext context) {
     final isMonthlyState = ref.watch(planToggleProvider);
     final subState = ref.watch(subscriptionProvider);
-    final monthlyPackage =
-        subState.offerings?.current?.monthly?.storeProduct;
-    final yearlyPackage =
-        subState.offerings?.current?.annual?.storeProduct;
-    final canPurchase = !subState.isLoading &&
+    final monthlyPackage = subState.offerings?.current?.monthly?.storeProduct;
+    final yearlyPackage = subState.offerings?.current?.annual?.storeProduct;
+    final canPurchase =
+        !subState.isLoading &&
         subState.error == null &&
         subState.offerings?.current != null;
 
@@ -60,18 +59,14 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
                   SizedBox(width: 12.w),
                   Text(
                     'Choose Your Plan',
-                    style: getSemiBoldStyle22(
-                      color: ColorManager.textPrimary,
-                    ),
+                    style: getSemiBoldStyle22(color: ColorManager.textPrimary),
                   ),
                 ],
               ),
               SizedBox(height: 24.h),
               Text(
                 "Start knowing what's safe to spend.",
-                style: getBoldStyle32(
-                  color: ColorManager.textPrimary,
-                ),
+                style: getBoldStyle32(color: ColorManager.textPrimary),
               ),
               SizedBox(height: 16.h),
               Text(
@@ -159,8 +154,10 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
                         if (package == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                                content: Text(
-                                    'This plan is not available. Please try a different plan.')),
+                              content: Text(
+                                'This plan is not available. Please try a different plan.',
+                              ),
+                            ),
                           );
                           return;
                         }
@@ -259,40 +256,44 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    isMonthly ? 'Monthly' : 'Yearly',
-                    style: getBoldStyle24(
-                      color: ColorManager.grayBlack400,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      isMonthly ? 'Monthly' : 'Yearly',
+                      style: getBoldStyle24(color: ColorManager.grayBlack400),
                     ),
-                  ),
-                  SizedBox(height: 12.h),
-                  Text(
-                    label,
-                    style: getRegularStyle16_400(
-                        color: ColorManager.grayBlack400),
-                  ),
-                ],
+                    SizedBox(height: 12.h),
+                    Text(
+                      label,
+                      style: getRegularStyle16_400(
+                        color: ColorManager.grayBlack400,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    isLoading ? '...' : price,
-                    style: getBoldStyle32(
-                      color: ColorManager.textPrimary,
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        isLoading ? '...' : price,
+                        style: getBoldStyle32(color: ColorManager.textPrimary),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 12.h),
-                  Text(
-                    period,
-                    style: getRegularStyle14_400(
-                      color: ColorManager.grayBlack400,
+                    SizedBox(height: 12.h),
+                    Text(
+                      period,
+                      style: getRegularStyle14_400(
+                        color: ColorManager.grayBlack400,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),

@@ -7,19 +7,19 @@ class RevenueCatService {
   static const String entitlementId = 'premium';
 
   static Future<void> initialize() async {
-    try {
-      final apiKey = Platform.isIOS
-          ? dotenv.env['REVENUECAT_IOS_API_KEY'] ?? ''
-          : dotenv.env['REVENUECAT_ANDROID_API_KEY'] ?? '';
-
-      await Purchases.setLogLevel(LogLevel.debug);
-      PurchasesConfiguration configuration;
-      configuration = PurchasesConfiguration(apiKey);
-      await Purchases.configure(configuration);
-      log.d("RevenueCat initialized successfully");
-    } catch (e) {
-      log.d("RevenueCat initialization failed: $e");
+    final apiKey = Platform.isIOS
+        ? dotenv.env['REVENUECAT_IOS_API_KEY'] ?? ''
+        : dotenv.env['REVENUECAT_ANDROID_API_KEY'] ?? '';
+    if (apiKey.isEmpty) {
+      throw StateError(
+        'RevenueCat API key is missing for '
+        '${Platform.operatingSystem}. '
+        'Set REVENUECAT_${Platform.isIOS ? 'IOS' : 'ANDROID'}_API_KEY in .env',
+      );
     }
+    await Purchases.setLogLevel(LogLevel.debug);
+    await Purchases.configure(PurchasesConfiguration(apiKey));
+    log.d("RevenueCat initialized successfully");
   }
 
   static Future<Offerings> getOfferings() async {
