@@ -17,8 +17,7 @@ class CompletePaymentScreen extends ConsumerStatefulWidget {
       _CompletePaymentScreenState();
 }
 
-class _CompletePaymentScreenState
-    extends ConsumerState<CompletePaymentScreen> {
+class _CompletePaymentScreenState extends ConsumerState<CompletePaymentScreen> {
   @override
   void initState() {
     super.initState();
@@ -44,8 +43,7 @@ class _CompletePaymentScreenState
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 20.w, vertical: 32.h),
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 32.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -87,11 +85,13 @@ class _CompletePaymentScreenState
                             ),
                           ),
                           SizedBox(height: 16.h),
-                          Text(
-                            price,
-                            style: getBoldStyle32(
-                              color: ColorManager.textPrimary,
-                              fontSize: 48.sp,
+                          FittedBox(
+                            child: Text(
+                              price,
+                              style: getBoldStyle32(
+                                color: ColorManager.textPrimary,
+                                fontSize: 48.sp,
+                              ),
                             ),
                           ),
                           SizedBox(height: 4.h),
@@ -124,8 +124,7 @@ class _CompletePaymentScreenState
               ),
             ),
             Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -135,7 +134,8 @@ class _CompletePaymentScreenState
                       child: Text(
                         subState.error!,
                         style: getLightStyle14_400(
-                            color: ColorManager.redColor),
+                          color: ColorManager.redColor,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),
