@@ -50,6 +50,16 @@ class DebtCard extends StatelessWidget {
                       ),
                     ),
                   ],
+                  if (debt.minimumPayment != null) ...[
+                    SizedBox(height: 4.h),
+                    Text(
+                      '\$${debt.minimumPayment!.toStringAsFixed(0)}/mo min',
+                      style: getRegularStyle16_400(
+                        color: ColorManager.brown400,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

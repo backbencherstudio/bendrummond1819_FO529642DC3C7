@@ -30,6 +30,7 @@ class FinancialCommitmentData {
   final String category;
   final String name;
   final double amount;
+  final double? minimumPayment;
   final int? dueDay;
   final String? frequency;
   final bool isRecurring;
@@ -39,6 +40,7 @@ class FinancialCommitmentData {
     required this.category,
     required this.name,
     required this.amount,
+    this.minimumPayment,
     this.dueDay,
     this.frequency,
     this.isRecurring = false,
@@ -50,6 +52,9 @@ class FinancialCommitmentData {
         category: json['category'] ?? '',
         name: json['name'] ?? '',
         amount: double.tryParse(json['amount']?.toString() ?? '') ?? 0,
+        minimumPayment: json['minimum_payment'] != null
+            ? double.tryParse(json['minimum_payment'].toString())
+            : null,
         dueDay: json['due_day'] is int ? json['due_day'] as int : int.tryParse(json['due_day']?.toString() ?? ''),
         frequency: json['frequency'],
         isRecurring: json['is_recurring'] == true || json['is_recurring'] == 1,
@@ -59,6 +64,7 @@ class FinancialCommitmentData {
     'category': category,
     'name': name,
     'amount': amount,
+    if (minimumPayment != null) 'minimum_payment': minimumPayment,
     if (dueDay != null) 'due_day': dueDay,
     if (frequency != null) 'frequency': frequency,
     'is_recurring': isRecurring,

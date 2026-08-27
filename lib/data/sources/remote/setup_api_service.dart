@@ -586,12 +586,14 @@ class SetupApiService {
   Future<bool> addDebt({
     required String name,
     required double amount,
+    double? minimumPayment,
     int? dueDay,
   }) async {
     try {
       final body = <String, dynamic>{
         'name': name,
         'amount': amount,
+        if (minimumPayment != null) 'minimum_payment': minimumPayment,
         if (dueDay != null) 'due_day': dueDay,
       };
 
@@ -644,12 +646,14 @@ class SetupApiService {
     required String id,
     String? name,
     double? amount,
+    double? minimumPayment,
     int? dueDay,
   }) async {
     try {
       final body = <String, dynamic>{};
       if (name != null) body['name'] = name;
       if (amount != null) body['amount'] = amount;
+      if (minimumPayment != null) body['minimum_payment'] = minimumPayment;
       if (dueDay != null) body['due_day'] = dueDay;
 
       final response = await ApiClient.patchRequest(

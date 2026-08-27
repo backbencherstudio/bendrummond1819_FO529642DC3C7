@@ -22,6 +22,7 @@ class AddEditDebtSheet extends ConsumerStatefulWidget {
 class _AddEditDebtSheetState extends ConsumerState<AddEditDebtSheet> {
   late final TextEditingController _nameController;
   late final TextEditingController _amountController;
+  late final TextEditingController _minimumPaymentController;
   late final TextEditingController _dueDayController;
   final _formKey = GlobalKey<FormState>();
   bool _submitting = false;
@@ -34,6 +35,11 @@ class _AddEditDebtSheetState extends ConsumerState<AddEditDebtSheet> {
     _amountController = TextEditingController(
       text: existing != null ? existing.amount.toStringAsFixed(0) : '',
     );
+    _minimumPaymentController = TextEditingController(
+      text: existing?.minimumPayment != null
+          ? existing!.minimumPayment!.toStringAsFixed(0)
+          : '',
+    );
     _dueDayController = TextEditingController(
       text: existing?.dueDay?.toString() ?? '',
     );
@@ -43,6 +49,7 @@ class _AddEditDebtSheetState extends ConsumerState<AddEditDebtSheet> {
   void dispose() {
     _nameController.dispose();
     _amountController.dispose();
+    _minimumPaymentController.dispose();
     _dueDayController.dispose();
     super.dispose();
   }
@@ -81,12 +88,25 @@ class _AddEditDebtSheetState extends ConsumerState<AddEditDebtSheet> {
             SizedBox(height: 12.h),
 
             _LabeledField(
-              label: 'Amount',
+              label: 'Total balance',
               controller: _amountController,
-              hintText: 'e.g. 25',
+              hintText: 'e.g. 5000',
               keyboardType: TextInputType.number,
               validator: (v) {
                 if (v == null || v.trim().isEmpty) return 'Required';
+                if (double.tryParse(v) == null) return 'Invalid number';
+                return null;
+              },
+            ),
+            SizedBox(height: 12.h),
+
+            _LabeledField(
+              label: 'Minimum payment',
+              controller: _minimumPaymentController,
+              hintText: 'e.g. 150',
+              keyboardType: TextInputType.number,
+              validator: (v) {
+                if (v == null || v.trim().isEmpty) return null;
                 if (double.tryParse(v) == null) return 'Invalid number';
                 return null;
               },
@@ -148,6 +168,9 @@ class _AddEditDebtSheetState extends ConsumerState<AddEditDebtSheet> {
 
     final name = _nameController.text.trim();
     final amount = double.parse(_amountController.text.trim());
+    final minimumPaymentText = _minimumPaymentController.text.trim();
+    final minimumPayment =
+        minimumPaymentText.isNotEmpty ? double.parse(minimumPaymentText) : null;
     final dueDayText = _dueDayController.text.trim();
     final dueDay = dueDayText.isNotEmpty ? int.parse(dueDayText) : null;
 
@@ -160,12 +183,16 @@ class _AddEditDebtSheetState extends ConsumerState<AddEditDebtSheet> {
               id: widget.existing!.id!,
               name: name,
               amount: amount,
+              minimumPayment: minimumPayment,
               dueDay: dueDay,
             );
       } else {
-        success = await ref
-            .read(balancesProvider.notifier)
-            .addDebt(name: name, amount: amount, dueDay: dueDay);
+        success = await ref.read(balancesProvider.notifier).addDebt(
+              name: name,
+              amount: amount,
+              minimumPayment: minimumPayment,
+              dueDay: dueDay,
+            );
       }
     } catch (_) {
       success = false;

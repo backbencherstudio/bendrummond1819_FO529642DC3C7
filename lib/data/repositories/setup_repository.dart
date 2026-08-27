@@ -169,9 +169,15 @@ class SetupRepository {
   Future<bool> addDebt({
     required String name,
     required double amount,
+    double? minimumPayment,
     int? dueDay,
   }) {
-    return remoteSource.addDebt(name: name, amount: amount, dueDay: dueDay);
+    return remoteSource.addDebt(
+      name: name,
+      amount: amount,
+      minimumPayment: minimumPayment,
+      dueDay: dueDay,
+    );
   }
 
   Future<bool> deleteDebt(String id) {
@@ -182,8 +188,15 @@ class SetupRepository {
     required String id,
     String? name,
     double? amount,
+    double? minimumPayment,
     int? dueDay,
   }) {
-    return remoteSource.updateDebt(id: id, name: name, amount: amount, dueDay: dueDay);
+    return remoteSource.updateDebt(
+      id: id,
+      name: name,
+      amount: amount,
+      minimumPayment: minimumPayment,
+      dueDay: dueDay,
+    );
   }
 }

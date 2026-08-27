@@ -54,6 +54,7 @@ class BalancesNotifier extends Notifier<BalancesState> {
   Future<bool> addDebt({
     required String name,
     required double amount,
+    double? minimumPayment,
     int? dueDay,
   }) async {
     try {
@@ -96,6 +97,7 @@ class BalancesNotifier extends Notifier<BalancesState> {
     required String id,
     String? name,
     double? amount,
+    double? minimumPayment,
     int? dueDay,
   }) async {
     try {
