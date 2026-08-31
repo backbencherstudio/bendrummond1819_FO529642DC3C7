@@ -5,6 +5,7 @@ import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/subscript
 import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/subscription/widgets/plan_billing_toggle.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/subscription/widgets/plan_card.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/subscription/widgets/plan_error_banner.dart';
+import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/subscription/widgets/terms_of_service.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/subscription_provider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
@@ -95,9 +96,8 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
               if (subState.error != null) ...[
                 PlanErrorBanner(
                   message: subState.error!,
-                  onRetry: () => ref
-                      .read(subscriptionProvider.notifier)
-                      .loadOfferings(),
+                  onRetry: () =>
+                      ref.read(subscriptionProvider.notifier).loadOfferings(),
                 ),
                 SizedBox(height: 12.h),
               ],
@@ -125,6 +125,7 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
                       }
                     : null,
               ),
+              TermsOfService(),
             ],
           ),
         ),
@@ -132,3 +133,4 @@ class _ChooseYourPlanScreenState extends ConsumerState<ChooseYourPlanScreen> {
     );
   }
 }
+

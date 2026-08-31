@@ -23,4 +23,10 @@ class RoutesName {
   static const String resultScreen = "/result";
   static const String signupOtpScreen = "/signupOtpScreen";
   static const String setUpScreen = "/setUpScreen";
+
+  //========== Terms and Services============
+  static const String termsofEULA =
+      'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
+  static const String privacyPolicy =
+      'https://dashboard.stabilityus.com/legal?tab=support';
 }
