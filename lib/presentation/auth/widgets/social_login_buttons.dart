@@ -27,13 +27,15 @@ class SocialLoginButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SocialSignInButton(
-          title: "Sign in with Google",
-          provider: SocialProvider.google,
-          style: SocialButtonStyle.white,
-          isLoading: isGoogleLoading,
-          onTap: onGoogleTap,
-        ),
+        if (Platform.isAndroid) ...[
+          SocialSignInButton(
+            title: "Sign in with Google",
+            provider: SocialProvider.google,
+            style: SocialButtonStyle.white,
+            isLoading: isGoogleLoading,
+            onTap: onGoogleTap,
+          ),
+        ],
         if (Platform.isIOS && showApple && onAppleTap != null) ...[
           SizedBox(height: 12.h),
           SocialSignInButton(

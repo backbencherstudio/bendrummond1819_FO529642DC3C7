@@ -93,6 +93,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.secondary,
+
       body: SizedBox(
         width: double.infinity,
         child: Center(

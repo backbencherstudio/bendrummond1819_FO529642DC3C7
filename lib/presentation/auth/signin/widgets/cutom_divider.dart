@@ -12,18 +12,10 @@ class CustomDivider extends StatelessWidget {
         Expanded(child: Divider(color: ColorManager.brown200, thickness: 2)),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Container(
-            width: 4.r,
-            height: 6.r,
-            decoration: BoxDecoration(
-              color: ColorManager.gold2,
-              borderRadius: BorderRadius.circular(999.r),
-            ),
-          ),
+          child: Text("or", style: TextStyle(color: ColorManager.gold2)),
         ),
         Expanded(child: Divider(color: ColorManager.brown200, thickness: 2)),
       ],
     );
   }
 }
-

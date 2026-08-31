@@ -152,8 +152,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
                           isSecured: true,
                           focusNode: _passwordFocusNode,
                           onChanged: (_) => setState(() {}),
-                          validator: (value) =>
-                              (value == null || value.isEmpty)
+                          validator: (value) => (value == null || value.isEmpty)
                               ? "Password is required"
                               : null,
                         ),
@@ -286,4 +285,3 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
     );
   }
 }
-
