@@ -111,10 +111,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   punchEffectController: _punchEffectController,
                   bounceAnimation: _bounceAnimation,
                 ),
-                SplashProgressSection(
-                  showColorEffect: _showColorEffect,
-                  progressController: _progressController,
-                ),
+                // SplashProgressSection(
+                //   showColorEffect: _showColorEffect,
+                //   progressController: _progressController,
+                // ),
               ],
             ),
           ),

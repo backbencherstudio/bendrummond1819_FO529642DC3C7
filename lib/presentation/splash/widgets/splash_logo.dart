@@ -2,6 +2,8 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_mana
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'splash_wavy_line.dart';
+
 class SplashLogo extends StatelessWidget {
   const SplashLogo({
     super.key,
@@ -23,27 +25,38 @@ class SplashLogo extends StatelessWidget {
       builder: (context, child) {
         return Transform.translate(
           offset: Offset(0, bounceAnimation.value),
-          child: showColorEffect
-              ? ShaderMask(
-                  shaderCallback: (Rect bounds) {
-                    return LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: const [
-                        Color(0xFF4A3A2F),
-                        Color(0xFFB08A70),
-                        Color(0xFF4A3A2F),
-                      ],
-                      stops: [
-                        shimmerController.value - 0.3,
-                        shimmerController.value,
-                        shimmerController.value + 0.3,
-                      ],
-                    ).createShader(bounds);
-                  },
-                  child: _buildText(Colors.white),
-                )
-              : _buildText(const Color(0xFF4A3A2F)),
+          child: SizedBox(
+            width: 320.w,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                // Wavy lines sit behind the text
+                SplashWavyLines(width: 320.w),
+
+                showColorEffect
+                    ? ShaderMask(
+                        shaderCallback: (Rect bounds) {
+                          return LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: const [
+                              Color(0xFF4A3A2F),
+                              Color(0xFFB08A70),
+                              Color(0xFF4A3A2F),
+                            ],
+                            stops: [
+                              shimmerController.value - 0.3,
+                              shimmerController.value,
+                              shimmerController.value + 0.3,
+                            ],
+                          ).createShader(bounds);
+                        },
+                        child: _buildText(Colors.white),
+                      )
+                    : _buildText(const Color(0xFF4A3A2F)),
+              ],
+            ),
+          ),
         );
       },
     );
@@ -52,7 +65,10 @@ class SplashLogo extends StatelessWidget {
   Widget _buildText(Color color) {
     return Text(
       "STABILITY",
-      style: getBoldStyle32(color: color).copyWith(letterSpacing: 8),
+      style: getBoldStyle32(
+        color: color,
+      ).copyWith(fontFamily: 'Lora', letterSpacing: 6),
     );
   }
 }
+
