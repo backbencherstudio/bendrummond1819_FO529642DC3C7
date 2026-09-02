@@ -24,6 +24,7 @@ class AddGoalScreen extends ConsumerStatefulWidget {
 class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
   final savingNameController = TextEditingController();
   final _amountController = TextEditingController();
+  final _contributionController = TextEditingController();
   bool _isSubmitting = false;
   String _selectedFrequency = "Per month";
 
@@ -31,6 +32,7 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
   void dispose() {
     savingNameController.dispose();
     _amountController.dispose();
+    _contributionController.dispose();
     super.dispose();
   }
 
@@ -58,7 +60,7 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
       final success = await repository.addNewGoal(
         goalName: savingNameController.text,
         targetAmount: double.tryParse(_amountController.text) ?? 0,
-        contribution: double.tryParse(_amountController.text) ?? 0,
+        contribution: double.tryParse(_contributionController.text) ?? 0,
         frequency: frequency,
       );
 
@@ -141,13 +143,24 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
 
               SizedBox(height: 12.h),
 
-              // ===================== Amount ========================
-              _buildLabel("Amount"),
+              // ===================== Target Amount ========================
+              _buildLabel("Target amount"),
               SizedBox(height: 6.h),
               CustomFromField(
-                hintText: '60',
+                hintText: '80000',
                 prefixIcon: SvgPicture.asset(IconManager.dollar),
                 controller: _amountController,
+              ),
+
+              SizedBox(height: 12.h),
+
+              // ===================== Contribution ========================
+              _buildLabel("Contribution"),
+              SizedBox(height: 6.h),
+              CustomFromField(
+                hintText: '500',
+                prefixIcon: SvgPicture.asset(IconManager.dollar),
+                controller: _contributionController,
               ),
 
               SizedBox(height: 12.h),

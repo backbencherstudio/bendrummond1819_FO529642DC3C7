@@ -169,8 +169,9 @@ class _AddEditDebtSheetState extends ConsumerState<AddEditDebtSheet> {
     final name = _nameController.text.trim();
     final amount = double.parse(_amountController.text.trim());
     final minimumPaymentText = _minimumPaymentController.text.trim();
-    final minimumPayment =
-        minimumPaymentText.isNotEmpty ? double.parse(minimumPaymentText) : null;
+    final minimumPayment = minimumPaymentText.isNotEmpty
+        ? double.parse(minimumPaymentText)
+        : null;
     final dueDayText = _dueDayController.text.trim();
     final dueDay = dueDayText.isNotEmpty ? int.parse(dueDayText) : null;
 
@@ -187,7 +188,9 @@ class _AddEditDebtSheetState extends ConsumerState<AddEditDebtSheet> {
               dueDay: dueDay,
             );
       } else {
-        success = await ref.read(balancesProvider.notifier).addDebt(
+        success = await ref
+            .read(balancesProvider.notifier)
+            .addDebt(
               name: name,
               amount: amount,
               minimumPayment: minimumPayment,
