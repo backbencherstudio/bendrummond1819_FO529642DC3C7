@@ -27,7 +27,7 @@ class SignUpModelview extends AsyncNotifier<SignUpState> {
 
   Future<bool> register({
     required String name,
-    required String email,
+    String? email,
     required String password,
     required String phone,
     required String dob,

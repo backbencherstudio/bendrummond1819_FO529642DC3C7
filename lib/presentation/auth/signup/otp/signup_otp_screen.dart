@@ -21,20 +21,20 @@ class SignupOtpScreen extends ConsumerStatefulWidget {
 
 class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
   final _otpController = TextEditingController();
-  String _email = '';
+  String _phone = '';
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final args = ModalRoute.of(context)?.settings.arguments;
     if (args is String) {
-      _email = args;
+      _phone = args;
     }
   }
 
   Future<void> handleVerifyOtp() async {
     final otp = _otpController.text.trim();
-    if (otp.isEmpty || _email.isEmpty) {
+    if (otp.isEmpty || _phone.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please enter the OTP")),
       );
@@ -43,7 +43,7 @@ class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
 
     final success = await ref
         .read(signupOtpViewModelProvider.notifier)
-        .verifyEmail(email: _email, otp: otp);
+        .verifyPhone(phone: _phone, otp: otp);
 
     if (success && mounted) {
       Navigator.pushNamedAndRemoveUntil(
@@ -60,11 +60,11 @@ class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
   }
 
   Future<void> handleResendOtp() async {
-    if (_email.isEmpty) return;
+    if (_phone.isEmpty) return;
 
     final success = await ref
         .read(signupOtpViewModelProvider.notifier)
-        .resendOtp(email: _email);
+        .resendOtp(phone: _phone);
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(

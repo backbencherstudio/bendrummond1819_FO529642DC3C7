@@ -18,13 +18,13 @@ class SignupOtpViewmodel extends StateNotifier<SignupOtpState> {
   SignupOtpViewmodel({required this.repository})
     : super(SignupOtpState(isLoading: false));
 
-  Future<bool> verifyEmail({
-    required String email,
+  Future<bool> verifyPhone({
+    required String phone,
     required String otp,
   }) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
-      final success = await repository.verifyEmail(email: email, otp: otp);
+      final success = await repository.verifyEmail(phone: phone, otp: otp);
       state = state.copyWith(isLoading: false, isSuccess: success);
       return success;
     } catch (e) {
@@ -33,10 +33,15 @@ class SignupOtpViewmodel extends StateNotifier<SignupOtpState> {
     }
   }
 
-  Future<bool> resendOtp({required String email}) async {
+  Future<bool> verifyEmail({
+    required String email,
+    required String otp,
+  }) => verifyPhone(phone: email, otp: otp);
+
+  Future<bool> resendOtp({required String phone}) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
-      final success = await repository.resendOtp(email: email);
+      final success = await repository.resendOtp(phone: phone);
       state = state.copyWith(isLoading: false, isSuccess: success);
       return success;
     } catch (e) {

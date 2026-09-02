@@ -78,12 +78,14 @@ class _SetUpMainViewState extends ConsumerState<SetUpScreen> {
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
               child: Row(
                 children: [
-                  customBackButton(
-                    context,
-                    onPressed: _onBack,
-                    color: ColorManager.backGroundCard,
-                    borderColor: ColorManager.borderColor3,
-                  ),
+                  if (currentStep != 1) ...[
+                    customBackButton(
+                      context,
+                      onPressed: _onBack,
+                      color: ColorManager.backGroundCard,
+                      borderColor: ColorManager.borderColor3,
+                    ),
+                  ],
                   SizedBox(width: 16.w),
                   Expanded(
                     child: Column(
@@ -164,11 +166,17 @@ class _SetUpMainViewState extends ConsumerState<SetUpScreen> {
                   ],
                   if (currentStep == 8) ...[
                     ref.watch(setupDataProvider).isSubmitting
-                        ? Center(child: CircularProgressIndicator(color: ColorManager.textPrimary))
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              color: ColorManager.textPrimary,
+                            ),
+                          )
                         : PrimaryButton(
                             title: "Continue",
                             onTap: () async {
-                              final success = await ref.read(setupDataProvider.notifier).submitSetup();
+                              final success = await ref
+                                  .read(setupDataProvider.notifier)
+                                  .submitSetup();
                               if (success && mounted) {
                                 Navigator.pushNamed(
                                   context,
@@ -176,7 +184,8 @@ class _SetUpMainViewState extends ConsumerState<SetUpScreen> {
                                 );
                               } else if (mounted) {
                                 Utils.showToast(
-                                  message: "Something went wrong while setting up your account. Please try again.",
+                                  message:
+                                      "Something went wrong while setting up your account. Please try again.",
                                   backgroundColor: ColorManager.errorColor,
                                   textColor: ColorManager.whiteColor,
                                 );

@@ -12,17 +12,17 @@ class AuthApiService {
   //register
   Future<bool> register({
     required String name,
-    required String email,
+    String? email,
     required String password,
     required String phone,
     required String dob,
   }) async {
     try {
-      final body = {
+      final body = <String, dynamic>{
         "name": name,
-        "email": email,
+        if (email != null && email.trim().isNotEmpty) "email": email.trim(),
         "password": password,
-        "phone": phone,
+        "phone_number": phone,
         "birthDate": dob,
       };
       final dynamic response = await apiClient.postRequest(
@@ -62,9 +62,9 @@ class AuthApiService {
   }
 
   //login
-  Future<bool> login({required String email, required String password}) async {
+  Future<bool> login({required String phone, required String password}) async {
     try {
-      final body = {"email": email, "password": password};
+      final body = {"phone_number": phone, "password": password};
       final dynamic response = await apiClient.postRequest(
         body: body,
         endpoints: ApiEndpoints.login,
@@ -363,16 +363,16 @@ class AuthApiService {
     }
   }
 
-  //verify email (signup otp)
-  Future<bool> verifyEmail({required String email, required String otp}) async {
+  //verify phone (signup otp)
+  Future<bool> verifyEmail({required String phone, required String otp}) async {
     try {
-      final body = {"email": email, "token": otp};
+      final body = {"phone_number": phone, "token": otp};
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.verifyMail,
         body: body,
       );
       if (response == null) return false;
-      log("Verify email response: $response");
+      log("Verify phone response: $response");
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
           return false;
@@ -385,9 +385,9 @@ class AuthApiService {
   }
 
   //resend otp (signup)
-  Future<bool> resendOtp({required String email}) async {
+  Future<bool> resendOtp({required String phone}) async {
     try {
-      final body = {"email": email};
+      final body = {"phone_number": phone};
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.resendOtp,
         body: body,

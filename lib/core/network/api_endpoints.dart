@@ -1,5 +1,6 @@
 class ApiEndpoints {
-  static const String baseUrl = "https://backend.stabilityus.com/api";
+  // static const String baseUrl = "https://backend.stabilityus.com/api";
+  static const String baseUrl = 'http://10.10.9.178:4000/api';
   //===================== auth ApiEndpoints ===========================//
   static const String register = '/auth/register';
   static const String login = '/auth/login';

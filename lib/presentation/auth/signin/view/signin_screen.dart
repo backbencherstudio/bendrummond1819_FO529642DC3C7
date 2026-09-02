@@ -28,24 +28,24 @@ class SigningScreen extends ConsumerStatefulWidget {
 
 class _SigningScreenState extends ConsumerState<SigningScreen>
     with KeyboardAwareScrollMixin, SocialLoginMixin {
-  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _signInButtonKey = GlobalKey();
-  final _emailFocusNode = FocusNode();
+  final _phoneFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    registerAutoScrollFocus(_emailFocusNode, _signInButtonKey);
+    registerAutoScrollFocus(_phoneFocusNode, _signInButtonKey);
     registerAutoScrollFocus(_passwordFocusNode, _signInButtonKey);
   }
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _phoneController.dispose();
     _passwordController.dispose();
-    _emailFocusNode.dispose();
+    _phoneFocusNode.dispose();
     _passwordFocusNode.dispose();
     super.dispose();
   }
@@ -90,10 +90,10 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
                   SizedBox(height: 25.h),
 
                   LabeledFormField(
-                    label: "Email",
-                    hintText: "you@example.com",
-                    controller: _emailController,
-                    focusNode: _emailFocusNode,
+                    label: "Phone number",
+                    hintText: "(123) 456-7890",
+                    controller: _phoneController,
+                    focusNode: _phoneFocusNode,
                   ),
 
                   SizedBox(height: 12.h),
@@ -170,7 +170,7 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
     final success = await ref
         .read(signInViewModelProvider.notifier)
         .signIn(
-          email: _emailController.text.trim(),
+          phone: _phoneController.text.trim(),
           password: _passwordController.text,
         );
 
@@ -222,11 +222,7 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
         (route) => false,
       );
     } else if (setupComplete == false) {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        RoutesName.setUpScreen,
-        (route) => false,
-      );
+      Navigator.pushReplacementNamed(context, RoutesName.setUpScreen);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

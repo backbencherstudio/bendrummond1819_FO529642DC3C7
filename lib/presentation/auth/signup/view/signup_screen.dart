@@ -40,7 +40,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
 
   bool get _isFormValid =>
       _fullNameController.text.trim().isNotEmpty &&
-      _emailController.text.trim().isNotEmpty &&
       _passwordController.text.isNotEmpty &&
       _phoneController.text.trim().isNotEmpty &&
       _dobController.text.trim().isNotEmpty;
@@ -125,14 +124,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
                         SizedBox(height: 12.h),
 
                         LabeledFormField(
-                          label: "Email address",
+                          label: "Email address (optional)",
                           hintText: "you@example.com",
                           controller: _emailController,
                           focusNode: _emailFocusNode,
                           onChanged: (_) => setState(() {}),
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
-                              return "Email is required";
+                              return null;
                             }
                             final emailRegex = RegExp(
                               r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
@@ -243,7 +242,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
       Navigator.pushReplacementNamed(
         context,
         RoutesName.signupOtpScreen,
-        arguments: _emailController.text.trim(),
+        arguments: _phoneController.text.trim(),
       );
     } else if (!success && mounted) {
       final state = ref.read(signUpViewModelProvider).value;

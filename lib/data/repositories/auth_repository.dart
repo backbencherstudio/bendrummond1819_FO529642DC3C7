@@ -8,7 +8,7 @@ class AuthRepository {
 
   Future<bool> register({
     required String name,
-    required String email,
+    String? email,
     required String password,
     required String phone,
     required String dob,
@@ -22,8 +22,8 @@ class AuthRepository {
     );
   }
 
-  Future<bool> login({required String email, required String password}) async {
-    return await remoteSource.login(email: email, password: password);
+  Future<bool> login({required String phone, required String password}) async {
+    return await remoteSource.login(phone: phone, password: password);
   }
 
   Future<bool> googleLogin({required String idToken}) async {
@@ -79,12 +79,12 @@ class AuthRepository {
     return await remoteSource.verifyResetOtp(email: email, otp: otp);
   }
 
-  Future<bool> verifyEmail({required String email, required String otp}) async {
-    return await remoteSource.verifyEmail(email: email, otp: otp);
+  Future<bool> verifyEmail({required String phone, required String otp}) async {
+    return await remoteSource.verifyEmail(phone: phone, otp: otp);
   }
 
-  Future<bool> resendOtp({required String email}) async {
-    return await remoteSource.resendOtp(email: email);
+  Future<bool> resendOtp({required String phone}) async {
+    return await remoteSource.resendOtp(phone: phone);
   }
 
   Future<bool> resetPassword({
