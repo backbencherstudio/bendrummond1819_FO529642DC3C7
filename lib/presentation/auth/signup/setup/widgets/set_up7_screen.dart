@@ -178,7 +178,7 @@ class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
           ),
           SizedBox(height: 6.h),
           CustomFromField(
-            hintText: "Credit card",
+            hintText: "",
             controller: whatIsItController,
             keyboardType: TextInputType.text,
           ),
@@ -189,7 +189,7 @@ class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
           ),
           SizedBox(height: 6.h),
           CustomFromField(
-            hintText: "25",
+            hintText: "",
             controller: amountController,
             keyboardType: TextInputType.number,
             prefixIcon: SvgPicture.asset(IconManager.dollar),
@@ -241,8 +241,8 @@ class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
             child: IgnorePointer(
               child: CustomFromField(
                 hintText: "Select frequency",
-              controller: frequentlyController,
-              keyboardType: TextInputType.text,
+                controller: frequentlyController,
+                keyboardType: TextInputType.text,
                 suffixIcon: Icon(
                   isFrequencyExpanded
                       ? Icons.keyboard_arrow_up_outlined

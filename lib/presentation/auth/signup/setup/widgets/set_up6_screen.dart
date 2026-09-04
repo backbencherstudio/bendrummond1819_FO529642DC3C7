@@ -168,7 +168,7 @@ class _SetUp6ScreenState extends ConsumerState<SetUp6Screen> {
           ),
           SizedBox(height: 6.h),
           CustomFromField(
-            hintText: "Electricity bill",
+            hintText: "",
             controller: nameController,
             keyboardType: TextInputType.text,
           ),
@@ -187,7 +187,7 @@ class _SetUp6ScreenState extends ConsumerState<SetUp6Screen> {
                     ),
                     SizedBox(height: 6.h),
                     CustomFromField(
-                      hintText: "100",
+                      hintText: "",
                       controller: amountController,
                       keyboardType: TextInputType.number,
                       prefixIcon: SvgPicture.asset(IconManager.dollar),
@@ -208,7 +208,7 @@ class _SetUp6ScreenState extends ConsumerState<SetUp6Screen> {
                     ),
                     SizedBox(height: 6.h),
                     CustomFromField(
-                      hintText: "4",
+                      hintText: "",
                       controller: dayController,
                       keyboardType: TextInputType.number,
                     ),

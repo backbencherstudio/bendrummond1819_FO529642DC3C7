@@ -19,20 +19,20 @@ class ForgotPassword extends ConsumerStatefulWidget {
 }
 
 class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
-  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
 
   Future<void> handForgotPassword() async {
-    final email = _emailController.text.trim();
-    if (email.isEmpty) {
+    final phone = _phoneController.text.trim();
+    if (phone.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter your email")),
+        const SnackBar(content: Text("Please enter your phone number")),
       );
       return;
     }
 
     final success = await ref
         .read(forgotPasswordViewModelProvider.notifier)
-        .forgotPassword(email: email);
+        .forgotPassword(phone: phone);
 
 
     
@@ -40,7 +40,7 @@ class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
       Navigator.pushNamed(
         context,
         RoutesName.forgotPasswordOtpRoute,
-        arguments: email,
+        arguments: phone,
       );
     } else if (mounted) {
       final state = ref.read(forgotPasswordViewModelProvider);
@@ -52,7 +52,7 @@ class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -93,15 +93,16 @@ class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
                     SizedBox(height: 15.h),
 
                     Text(
-                      "Email",
+                      "Phone number",
                       style: getRegularStyle14_400(
                         color: ColorManager.brown300,
                       ),
                     ),
                     SizedBox(height: 10.h),
                     CustomFromField(
-                      hintText: "you@example.com",
-                      controller: _emailController,
+                      hintText: "(123) 456-7890",
+                      controller: _phoneController,
+                      keyboardType: TextInputType.phone,
                     ),
                   ],
                 ),

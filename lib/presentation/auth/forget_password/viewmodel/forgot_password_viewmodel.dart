@@ -19,10 +19,10 @@ class ForgotPasswordView extends StateNotifier<ForgotPasswordState> {
   ForgotPasswordView({required this.repository})
     : super(ForgotPasswordState(isLoading: false));
 
-  Future<bool> forgotPassword({required String email}) async {
-    state = state.copyWith(isLoading: true, errorMessage: null, email: email);
+  Future<bool> forgotPassword({required String phone}) async {
+    state = state.copyWith(isLoading: true, errorMessage: null, phone: phone);
     try {
-      final success = await repository.forgotPassword(email: email);
+      final success = await repository.forgotPassword(phone: phone);
       state = state.copyWith(isLoading: false, isSuccess: success);
       return success;
     } catch (e) {
@@ -32,12 +32,12 @@ class ForgotPasswordView extends StateNotifier<ForgotPasswordState> {
   }
 
   Future<bool> verifyOtp({required String otp}) async {
-    final email = state.email;
-    if (email == null || email.isEmpty) return false;
+    final phone = state.phone;
+    if (phone == null || phone.isEmpty) return false;
 
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
-      final success = await repository.verifyResetOtp(email: email, otp: otp);
+      final success = await repository.verifyResetOtp(phone: phone, otp: otp);
       state = state.copyWith(isLoading: false, isSuccess: success, resetToken: otp);
       return success;
     } catch (e) {
@@ -50,15 +50,15 @@ class ForgotPasswordView extends StateNotifier<ForgotPasswordState> {
     required String password,
     required String passwordConfirmation,
   }) async {
-    final email = state.email;
+    final phone = state.phone;
     final token = state.resetToken;
-    if (email == null || email.isEmpty) return false;
+    if (phone == null || phone.isEmpty) return false;
     if (token == null || token.isEmpty) return false;
 
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
       final success = await repository.resetPassword(
-        email: email,
+        phone: phone,
         password: password,
         passwordConfirmation: passwordConfirmation,
         token: token,
@@ -76,14 +76,14 @@ class ForgotPasswordState {
   final bool isLoading;
   final bool isSuccess;
   final String? errorMessage;
-  final String? email;
+  final String? phone;
   final String? resetToken;
 
   const ForgotPasswordState({
     required this.isLoading,
     this.isSuccess = false,
     this.errorMessage,
-    this.email,
+    this.phone,
     this.resetToken,
   });
 
@@ -91,14 +91,14 @@ class ForgotPasswordState {
     bool? isLoading,
     bool? isSuccess,
     String? errorMessage,
-    String? email,
+    String? phone,
     String? resetToken,
   }) {
     return ForgotPasswordState(
       isLoading: isLoading ?? this.isLoading,
       isSuccess: isSuccess ?? this.isSuccess,
       errorMessage: errorMessage,
-      email: email ?? this.email,
+      phone: phone ?? this.phone,
       resetToken: resetToken ?? this.resetToken,
     );
   }
