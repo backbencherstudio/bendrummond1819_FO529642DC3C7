@@ -32,8 +32,6 @@ class AuthApiService {
 
       if (response == null) return false;
 
-      log("Register response: $response");
-
       if (response is Map<String, dynamic>) {
         if (response['success'] == false ||
             response['error'] != null ||
@@ -71,8 +69,6 @@ class AuthApiService {
       );
 
       if (response == null) return false;
-
-      log("Login response: $response");
 
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
@@ -117,8 +113,6 @@ class AuthApiService {
       );
 
       if (response == null) return false;
-
-      log("Google login response: $response");
 
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
@@ -165,8 +159,6 @@ class AuthApiService {
 
       if (response == null) return false;
 
-      log("Apple login response: $response");
-
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
           throw Exception(
@@ -206,8 +198,6 @@ class AuthApiService {
 
       if (response == null) return null;
 
-      log("Load user response: $response");
-
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
           return null;
@@ -233,7 +223,7 @@ class AuthApiService {
         body: body,
       );
       if (response == null) return false;
-      log("Forgot Password response: $response");
+
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
           return false;
@@ -257,7 +247,7 @@ class AuthApiService {
         body: body,
       );
       if (response == null) return false;
-      log("Verify Reset OTP response: $response");
+
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
           return false;
