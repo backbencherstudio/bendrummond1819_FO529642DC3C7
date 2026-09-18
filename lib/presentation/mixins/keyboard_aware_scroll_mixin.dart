@@ -18,6 +18,7 @@ mixin KeyboardAwareScrollMixin<T extends StatefulWidget> on State<T> {
           final ctx = targetKey.currentContext;
           if (ctx != null && mounted) {
             Scrollable.ensureVisible(
+              // ignore: use_build_context_synchronously
               ctx,
               duration: animationDuration,
               curve: Curves.easeOut,

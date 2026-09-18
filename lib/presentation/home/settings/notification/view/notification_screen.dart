@@ -152,6 +152,7 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
           Switch(
             value: value,
             onChanged: onChanged,
+            // ignore: deprecated_member_use
             activeColor: Colors.white,
             activeTrackColor: ColorManager.brown,
             inactiveThumbColor: Colors.white,

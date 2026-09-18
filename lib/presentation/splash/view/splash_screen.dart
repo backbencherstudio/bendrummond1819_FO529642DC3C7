@@ -3,9 +3,7 @@ import 'package:bendrummond1819_fo529642dc3c7/presentation/splash/viewmodel/spla
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../widgets/splash_logo.dart';
-import '../widgets/splash_progress_section.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});

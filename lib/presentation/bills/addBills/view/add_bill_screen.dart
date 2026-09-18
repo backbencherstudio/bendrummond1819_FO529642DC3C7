@@ -297,27 +297,27 @@ class _AddBillScreenState extends ConsumerState<AddBillScreen> {
     );
   }
 
-  Widget _buildCustomDateDropdown() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 12.r),
-      decoration: BoxDecoration(
-        color: ColorManager.secondaryBackGround,
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: ColorManager.backgroundPressed100),
-      ),
-      child: Row(
-        children: [
-          SvgPicture.asset(IconManager.calendar),
-          SizedBox(width: 15),
-          Expanded(
-            child: Text(
-              "Custom date",
-              style: getRegularStyle16_400(color: ColorManager.brown400),
-            ),
-          ),
-          SvgPicture.asset(IconManager.arrowDown),
-        ],
-      ),
-    );
-  }
+  // Widget _buildCustomDateDropdown() {
+  //   return Container(
+  //     padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 12.r),
+  //     decoration: BoxDecoration(
+  //       color: ColorManager.secondaryBackGround,
+  //       borderRadius: BorderRadius.circular(15),
+  //       border: Border.all(color: ColorManager.backgroundPressed100),
+  //     ),
+  //     child: Row(
+  //       children: [
+  //         SvgPicture.asset(IconManager.calendar),
+  //         SizedBox(width: 15),
+  //         Expanded(
+  //           child: Text(
+  //             "Custom date",
+  //             style: getRegularStyle16_400(color: ColorManager.brown400),
+  //           ),
+  //         ),
+  //         SvgPicture.asset(IconManager.arrowDown),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

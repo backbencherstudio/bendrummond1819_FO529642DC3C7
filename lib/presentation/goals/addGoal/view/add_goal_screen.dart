@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bendrummond1819_fo529642dc3c7/core/network/api_clients.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
@@ -64,7 +66,7 @@ class _AddGoalScreenState extends ConsumerState<AddGoalScreen> {
         frequency: frequency,
       );
 
-      print(success);
+      log("success: $success");
       if (success && mounted) {
         Utils.showToast(
           message: "Goal Added",

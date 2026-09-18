@@ -5,7 +5,7 @@ import '../../../../core/resource/constants/style_manager.dart';
 
 class SectionLabel extends StatelessWidget {
   final String text;
-  const SectionLabel(this.text);
+  const SectionLabel(this.text, {super.key});
 
   @override
   Widget build(BuildContext context) {
