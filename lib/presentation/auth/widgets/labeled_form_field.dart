@@ -1,7 +1,7 @@
-import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_from_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LabeledFormField extends StatelessWidget {
@@ -15,6 +15,8 @@ class LabeledFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final Widget? trailing;
   final void Function(String)? onChanged;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputType? keyboardType;
 
   const LabeledFormField({
     super.key,
@@ -28,6 +30,8 @@ class LabeledFormField extends StatelessWidget {
     this.validator,
     this.trailing,
     this.onChanged,
+    this.inputFormatters,
+    this.keyboardType,
   });
 
   @override
@@ -35,22 +39,10 @@ class LabeledFormField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (trailing == null)
-          Text(
-            label,
-            style: getRegularStyle14_400(color: ColorManager.brown300),
-          )
-        else
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                label,
-                style: getRegularStyle14_400(color: ColorManager.brown300),
-              ),
-              trailing!,
-            ],
-          ),
+        Text(
+          label,
+          style: getRegularStyle14_400(color: Colors.black),
+        ),
         SizedBox(height: 5.h),
         CustomFromField(
           hintText: hintText,
@@ -61,6 +53,9 @@ class LabeledFormField extends StatelessWidget {
           onTap: onTap,
           validator: validator,
           onChanged: onChanged,
+          inputFormatters: inputFormatters,
+          keyboardType: keyboardType,
+          suffixIcon: trailing,
         ),
       ],
     );

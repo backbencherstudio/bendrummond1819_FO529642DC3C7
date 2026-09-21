@@ -22,8 +22,8 @@ class AuthApiService {
         "name": name,
         if (email != null && email.trim().isNotEmpty) "email": email.trim(),
         "password": password,
-        "phone_number": phone,
-        "birthDate": dob,
+        "phone": phone,
+        "birthDate": dob.replaceAll('/', '-'),
       };
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.register,
@@ -355,16 +355,16 @@ class AuthApiService {
     }
   }
 
-  //verify phone (signup otp)
-  Future<bool> verifyEmail({required String phone, required String otp}) async {
+  //verify email (signup otp)
+  Future<bool> verifyEmail({required String email, required String otp}) async {
     try {
-      final body = {"phone_number": phone, "token": otp};
+      final body = {"email": email, "token": otp};
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.verifyMail,
         body: body,
       );
       if (response == null) return false;
-      log("Verify phone response: $response");
+      log("Verify email response: $response");
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
           return false;
@@ -377,9 +377,9 @@ class AuthApiService {
   }
 
   //resend otp (signup)
-  Future<bool> resendOtp({required String phone}) async {
+  Future<bool> resendOtp({required String email}) async {
     try {
-      final body = {"phone_number": phone};
+      final body = {"email": email};
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.resendOtp,
         body: body,

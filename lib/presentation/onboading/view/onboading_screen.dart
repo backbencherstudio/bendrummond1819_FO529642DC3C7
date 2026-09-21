@@ -15,7 +15,7 @@ class OnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
-    final double imageSectionHeight = screenHeight * 0.58;
+    final double imageSectionHeight = screenHeight * 0.54;
 
     return Scaffold(
       backgroundColor: ColorManager.primary,
@@ -51,27 +51,27 @@ class OnboardingScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 10.h),
+                  SizedBox(height: 6.h),
 
                   Text(
                     "Win back confidence over spending.",
-                    style: getBoldStyle32(
+                    style: getBoldStyle24(
                       color: ColorManager.brown,
                     ).copyWith(letterSpacing: -0.1),
                   ),
 
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 10.h),
 
                   Text(
                     "See what money comes in and goes out. Know what's actually safe to spend.",
-                    style: getRegularStyle16_400(color: ColorManager.brown400),
+                    style: getRegularStyle14_400(color: ColorManager.brown400),
                   ),
 
-                  SizedBox(height: 25.h),
+                  SizedBox(height: 16.h),
 
                   Wrap(
                     spacing: 10.w,
-                    runSpacing: 12.h,
+                    runSpacing: 8.h,
                     children: [
                       _buildFeatureRow("2-Minute Setup"),
                       _buildFeatureRow("One Question at a Time"),
@@ -79,7 +79,7 @@ class OnboardingScreen extends StatelessWidget {
                     ],
                   ),
 
-                  SizedBox(height: 32.h),
+                  SizedBox(height: 20.h),
 
                   /// ************ Get Started Button *****************
                   PrimaryButton(
@@ -92,7 +92,7 @@ class OnboardingScreen extends StatelessWidget {
                     },
                   ),
 
-                  SizedBox(height: 12.h),
+                  SizedBox(height: 10.h),
 
                   /// ************ Sign in Button *****************
                   CustomOutlinedButton(
@@ -101,7 +101,7 @@ class OnboardingScreen extends StatelessWidget {
                       Navigator.pushNamed(context, RoutesName.signInRoute);
                     },
                   ),
-                  SizedBox(height: 40.h),
+                  SizedBox(height: 20.h),
                 ],
               ),
             ),

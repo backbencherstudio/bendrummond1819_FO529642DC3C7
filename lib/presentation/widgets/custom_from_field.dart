@@ -1,5 +1,6 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/resource/constants/color_manger.dart';
 
@@ -25,6 +26,7 @@ class CustomFromField extends StatefulWidget {
   final BoxConstraints? prefixIconConstraints;
   final int? maxLines;
   final FocusNode? focusNode;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomFromField({
     super.key,
@@ -49,6 +51,7 @@ class CustomFromField extends StatefulWidget {
     this.suffixIconConstraints,
     this.prefixIconConstraints,
     this.maxLines,
+    this.inputFormatters,
   });
 
   @override
@@ -70,12 +73,13 @@ class _CustomFromFieldState extends State<CustomFromField> {
       maxLines: widget.maxLines ?? 1,
       readOnly: widget.readOnly,
       focusNode: widget.focusNode,
+      inputFormatters: widget.inputFormatters,
       style:
           widget.style ?? getRegularStyle16_400(color: ColorManager.brown400),
       decoration: InputDecoration(
         contentPadding:
             widget.contentPadding ??
-            EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+            EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
         filled: widget.filled ?? true,
         fillColor: widget.fillColor ?? ColorManager.backgroundSecondary,
         hintText: widget.hintText,
@@ -161,6 +165,7 @@ class _CustomFromFieldState extends State<CustomFromField> {
           borderRadius: BorderRadius.circular(16.r),
           borderSide: const BorderSide(color: Colors.red),
         ),
+        errorStyle: getRegularStyle14_400(color: Colors.red.shade900),
       ),
     );
   }
