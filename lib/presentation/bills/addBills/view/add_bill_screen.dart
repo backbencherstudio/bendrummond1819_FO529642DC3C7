@@ -85,7 +85,7 @@ class _AddBillScreenState extends ConsumerState<AddBillScreen> {
           backgroundColor: ColorManager.successColor,
           textColor: ColorManager.whiteColor,
         );
-        ref.invalidate(billsProvider);
+        ref.read(billsProvider.notifier).refresh();
         Navigator.pop(context);
       } else if (mounted) {
         Utils.showToast(
