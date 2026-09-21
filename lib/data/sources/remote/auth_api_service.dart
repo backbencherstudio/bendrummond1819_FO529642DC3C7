@@ -43,8 +43,12 @@ class AuthApiService {
 
         try {
           final token = response['authorization']?['access_token'];
+          final refreshToken = response['authorization']?['refresh_token'];
           if (token != null) {
             await SharedPreferenceData.setToken(token);
+            if (refreshToken != null) {
+              await SharedPreferenceData.setRefreshToken(refreshToken);
+            }
             await ApiClient.headerSet();
           }
         } catch (_) {
@@ -60,9 +64,9 @@ class AuthApiService {
   }
 
   //login
-  Future<bool> login({required String phone, required String password}) async {
+  Future<bool> login({required String email, required String password}) async {
     try {
-      final body = {"phone_number": phone, "password": password};
+      final body = {"email": email, "password": password};
       final dynamic response = await apiClient.postRequest(
         body: body,
         endpoints: ApiEndpoints.login,
@@ -79,8 +83,12 @@ class AuthApiService {
 
         try {
           final token = response['authorization']?['access_token'];
+          final refreshToken = response['authorization']?['refresh_token'];
           if (token != null) {
             await SharedPreferenceData.setToken(token);
+            if (refreshToken != null) {
+              await SharedPreferenceData.setRefreshToken(refreshToken);
+            }
             await ApiClient.headerSet();
           }
         } catch (_) {
@@ -123,8 +131,12 @@ class AuthApiService {
 
         try {
           final token = response['authorization']?['access_token'];
+          final refreshToken = response['authorization']?['refresh_token'];
           if (token != null) {
             await SharedPreferenceData.setToken(token);
+            if (refreshToken != null) {
+              await SharedPreferenceData.setRefreshToken(refreshToken);
+            }
             await ApiClient.headerSet();
           }
         } catch (_) {
@@ -168,8 +180,12 @@ class AuthApiService {
 
         try {
           final token = response['authorization']?['access_token'];
+          final refreshToken = response['authorization']?['refresh_token'];
           if (token != null) {
             await SharedPreferenceData.setToken(token);
+            if (refreshToken != null) {
+              await SharedPreferenceData.setRefreshToken(refreshToken);
+            }
             await ApiClient.headerSet();
           }
         } catch (_) {

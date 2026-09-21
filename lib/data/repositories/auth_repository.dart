@@ -22,8 +22,8 @@ class AuthRepository {
     );
   }
 
-  Future<bool> login({required String phone, required String password}) async {
-    return await remoteSource.login(phone: phone, password: password);
+  Future<bool> login({required String email, required String password}) async {
+    return await remoteSource.login(email: email, password: password);
   }
 
   Future<bool> googleLogin({required String idToken}) async {

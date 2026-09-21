@@ -10,14 +10,29 @@ class SharedPreferenceData {
     }
   }
 
+  static Future<void> setRefreshToken(String? token) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (token != null) {
+      prefs.setString('refresh_token', token);
+    } else {
+      prefs.remove('refresh_token');
+    }
+  }
+
   static Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('auth_token');
   }
 
+  static Future<String?> getRefreshToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('refresh_token');
+  }
+
   static Future<void> removeToken() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('auth_token');
+    prefs.remove('refresh_token');
   }
 
   static Future<String?> getRole() async {
