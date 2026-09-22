@@ -1,10 +1,11 @@
-const List<String> incomeTypes = ['SAME_EVERY_PAYCHECK', 'FIXED', 'VARIABLE'];
+const List<String> incomeTypes = ['SAME_EVERY_PAYCHECK', 'VARIES_A_LITTLE', 'VARIES_A_LOT'];
 
 const List<String> payFrequencies = [
   'WEEKLY',
   'EVERY_2_WEEKS',
   'TWICE_A_MONTH',
   'MONTHLY',
+  'INCONSISTENT',
 ];
 
 String formatEnumLabel(String value) {

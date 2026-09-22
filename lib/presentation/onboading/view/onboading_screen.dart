@@ -1,6 +1,7 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/image_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/utils.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/view/signup_screen.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_logo_text.dart';
@@ -9,15 +10,40 @@ import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_butto
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class OnboardingScreen extends StatelessWidget {
+class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
+
+  @override
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  DateTime? currentBackPressTime;
 
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double imageSectionHeight = screenHeight * 0.54;
 
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+
+        DateTime now = DateTime.now();
+        if (currentBackPressTime == null ||
+            now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+          currentBackPressTime = now;
+          Utils.showToast(
+            message: "Double back to exit",
+            backgroundColor: ColorManager.brown,
+            textColor: Colors.white,
+          );
+        } else {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
       backgroundColor: ColorManager.primary,
       body: SingleChildScrollView(
         physics: const ClampingScrollPhysics(),
@@ -108,7 +134,7 @@ class OnboardingScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildFeatureRow(String text) {

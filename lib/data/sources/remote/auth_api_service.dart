@@ -231,9 +231,9 @@ class AuthApiService {
   }
 
   //forgotpassord
-  Future<bool> forgotPassword({required String phone}) async {
+  Future<bool> forgotPassword({required String email}) async {
     try {
-      final body = {"phone_number": phone};
+      final body = {"email": email};
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.forgetPassword,
         body: body,
@@ -253,11 +253,11 @@ class AuthApiService {
 
   //verify reset otp
   Future<bool> verifyResetOtp({
-    required String phone,
+    required String email,
     required String otp,
   }) async {
     try {
-      final body = {"phone_number": phone, "token": otp};
+      final body = {"email": email, "token": otp};
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.verifyResetOtp,
         body: body,
@@ -415,14 +415,14 @@ class AuthApiService {
 
   //reset password
   Future<bool> resetPassword({
-    required String phone,
+    required String email,
     required String password,
     required String passwordConfirmation,
     required String token,
   }) async {
     try {
       final body = {
-        "phone_number": phone,
+        "email": email,
         "password": password,
         "password_confirmation": passwordConfirmation,
         "token": token,

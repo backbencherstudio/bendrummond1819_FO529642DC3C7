@@ -66,16 +66,16 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(
-              ImageManager.onBoardingImg,
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset(ImageManager.onBoardingImg, fit: BoxFit.cover),
           ),
           SafeArea(
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 8.h,
+                  ),
                   child: Row(
                     children: [
                       customBackButton(
@@ -116,7 +116,9 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
                               if (value == null || value.trim().isEmpty) {
                                 return "Email is required";
                               }
-                              final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+                              final emailRegex = RegExp(
+                                r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
+                              );
                               if (!emailRegex.hasMatch(value.trim())) {
                                 return "Enter a valid email";
                               }
@@ -130,8 +132,12 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
                             controller: _passwordController,
                             isSecured: true,
                             focusNode: _passwordFocusNode,
-                            trailing: TextButton(
-                              onPressed: () {
+                          ),
+                          SizedBox(height: 8.h),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: GestureDetector(
+                              onTap: () {
                                 Navigator.pushNamed(
                                   context,
                                   RoutesName.forgotPasswordRoute,
@@ -139,12 +145,13 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
                               },
                               child: Text(
                                 "Forgot password?",
-                                style: getRegularStyle14_500(
-                                  color: ColorManager.brown500,
-                                ).copyWith(
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: ColorManager.brown,
-                                ),
+                                style:
+                                    getRegularStyle14_500(
+                                      color: ColorManager.whiteColor,
+                                    ).copyWith(
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: ColorManager.brown,
+                                    ),
                               ),
                             ),
                           ),
@@ -170,8 +177,10 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
                           AuthSwitchLink(
                             leadingText: "New to Stability? ",
                             linkText: "Create an account.",
-                            onTap: () =>
-                                Navigator.pushNamed(context, RoutesName.signUpRoute),
+                            onTap: () => Navigator.pushNamed(
+                              context,
+                              RoutesName.signUpRoute,
+                            ),
                           ),
                           SizedBox(height: 60.h),
                         ],

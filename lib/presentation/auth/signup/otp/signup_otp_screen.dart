@@ -113,6 +113,11 @@ class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
                       "Enter OTP Code",
                       style: getBoldStyle32(color: ColorManager.textPrimary),
                     ),
+                    SizedBox(height: 10.h),
+                    Text(
+                      "We have sent an OTP code to your email",
+                      style: getRegularStyle14_400(color: ColorManager.brown300),
+                    ),
                     SizedBox(height: 15.h),
 
                     CustomPinCodeField(

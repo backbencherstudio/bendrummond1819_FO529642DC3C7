@@ -19,20 +19,20 @@ class ForgotPassword extends ConsumerStatefulWidget {
 }
 
 class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
-  final _phoneController = TextEditingController();
+  final _emailController = TextEditingController();
 
   Future<void> handForgotPassword() async {
-    final phone = _phoneController.text.trim();
-    if (phone.isEmpty) {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter your phone number")),
+        const SnackBar(content: Text("Please enter your email address")),
       );
       return;
     }
 
     final success = await ref
         .read(forgotPasswordViewModelProvider.notifier)
-        .forgotPassword(phone: phone);
+        .forgotPassword(email: email);
 
 
     
@@ -40,7 +40,7 @@ class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
       Navigator.pushNamed(
         context,
         RoutesName.forgotPasswordOtpRoute,
-        arguments: phone,
+        arguments: email,
       );
     } else if (mounted) {
       final state = ref.read(forgotPasswordViewModelProvider);
@@ -52,7 +52,7 @@ class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
 
   @override
   void dispose() {
-    _phoneController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
@@ -93,16 +93,16 @@ class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
                     SizedBox(height: 15.h),
 
                     Text(
-                      "Phone number",
+                      "Email address",
                       style: getRegularStyle14_400(
                         color: ColorManager.brown300,
                       ),
                     ),
                     SizedBox(height: 10.h),
                     CustomFromField(
-                      hintText: "(123) 456-7890",
-                      controller: _phoneController,
-                      keyboardType: TextInputType.phone,
+                      hintText: "you@example.com",
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
                     ),
                   ],
                 ),

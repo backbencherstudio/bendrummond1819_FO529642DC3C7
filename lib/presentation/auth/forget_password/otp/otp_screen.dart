@@ -23,12 +23,12 @@ class ForgotPasswordOtpScreen extends ConsumerStatefulWidget {
 class _ForgotPasswordOtpScreenState
     extends ConsumerState<ForgotPasswordOtpScreen> {
   final _otpController = TextEditingController();
-  String _phone = '';
+  String _email = '';
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _phone = ModalRoute.of(context)?.settings.arguments as String? ?? _phone;
+    _email = ModalRoute.of(context)?.settings.arguments as String? ?? _email;
   }
 
   Future<void> handleVerifyOtp() async {
@@ -48,7 +48,7 @@ class _ForgotPasswordOtpScreenState
       Navigator.pushNamed(
         context,
         RoutesName.resetNewPasswordRoute,
-        arguments: _phone,
+        arguments: _email,
       );
     } else if (mounted) {
       final state = ref.read(forgotPasswordViewModelProvider);
@@ -61,7 +61,7 @@ class _ForgotPasswordOtpScreenState
   Future<void> handleResendOtp() async {
     final success = await ref
         .read(forgotPasswordViewModelProvider.notifier)
-        .forgotPassword(phone: _phone);
+        .forgotPassword(email: _email);
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
