@@ -108,7 +108,7 @@ class _SetUp4ScreenState extends ConsumerState<SetUp4Screen> {
 
                     Expanded(
                       child: Text(
-                        "Set as Weekly/Monthly Payment",
+                        "Set as ${ref.watch(setupDataProvider).payFrequencyLabel} Payment",
                         style: getRegularStyle14_400(color: ColorManager.brown),
                       ),
                     ),

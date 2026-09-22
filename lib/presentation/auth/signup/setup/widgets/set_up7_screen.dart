@@ -45,16 +45,23 @@ class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
   }
 
   void _addNewBill() {
-    if (whatIsItController.text.isNotEmpty &&
-        amountController.text.isNotEmpty) {
-      final debts = List<Map<String, String>>.from(
-        ref.read(setupDataProvider).debts,
+    if (whatIsItController.text.trim().isEmpty || amountController.text.trim().isEmpty) {
+      Utils.showToast(
+        message: "Please enter debt name and amount",
+        backgroundColor: ColorManager.errorColor,
+        textColor: ColorManager.whiteColor,
       );
-      debts.add({
-        'name': whatIsItController.text,
-        'amount': amountController.text,
-        'frequently': frequentlyController.text,
-      });
+      return;
+    }
+
+    final debts = List<Map<String, String>>.from(
+      ref.read(setupDataProvider).debts,
+    );
+    debts.add({
+      'name': whatIsItController.text.trim(),
+      'amount': amountController.text.trim(),
+      'frequently': frequentlyController.text.trim(),
+    });
       ref.read(setupDataProvider.notifier).setDebts(debts);
       setState(() {
         isAdding = false;
@@ -62,7 +69,6 @@ class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
         amountController.clear();
         frequentlyController.text = selectedFrequency;
       });
-    }
   }
 
   void _removeDebt(Map<String, String> debt) {
@@ -219,8 +225,8 @@ class _SetUp7ScreenState extends ConsumerState<SetUp7Screen> {
                 ),
                 SizedBox(width: 12.w),
                 Text(
-                  "Set as Weekly/Monthly Payment",
-                  style: getRegularStyle14_400(color: ColorManager.brown),
+                  "Set as ${ref.watch(setupDataProvider).payFrequencyLabel} Payment",
+                  style: getRegularStyle16_400(color: ColorManager.textPrimary),
                 ),
               ],
             ),

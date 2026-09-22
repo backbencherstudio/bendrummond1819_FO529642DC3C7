@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../../core/resource/constants/color_manger.dart';
 import '../../../../../core/resource/constants/icon_manager.dart';
 import '../../../../../core/resource/constants/style_manager.dart';
+import '../../../../../core/resource/utils.dart';
 import '../../../../widgets/custom_from_field.dart';
 import '../../../../widgets/outline_button.dart';
 import '../../../../widgets/primary_button.dart';
@@ -72,7 +73,14 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
   void _addNewGoal() {
     final name = savingNameController.text.trim();
     final amount = amountController.text.trim();
-    if (name.isEmpty || amount.isEmpty) return;
+    if (name.isEmpty || amount.isEmpty) {
+      Utils.showToast(
+        message: "Please enter goal name and amount",
+        backgroundColor: ColorManager.errorColor,
+        textColor: ColorManager.whiteColor,
+      );
+      return;
+    }
 
     final frequency = _selectedFrequency ?? 'MONTHLY';
 

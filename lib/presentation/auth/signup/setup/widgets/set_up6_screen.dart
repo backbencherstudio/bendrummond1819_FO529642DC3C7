@@ -11,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../../core/resource/constants/color_manger.dart';
 import '../../../../../core/resource/constants/icon_manager.dart';
 import '../../../../../core/resource/constants/style_manager.dart';
+import '../../../../../core/resource/utils.dart';
 
 class SetUp6Screen extends ConsumerStatefulWidget {
   const SetUp6Screen({super.key});
@@ -36,15 +37,23 @@ class _SetUp6ScreenState extends ConsumerState<SetUp6Screen> {
   }
 
   void _addNewBill() {
-    if (nameController.text.isNotEmpty && amountController.text.isNotEmpty) {
-      final bills = List<Map<String, String>>.from(
-        ref.read(setupDataProvider).bills,
+    if (nameController.text.trim().isEmpty || amountController.text.trim().isEmpty) {
+      Utils.showToast(
+        message: "Please enter bill name and amount",
+        backgroundColor: ColorManager.errorColor,
+        textColor: ColorManager.whiteColor,
       );
-      bills.add({
-        'name': nameController.text,
-        'amount': amountController.text,
-        'day': dayController.text,
-      });
+      return;
+    }
+
+    final bills = List<Map<String, String>>.from(
+      ref.read(setupDataProvider).bills,
+    );
+    bills.add({
+      'name': nameController.text.trim(),
+      'amount': amountController.text.trim(),
+      'day': dayController.text.trim(),
+    });
       ref.read(setupDataProvider.notifier).setBills(bills);
       setState(() {
         isAdding = false;
@@ -52,7 +61,6 @@ class _SetUp6ScreenState extends ConsumerState<SetUp6Screen> {
         amountController.clear();
         dayController.clear();
       });
-    }
   }
 
   void _removeBill(Map<String, String> bill) {
@@ -242,8 +250,10 @@ class _SetUp6ScreenState extends ConsumerState<SetUp6Screen> {
                 ),
                 SizedBox(width: 12.w),
                 Text(
-                  "Set as Weekly/Monthly Payment",
-                  style: getRegularStyle14_400(color: ColorManager.brown),
+                  "Set as ${ref.watch(setupDataProvider).payFrequencyLabel} Payment",
+                  style: getRegularStyle16_400(
+                    color: ColorManager.textPrimary,
+                  ),
                 ),
               ],
             ),

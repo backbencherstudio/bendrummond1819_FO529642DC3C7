@@ -20,15 +20,18 @@ class AuthSwitchLink extends StatelessWidget {
     return Center(
       child: RichText(
         text: TextSpan(
-          style: getRegularStyle14_400(color: ColorManager.brown300),
           children: [
-            TextSpan(text: leadingText),
+            TextSpan(
+              text: leadingText,
+              style: getRegularStyle14_400(color: ColorManager.blackColor),
+            ),
             TextSpan(
               text: linkText,
-              style: getRegularStyle14_500(color: ColorManager.brown).copyWith(
-                decoration: TextDecoration.underline,
-                decorationColor: ColorManager.brown,
-              ),
+              style: getRegularStyle14_500(color: ColorManager.blackColor)
+                  .copyWith(
+                    decoration: TextDecoration.underline,
+                    decorationColor: ColorManager.blackColor,
+                  ),
               recognizer: TapGestureRecognizer()..onTap = onTap,
             ),
           ],

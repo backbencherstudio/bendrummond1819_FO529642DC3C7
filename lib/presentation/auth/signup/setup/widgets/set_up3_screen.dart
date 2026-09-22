@@ -107,7 +107,7 @@ class _SetUp3ScreenState extends ConsumerState<SetUp3Screen> {
                           ),
                           SizedBox(width: 12.w),
                           Text(
-                            "Set as Weekly/Monthly Payment",
+                            "Set as ${ref.watch(setupDataProvider).payFrequencyLabel} Payment",
                             style: getRegularStyle14_400(
                               color: ColorManager.brown,
                             ),
