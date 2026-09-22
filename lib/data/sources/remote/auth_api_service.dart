@@ -22,8 +22,8 @@ class AuthApiService {
         "name": name,
         if (email != null && email.trim().isNotEmpty) "email": email.trim(),
         "password": password,
-        "phone_number": phone,
-        "birthDate": dob,
+        "phone": phone,
+        "birthDate": dob.replaceAll('/', '-'),
       };
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.register,
@@ -43,8 +43,12 @@ class AuthApiService {
 
         try {
           final token = response['authorization']?['access_token'];
+          final refreshToken = response['authorization']?['refresh_token'];
           if (token != null) {
             await SharedPreferenceData.setToken(token);
+            if (refreshToken != null) {
+              await SharedPreferenceData.setRefreshToken(refreshToken);
+            }
             await ApiClient.headerSet();
           }
         } catch (_) {
@@ -60,9 +64,9 @@ class AuthApiService {
   }
 
   //login
-  Future<bool> login({required String phone, required String password}) async {
+  Future<bool> login({required String email, required String password}) async {
     try {
-      final body = {"phone_number": phone, "password": password};
+      final body = {"email": email, "password": password};
       final dynamic response = await apiClient.postRequest(
         body: body,
         endpoints: ApiEndpoints.login,
@@ -79,8 +83,12 @@ class AuthApiService {
 
         try {
           final token = response['authorization']?['access_token'];
+          final refreshToken = response['authorization']?['refresh_token'];
           if (token != null) {
             await SharedPreferenceData.setToken(token);
+            if (refreshToken != null) {
+              await SharedPreferenceData.setRefreshToken(refreshToken);
+            }
             await ApiClient.headerSet();
           }
         } catch (_) {
@@ -123,8 +131,12 @@ class AuthApiService {
 
         try {
           final token = response['authorization']?['access_token'];
+          final refreshToken = response['authorization']?['refresh_token'];
           if (token != null) {
             await SharedPreferenceData.setToken(token);
+            if (refreshToken != null) {
+              await SharedPreferenceData.setRefreshToken(refreshToken);
+            }
             await ApiClient.headerSet();
           }
         } catch (_) {
@@ -168,8 +180,12 @@ class AuthApiService {
 
         try {
           final token = response['authorization']?['access_token'];
+          final refreshToken = response['authorization']?['refresh_token'];
           if (token != null) {
             await SharedPreferenceData.setToken(token);
+            if (refreshToken != null) {
+              await SharedPreferenceData.setRefreshToken(refreshToken);
+            }
             await ApiClient.headerSet();
           }
         } catch (_) {
@@ -215,9 +231,9 @@ class AuthApiService {
   }
 
   //forgotpassord
-  Future<bool> forgotPassword({required String phone}) async {
+  Future<bool> forgotPassword({required String email}) async {
     try {
-      final body = {"phone_number": phone};
+      final body = {"email": email};
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.forgetPassword,
         body: body,
@@ -237,11 +253,11 @@ class AuthApiService {
 
   //verify reset otp
   Future<bool> verifyResetOtp({
-    required String phone,
+    required String email,
     required String otp,
   }) async {
     try {
-      final body = {"phone_number": phone, "token": otp};
+      final body = {"email": email, "token": otp};
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.verifyResetOtp,
         body: body,
@@ -276,10 +292,12 @@ class AuthApiService {
       if (avatar != null) body['avatar'] = avatar;
       if (address != null) body['address'] = address;
       if (phoneNumber != null) body['phone_number'] = phoneNumber;
-      if (billRemainders != null)
+      if (billRemainders != null) {
         body['bill_remainders'] = billRemainders ? "1" : "0";
-      if (notificationRemainder != null)
+      }
+      if (notificationRemainder != null) {
         body['notification_remainder'] = notificationRemainder ? "1" : "0";
+      }
       if (gender != null) body['gender'] = gender;
       if (dateOfBirth != null) body['date_of_birth'] = dateOfBirth;
 
@@ -353,16 +371,16 @@ class AuthApiService {
     }
   }
 
-  //verify phone (signup otp)
-  Future<bool> verifyEmail({required String phone, required String otp}) async {
+  //verify email (signup otp)
+  Future<bool> verifyEmail({required String email, required String otp}) async {
     try {
-      final body = {"phone_number": phone, "token": otp};
+      final body = {"email": email, "token": otp};
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.verifyMail,
         body: body,
       );
       if (response == null) return false;
-      log("Verify phone response: $response");
+      log("Verify email response: $response");
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
           return false;
@@ -375,9 +393,9 @@ class AuthApiService {
   }
 
   //resend otp (signup)
-  Future<bool> resendOtp({required String phone}) async {
+  Future<bool> resendOtp({required String email}) async {
     try {
-      final body = {"phone_number": phone};
+      final body = {"email": email};
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.resendOtp,
         body: body,
@@ -397,14 +415,14 @@ class AuthApiService {
 
   //reset password
   Future<bool> resetPassword({
-    required String phone,
+    required String email,
     required String password,
     required String passwordConfirmation,
     required String token,
   }) async {
     try {
       final body = {
-        "phone_number": phone,
+        "email": email,
         "password": password,
         "password_confirmation": passwordConfirmation,
         "token": token,

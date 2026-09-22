@@ -6,7 +6,7 @@ import '../../../../core/resource/constants/style_manager.dart';
 
 class EmptySectionText extends StatelessWidget {
   final String text;
-  const EmptySectionText(this.text);
+  const EmptySectionText(this.text, {super.key});
 
   @override
   Widget build(BuildContext context) {

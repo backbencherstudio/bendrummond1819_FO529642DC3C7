@@ -1,7 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import 'labeled_form_field.dart';
+
+class DateInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (newValue.text.length < oldValue.text.length) {
+      return newValue;
+    }
+
+    String text = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    if (text.length > 8) {
+      text = text.substring(0, 8);
+    }
+
+    var buffer = StringBuffer();
+    for (int i = 0; i < text.length; i++) {
+      buffer.write(text[i]);
+      var nonZeroIndex = i + 1;
+      if (nonZeroIndex == 2 && nonZeroIndex != text.length) {
+        buffer.write('/');
+      } else if (nonZeroIndex == 4 && nonZeroIndex != text.length) {
+        buffer.write('/');
+      }
+    }
+
+    var string = buffer.toString();
+    return newValue.copyWith(
+      text: string,
+      selection: TextSelection.collapsed(offset: string.length),
+    );
+  }
+}
 
 class DateOfBirthField extends StatelessWidget {
   final String label;
@@ -19,7 +54,7 @@ class DateOfBirthField extends StatelessWidget {
     required this.label,
     required this.controller,
     this.focusNode,
-    this.hintText = "MM/DD/YYYY",
+    this.hintText = "DD/MM/YYYY",
     this.initialDate,
     this.firstDate,
     this.lastDate,
@@ -35,7 +70,7 @@ class DateOfBirthField extends StatelessWidget {
       lastDate: lastDate ?? DateTime.now(),
     );
     if (picked != null) {
-      controller.text = DateFormat('yyyy-MM-dd').format(picked);
+      controller.text = DateFormat('dd/MM/yyyy').format(picked);
       onChanged?.call(controller.text);
     }
   }
@@ -47,12 +82,17 @@ class DateOfBirthField extends StatelessWidget {
       hintText: hintText,
       controller: controller,
       focusNode: focusNode,
-      readOnly: true,
-      onTap: () => _selectDate(context),
+      readOnly: false,
+      keyboardType: TextInputType.number,
+      inputFormatters: [DateInputFormatter()],
+      trailing: GestureDetector(
+        onTap: () => _selectDate(context),
+        child: const Icon(Icons.calendar_today, size: 20),
+      ),
       validator:
           validator ??
           (value) => (value == null || value.isEmpty)
-              ? "Please select your date of birth"
+              ? "Please enter your date of birth"
               : null,
       onChanged: onChanged,
     );

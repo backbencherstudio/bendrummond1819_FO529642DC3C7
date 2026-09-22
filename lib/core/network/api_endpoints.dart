@@ -1,39 +1,39 @@
 class ApiEndpoints {
-  static const String baseUrl = "https://backend.stabilityus.com/api";
-  // static const String baseUrl = 'http://10.10.9.178:4000/api';
+  // static const String baseUrl = "https://backend.stabilityus.com/api";
+  static const String baseUrl = 'http://10.10.9.189:4000/api';
   //===================== auth ApiEndpoints ===========================//
-  static const String register = '/auth/register';
-  static const String login = '/auth/login';
-  static const String switchRole = '/auth/switch-role';
-  static const String verifyMail = '/auth/verify-email';
-  static const String resendOtp = '/auth/resend-verification-email';
-  static const String loadUser = '/auth/me';
-  static const String updateProfile = '/auth/update';
-  static const String forgetPassword = '/auth/forgot-password';
-  static const String verifyResetOtp = '/auth/verify-email';
-  static const String resetPassword = '/auth/reset-password';
-  static const String logout = '/auth/logout';
-  static const String googleLogin = '/auth/google';
-  static const String appleLogin = '/auth/apple';
-  static const String createAndagetJob = '/jobs';
-  static const String deleteAccount = '/auth/delete-account';
+  static const String register = 'auth/register';
+  static const String login = 'auth/login';
+  static const String switchRole = 'auth/switch-role';
+  static const String verifyMail = 'auth/verify-email';
+  static const String resendOtp = 'auth/resend-verification-email';
+  static const String loadUser = 'auth/me';
+  static const String updateProfile = 'auth/update';
+  static const String forgetPassword = 'auth/forgot-password';
+  static const String verifyResetOtp = 'auth/verify-email';
+  static const String resetPassword = 'auth/reset-password';
+  static const String logout = 'auth/logout';
+  static const String googleLogin = 'auth/google';
+  static const String appleLogin = 'auth/apple';
+  static const String createAndagetJob = 'jobs';
+  static const String deleteAccount = 'auth/delete-account';
   //========================set-up ApiEndpoints=========================//
-  static const String setUp = '/set-up';
-  static const String addNewGoal = '/set-up/add-new-goal';
-  static const String addBill = '/set-up/add-bill';
-  static const String debts = '/set-up/debts';
-  static const String savingGoals = '/set-up/saving-goals';
-  static const String monthlyBills = '/set-up/monthly-bills';
-  static String billById(String id) => '/set-up/bill/$id';
-  static String savingGoalById(String id) => '/set-up/saving-goals/$id';
-  static String deletSavingGoalById(String id) => '/set-up/saving-goals/$id';
-  static String billForPatch(String id) => '/set-up/bill/$id';
+  static const String setUp = 'set-up';
+  static const String addNewGoal = 'set-up/add-new-goal';
+  static const String addBill = 'set-up/add-bill';
+  static const String debts = 'set-up/debts';
+  static const String savingGoals = 'set-up/saving-goals';
+  static const String monthlyBills = 'set-up/monthly-bills';
+  static String billById(String id) => 'set-up/bill/$id';
+  static String savingGoalById(String id) => 'set-up/saving-goals/$id';
+  static String deletSavingGoalById(String id) => 'set-up/saving-goals/$id';
+  static String billForPatch(String id) => 'set-up/bill/$id';
 
-  static String incomeForPatch(String id) => '/set-up/income/$id';
-  static const String payIncomes = '/set-up/pay-incomes';
-  static const String addIncome = '/set-up/add-income';
-  static String deleteIncomeById(String id) => '/set-up/income/$id';
+  static String incomeForPatch(String id) => 'set-up/income/$id';
+  static const String payIncomes = 'set-up/pay-incomes';
+  static const String addIncome = 'set-up/add-income';
+  static String deleteIncomeById(String id) => 'set-up/income/$id';
 
-  static const String addDebt = '/set-up/add-debt';
-  static String debtById(String id) => '/set-up/debt/$id';
+  static const String addDebt = 'set-up/add-debt';
+  static String debtById(String id) => 'set-up/debt/$id';
 }

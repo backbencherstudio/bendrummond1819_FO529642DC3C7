@@ -39,7 +39,7 @@ class PrimaryButton extends StatelessWidget {
       onTap: (isLoading || !isEnabled) ? null : onTap,
       child: Container(
         width: width ?? double.infinity,
-        height: height ?? 52.h,
+        height: height ?? 44.h,
         padding: padding ?? EdgeInsets.symmetric(horizontal: 16.w),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius ?? 12.r),

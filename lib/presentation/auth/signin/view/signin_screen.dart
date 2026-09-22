@@ -9,7 +9,9 @@ import '../../../../core/resource/constants/style_manager.dart';
 import '../../../../core/route/routes_name.dart';
 import '../../../../data/repositories/setup_repository.dart';
 import '../../../../data/sources/remote/setup_api_service.dart';
-import '../../widgets/auth_header.dart';
+import '../../../../core/resource/constants/image_manager.dart';
+import '../../../widgets/custom_back_button.dart';
+import '../../../widgets/custom_logo_text.dart';
 import '../../widgets/auth_headline.dart';
 import '../../widgets/auth_switch_link.dart';
 import '../../widgets/labeled_form_field.dart';
@@ -28,24 +30,22 @@ class SigningScreen extends ConsumerStatefulWidget {
 
 class _SigningScreenState extends ConsumerState<SigningScreen>
     with KeyboardAwareScrollMixin, SocialLoginMixin {
-  final _phoneController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _signInButtonKey = GlobalKey();
-  final _phoneFocusNode = FocusNode();
+  final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    registerAutoScrollFocus(_phoneFocusNode, _signInButtonKey);
-    registerAutoScrollFocus(_passwordFocusNode, _signInButtonKey);
   }
 
   @override
   void dispose() {
-    _phoneController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
-    _phoneFocusNode.dispose();
+    _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
     super.dispose();
   }
@@ -63,104 +63,135 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: ColorManager.primary,
-      body: SingleChildScrollView(
-        controller: scrollController,
-        physics: const ClampingScrollPhysics(),
-        child: Column(
-          children: [
-            const AuthHeader(),
-            Container(
-              width: double.infinity,
-              color: ColorManager.cF0EBE3,
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 10.h),
-
-                  AuthHeadline(
-                    title: "Welcome back",
-                    subtitle:
-                        "Access your personalized financial clarity dashboard.",
-                    titleStyle: getBoldStyle32(
-                      color: ColorManager.brown,
-                    ).copyWith(height: 1.1, letterSpacing: -0.5),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(ImageManager.onBoardingImg, fit: BoxFit.cover),
+          ),
+          SafeArea(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 8.h,
                   ),
-
-                  SizedBox(height: 25.h),
-
-                  LabeledFormField(
-                    label: "Phone number",
-                    hintText: "(123) 456-7890",
-                    controller: _phoneController,
-                    focusNode: _phoneFocusNode,
+                  child: Row(
+                    children: [
+                      customBackButton(
+                        context,
+                        borderColor: ColorManager.backgroundPressed100,
+                      ),
+                      const SizedBox(width: 12),
+                      customLogoText(),
+                    ],
                   ),
-
-                  SizedBox(height: 12.h),
-
-                  LabeledFormField(
-                    label: "Password",
-                    hintText: "Your password",
-                    controller: _passwordController,
-                    isSecured: true,
-                    focusNode: _passwordFocusNode,
-                    trailing: TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          RoutesName.forgotPasswordRoute,
-                        );
-                      },
-                      child: Text(
-                        "Forgot password?",
-                        style:
-                            getRegularStyle14_500(
-                              color: ColorManager.brown500,
-                            ).copyWith(
-                              decoration: TextDecoration.underline,
-                              decorationColor: ColorManager.brown,
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    physics: const ClampingScrollPhysics(),
+                    padding: EdgeInsets.symmetric(horizontal: 24.w),
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 10.h),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 10.h),
+                          AuthHeadline(
+                            title: "Welcome back",
+                            subtitle:
+                                "Access your personalized financial clarity dashboard.",
+                            titleStyle: getBoldStyle32(
+                              color: ColorManager.brown,
+                            ).copyWith(height: 1.1, letterSpacing: -0.5),
+                          ),
+                          SizedBox(height: 25.h),
+                          LabeledFormField(
+                            label: "Email address",
+                            hintText: "you@example.com",
+                            controller: _emailController,
+                            focusNode: _emailFocusNode,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return "Email is required";
+                              }
+                              final emailRegex = RegExp(
+                                r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
+                              );
+                              if (!emailRegex.hasMatch(value.trim())) {
+                                return "Enter a valid email";
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: 12.h),
+                          LabeledFormField(
+                            label: "Password",
+                            hintText: "Your password",
+                            controller: _passwordController,
+                            isSecured: true,
+                            focusNode: _passwordFocusNode,
+                          ),
+                          SizedBox(height: 8.h),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  RoutesName.forgotPasswordRoute,
+                                );
+                              },
+                              child: Text(
+                                "Forgot password?",
+                                style:
+                                    getRegularStyle14_500(
+                                      color: ColorManager.whiteColor,
+                                    ).copyWith(
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: ColorManager.brown,
+                                    ),
+                              ),
                             ),
+                          ),
+                          SizedBox(height: 25.h),
+                          KeyedSubtree(
+                            key: _signInButtonKey,
+                            child: PrimaryButton(
+                              title: "Sign In",
+                              isLoading: signInState.isEmailLoading,
+                              onTap: () => handleCredentialsSignIn(),
+                            ),
+                          ),
+                          SizedBox(height: 16.h),
+                          SocialLoginButtons(
+                            isGoogleLoading: signInState.isGoogleLoading,
+                            onGoogleTap: () => handleGoogleLogin(),
+                            isAppleLoading: signInState.isAppleLoading,
+                            onAppleTap: () => handleAppleLogin(),
+                          ),
+                          SizedBox(height: 10.h),
+                          const CustomDivider(),
+                          SizedBox(height: 10.h),
+                          AuthSwitchLink(
+                            leadingText: "New to Stability? ",
+                            linkText: "Create an account.",
+                            onTap: () => Navigator.pushNamed(
+                              context,
+                              RoutesName.signUpRoute,
+                            ),
+                          ),
+                          SizedBox(height: 60.h),
+                        ],
                       ),
                     ),
                   ),
-
-                  SizedBox(height: 25.h),
-
-                  KeyedSubtree(
-                    key: _signInButtonKey,
-                    child: PrimaryButton(
-                      title: "Sign In",
-                      isLoading: signInState.isEmailLoading,
-                      onTap: () => handleCredentialsSignIn(),
-                    ),
-                  ),
-
-                  SizedBox(height: 16.h),
-
-                  SocialLoginButtons(
-                    isGoogleLoading: signInState.isGoogleLoading,
-                    onGoogleTap: () => handleGoogleLogin(),
-                    isAppleLoading: signInState.isAppleLoading,
-                    onAppleTap: () => handleAppleLogin(),
-                  ),
-
-                  SizedBox(height: 10.h),
-                  const CustomDivider(),
-                  SizedBox(height: 10.h),
-
-                  AuthSwitchLink(
-                    leadingText: "New to Stability? ",
-                    linkText: "Create an account.",
-                    onTap: () =>
-                        Navigator.pushNamed(context, RoutesName.signUpRoute),
-                  ),
-
-                  SizedBox(height: 60.h),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -170,7 +201,7 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
     final success = await ref
         .read(signInViewModelProvider.notifier)
         .signIn(
-          phone: _phoneController.text.trim(),
+          email: _emailController.text.trim(),
           password: _passwordController.text,
         );
 

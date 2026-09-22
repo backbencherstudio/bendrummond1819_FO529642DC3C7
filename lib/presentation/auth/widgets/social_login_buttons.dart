@@ -1,11 +1,7 @@
 import 'dart:io';
-
-import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
-import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/outline_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/test_apple_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 class SocialLoginButtons extends StatelessWidget {
   final bool isGoogleLoading;

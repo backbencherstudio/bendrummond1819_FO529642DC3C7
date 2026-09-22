@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/setup_data_provider.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/home/viewmodel/home_riverpod.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/provider/incomes_provider.dart';
@@ -24,7 +26,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      print("yyyyyyyy");
+      log("yyyyyyyy");
       ref.read(incomesProvider.notifier).fetchIncomes();
       ref.read(userProvider.notifier).loadUser();
     });

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,7 +28,7 @@ class CachedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Imageurl $imgUrl");
+    log("Imageurl $imgUrl");
     return ClipRRect(
       borderRadius:
           specificBorderRadius ?? BorderRadius.circular(borderRadius ?? 0),

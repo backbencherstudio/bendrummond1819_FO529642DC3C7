@@ -63,10 +63,11 @@ class _AddEditDebtSheetState extends ConsumerState<AddEditDebtSheet> {
         top: 24.h,
         bottom: MediaQuery.of(context).viewInsets.bottom + 24.h,
       ),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+      child: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
@@ -158,6 +159,7 @@ class _AddEditDebtSheetState extends ConsumerState<AddEditDebtSheet> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

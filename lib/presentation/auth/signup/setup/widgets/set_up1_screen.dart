@@ -64,7 +64,7 @@ class _SetUp1ScreenState extends ConsumerState<SetUp1Screen> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: _options.length,
-              separatorBuilder: (_, __) => SizedBox(height: 16.h),
+              separatorBuilder: (_, _) => SizedBox(height: 16.h),
               itemBuilder: (context, index) => _buildOptionCard(index),
             ),
           ],
