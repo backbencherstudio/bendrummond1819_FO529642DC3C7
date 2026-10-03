@@ -28,6 +28,7 @@ class SignUpModelview extends AsyncNotifier<SignUpState> {
   Future<bool> register({
     required String name,
     String? email,
+    required String countryCode,
     required String password,
     required String phone,
     required String dob,
@@ -46,6 +47,7 @@ class SignUpModelview extends AsyncNotifier<SignUpState> {
       final success = await repository.register(
         name: name,
         email: email,
+        countryCode: countryCode,
         password: password,
         phone: phone,
         dob: dob,

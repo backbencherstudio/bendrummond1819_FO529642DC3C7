@@ -9,6 +9,7 @@ class AuthRepository {
   Future<bool> register({
     required String name,
     String? email,
+    required String countryCode,
     required String password,
     required String phone,
     required String dob,
@@ -16,6 +17,7 @@ class AuthRepository {
     return remoteSource.register(
       name: name,
       email: email,
+      countryCode: countryCode,
       password: password,
       phone: phone,
       dob: dob,

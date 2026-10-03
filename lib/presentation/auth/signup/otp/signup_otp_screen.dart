@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/resource/constants/color_manger.dart';
 import '../../../../core/resource/constants/style_manager.dart';
+import '../../../../core/resource/utils.dart';
 import '../../../../core/route/routes_name.dart';
 import '../../../widgets/custom_back_button.dart';
 import '../../../widgets/custom_logo_text.dart';
@@ -21,29 +22,27 @@ class SignupOtpScreen extends ConsumerStatefulWidget {
 
 class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
   final _otpController = TextEditingController();
-  String _email = '';
+  String _phone = '';
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final args = ModalRoute.of(context)?.settings.arguments;
     if (args is String) {
-      _email = args;
+      _phone = args;
     }
   }
 
   Future<void> handleVerifyOtp() async {
     final otp = _otpController.text.trim();
-    if (otp.isEmpty || _email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter the OTP")),
-      );
+    if (otp.isEmpty || _phone.isEmpty) {
+      Utils.showErrorToast(message: "Please enter the OTP");
       return;
     }
 
     final success = await ref
         .read(signupOtpViewModelProvider.notifier)
-        .verifyEmail(email: _email, otp: otp);
+        .verifyEmail(email: _phone, otp: otp);
 
     if (success && mounted) {
       Navigator.pushNamedAndRemoveUntil(
@@ -53,27 +52,27 @@ class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
       );
     } else if (mounted) {
       final state = ref.read(signupOtpViewModelProvider);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(state.errorMessage ?? "Verification failed")),
-      );
+      Utils.showErrorToast(message: state.errorMessage ?? "Verification failed");
     }
   }
 
   Future<void> handleResendOtp() async {
-    if (_email.isEmpty) return;
+    if (_phone.isEmpty) return;
 
     final success = await ref
         .read(signupOtpViewModelProvider.notifier)
-        .resendOtp(email: _email);
+        .resendOtp(email: _phone);
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            success ? "OTP resent successfully" : "Failed to resend OTP",
-          ),
-        ),
-      );
+      if (success) {
+        Utils.showToast(
+          message: "OTP resent successfully",
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+      } else {
+        Utils.showErrorToast(message: "Failed to resend OTP");
+      }
     }
   }
 
@@ -115,14 +114,14 @@ class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
                     ),
                     SizedBox(height: 10.h),
                     Text(
-                      "We have sent an OTP code to your email",
-                      style: getRegularStyle14_400(color: ColorManager.brown300),
+                      "We have sent an OTP code to your\nphone number $_phone",
+                      style: getRegularStyle14_400(
+                        color: ColorManager.brown300,
+                      ),
                     ),
                     SizedBox(height: 15.h),
 
-                    CustomPinCodeField(
-                      controller: _otpController,
-                    ),
+                    CustomPinCodeField(controller: _otpController),
                   ],
                 ),
               ),

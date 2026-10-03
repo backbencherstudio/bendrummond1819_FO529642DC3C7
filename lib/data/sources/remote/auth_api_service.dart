@@ -13,6 +13,7 @@ class AuthApiService {
   Future<bool> register({
     required String name,
     String? email,
+    required String countryCode,
     required String password,
     required String phone,
     required String dob,
@@ -21,9 +22,10 @@ class AuthApiService {
       final body = <String, dynamic>{
         "name": name,
         if (email != null && email.trim().isNotEmpty) "email": email.trim(),
-        "password": password,
+        "countryCode": countryCode,
         "phone": phone,
         "birthDate": dob.replaceAll('/', '-'),
+        "password": password,
       };
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.register,
@@ -36,9 +38,14 @@ class AuthApiService {
         if (response['success'] == false ||
             response['error'] != null ||
             (response['statusCode'] != null && response['statusCode'] >= 400)) {
-          throw Exception(
-            response['message'] ?? response['error'] ?? 'Registration failed',
-          );
+          var msg = response['message'] ?? response['error'] ?? 'Registration failed';
+          if (msg is Map) {
+            msg = msg['message'] ?? msg['error'] ?? msg.toString();
+          }
+          if (msg is List && msg.isNotEmpty) {
+            msg = msg.join('\n');
+          }
+          throw Exception(msg.toString());
         }
 
         try {
@@ -57,8 +64,20 @@ class AuthApiService {
       }
 
       return true;
-    } catch (e) {
-      log("Register error: ${e.toString()}");
+    } catch (error) {
+      log("Register error: ${error.toString()}");
+      if (error is DioException &&
+          error.response?.data is Map<String, dynamic>) {
+        final data = error.response?.data as Map<String, dynamic>;
+        var msg = data['message'] ?? data['error'] ?? 'Registration failed';
+        if (msg is Map) {
+          msg = msg['message'] ?? msg['error'] ?? msg.toString();
+        }
+        if (msg is List && msg.isNotEmpty) {
+          msg = msg.join('\n');
+        }
+        throw Exception(msg.toString());
+      }
       rethrow;
     }
   }
