@@ -23,26 +23,28 @@ class SignupOtpScreen extends ConsumerStatefulWidget {
 class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
   final _otpController = TextEditingController();
   String _phone = '';
+  String _userId = '';
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final args = ModalRoute.of(context)?.settings.arguments;
-    if (args is String) {
-      _phone = args;
+    if (args is Map<String, dynamic>) {
+      _phone = args['phone'] as String? ?? '';
+      _userId = args['userId'] as String? ?? '';
     }
   }
 
   Future<void> handleVerifyOtp() async {
     final otp = _otpController.text.trim();
-    if (otp.isEmpty || _phone.isEmpty) {
+    if (otp.isEmpty || _phone.isEmpty || _userId.isEmpty) {
       Utils.showErrorToast(message: "Please enter the OTP");
       return;
     }
 
     final success = await ref
         .read(signupOtpViewModelProvider.notifier)
-        .verifyEmail(email: _phone, otp: otp);
+        .verifyPhone(userId: _userId, otp: otp);
 
     if (success && mounted) {
       Navigator.pushNamedAndRemoveUntil(

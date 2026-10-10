@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/mixins/keyboard_aware_scroll_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -290,24 +291,38 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
     if (_formKey.currentState?.validate() != true) {
       return;
     }
-    final success = await ref
+
+    final formData = {
+      "name": _fullNameController.text.trim(),
+      "email": _emailController.text.trim(),
+      "countryCode": _selectedCountryCode,
+      "phone": "+$_selectedPhoneCode ${_phoneController.text.trim()}",
+      "birthDate": _dobController.text.trim(),
+      "password": _passwordController.text,
+    };
+    log("Registration Form Data: $formData");
+
+    final userId = await ref
         .read(signUpViewModelProvider.notifier)
         .register(
           name: _fullNameController.text.trim(),
           email: _emailController.text.trim(),
           countryCode: _selectedCountryCode,
           password: _passwordController.text,
-          phone: _phoneController.text.trim(),
+          phone: "+$_selectedPhoneCode ${_phoneController.text.trim()}",
           dob: _dobController.text.trim(),
         );
 
-    if (success && mounted) {
+    if (userId != null && mounted) {
       Navigator.pushNamed(
         context,
         RoutesName.signupOtpScreen,
-        arguments: '+$_selectedPhoneCode${_phoneController.text.trim()}',
+        arguments: {
+          'phone': '+$_selectedPhoneCode ${_phoneController.text.trim()}',
+          'userId': userId,
+        },
       );
-    } else if (!success && mounted) {
+    } else if (userId == null && mounted) {
       final state = ref.read(signUpViewModelProvider).value;
       Utils.showErrorToast(
         message: state?.errorMessage ?? "Registration failed",

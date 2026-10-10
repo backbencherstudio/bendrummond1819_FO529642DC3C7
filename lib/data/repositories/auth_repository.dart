@@ -6,7 +6,7 @@ class AuthRepository {
 
   AuthRepository({required this.remoteSource});
 
-  Future<bool> register({
+  Future<String?> register({
     required String name,
     String? email,
     required String countryCode,
@@ -83,6 +83,10 @@ class AuthRepository {
 
   Future<bool> verifyEmail({required String email, required String otp}) async {
     return await remoteSource.verifyEmail(email: email, otp: otp);
+  }
+
+  Future<bool> verifyPhone({required String userId, required String code}) async {
+    return await remoteSource.verifyPhone(userId: userId, code: code);
   }
 
   Future<bool> resendOtp({required String email}) async {

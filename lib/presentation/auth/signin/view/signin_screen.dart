@@ -2,10 +2,11 @@ import 'package:bendrummond1819_fo529642dc3c7/presentation/mixins/keyboard_aware
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:country_picker/country_picker.dart';
 import '../../../../core/network/api_clients.dart';
 import '../../../../core/resource/constants/color_manger.dart';
 import '../../../../core/resource/constants/style_manager.dart';
+import '../../../../core/resource/utils.dart';
 import '../../../../core/route/routes_name.dart';
 import '../../../../data/repositories/setup_repository.dart';
 import '../../../../data/sources/remote/setup_api_service.dart';
@@ -34,11 +35,12 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
   final _phoneFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
 
+  String _selectedPhoneCode = '1';
+
   @override
   void initState() {
     super.initState();
-    registerAutoScrollFocus(_phoneFocusNode, _signInButtonKey);
-    registerAutoScrollFocus(_passwordFocusNode, _signInButtonKey);
+    // Native flutter resizeToAvoidBottomInset handles it
   }
 
   @override
@@ -94,6 +96,63 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
                     hintText: "(123) 456-7890",
                     controller: _phoneController,
                     focusNode: _phoneFocusNode,
+                    prefix: GestureDetector(
+                      onTap: () {
+                        showCountryPicker(
+                          context: context,
+                          showPhoneCode: true,
+                          showDragHandle: false,
+                          countryListTheme: CountryListThemeData(
+                            bottomSheetHeight:
+                                MediaQuery.of(context).size.height * 0.66,
+                            textStyle: TextStyle(
+                              fontSize: 13.sp,
+                              color: Colors.black,
+                            ),
+                            searchTextStyle: TextStyle(
+                              fontSize: 14.sp,
+                              color: Colors.black,
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 10.w,
+                              vertical: 0.h,
+                            ),
+                            margin: EdgeInsets.zero,
+                          ),
+                          onSelect: (Country country) {
+                            setState(() {
+                              _selectedPhoneCode = country.phoneCode;
+                            });
+                          },
+                        );
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 16.w, right: 8.w),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: ColorManager.brown400,
+                                  size: 20.sp,
+                                ),
+                                SizedBox(width: 4.w),
+                                Text(
+                                  '+$_selectedPhoneCode',
+                                  style: getRegularStyle16_400(
+                                    color: ColorManager.brown400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
 
                   SizedBox(height: 12.h),
@@ -170,7 +229,7 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
     // final success = await ref
     //     .read(signInViewModelProvider.notifier)
     //     .signIn(
-    //       phone: _phoneController.text.trim(),
+    //       phone: '+$_selectedPhoneCode${_phoneController.text.trim()}',
     //       password: _passwordController.text,
     //     );
 
@@ -178,9 +237,7 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
     //   await _onSignInSuccess();
     // } else if (mounted) {
     //   final state = ref.read(signInViewModelProvider).value;
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(content: Text(state?.errorMessage ?? "Login failed")),
-    //   );
+    //   Utils.showErrorToast(message: state?.errorMessage ?? "Login failed");
     // }
   }
 
@@ -224,12 +281,8 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
     } else if (setupComplete == false) {
       Navigator.pushReplacementNamed(context, RoutesName.setUpScreen);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Unable to verify account status. Please try again later.",
-          ),
-        ),
+      Utils.showErrorToast(
+        message: "Unable to verify account status. Please try again later.",
       );
     }
   }

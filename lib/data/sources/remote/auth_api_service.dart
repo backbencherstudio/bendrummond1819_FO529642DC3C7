@@ -10,7 +10,7 @@ class AuthApiService {
   final ApiClient apiClient;
   AuthApiService({required this.apiClient});
   //register
-  Future<bool> register({
+  Future<String?> register({
     required String name,
     String? email,
     required String countryCode,
@@ -32,7 +32,7 @@ class AuthApiService {
         body: body,
       );
 
-      if (response == null) return false;
+      if (response == null) return null;
 
       if (response is Map<String, dynamic>) {
         if (response['success'] == false ||
@@ -63,7 +63,12 @@ class AuthApiService {
         }
       }
 
-      return true;
+      final data = response['data'];
+      if (data != null && data['userId'] != null) {
+        return data['userId'].toString();
+      }
+
+      return "success";
     } catch (error) {
       log("Register error: ${error.toString()}");
       if (error is DioException &&
@@ -403,6 +408,41 @@ class AuthApiService {
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
           return false;
+        }
+      }
+      return true;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  //verify phone
+  Future<bool> verifyPhone({required String userId, required String code}) async {
+    try {
+      final body = {"userId": userId, "code": code};
+      final dynamic response = await apiClient.postRequest(
+        endpoints: ApiEndpoints.verifyPhone,
+        body: body,
+      );
+      if (response == null) return false;
+      log("Verify phone response: $response");
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          return false;
+        }
+        
+        try {
+          final token = response['authorization']?['access_token'] ?? response['data']?['accessToken'];
+          final refreshToken = response['authorization']?['refresh_token'] ?? response['data']?['refreshToken'];
+          if (token != null) {
+            await SharedPreferenceData.setToken(token);
+            if (refreshToken != null) {
+              await SharedPreferenceData.setRefreshToken(refreshToken);
+            }
+            await ApiClient.headerSet();
+          }
+        } catch (_) {
+          log("Failed to save token from verify phone response");
         }
       }
       return true;

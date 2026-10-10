@@ -25,7 +25,7 @@ class SignUpModelview extends AsyncNotifier<SignUpState> {
     );
   }
 
-  Future<bool> register({
+  Future<String?> register({
     required String name,
     String? email,
     required String countryCode,
@@ -44,7 +44,7 @@ class SignUpModelview extends AsyncNotifier<SignUpState> {
       current.copyWith(isEmailLoading: true, errorMessage: null),
     );
     try {
-      final success = await repository.register(
+      final userId = await repository.register(
         name: name,
         email: email,
         countryCode: countryCode,
@@ -55,10 +55,10 @@ class SignUpModelview extends AsyncNotifier<SignUpState> {
       state = AsyncData(
         (state.value ?? current).copyWith(
           isEmailLoading: false,
-          isSuccess: success,
+          isSuccess: userId != null,
         ),
       );
-      return success;
+      return userId;
     } catch (e) {
       state = AsyncData(
         (state.value ?? current).copyWith(
@@ -66,7 +66,7 @@ class SignUpModelview extends AsyncNotifier<SignUpState> {
           errorMessage: Utils.friendlyErrorMessage(e),
         ),
       );
-      return false;
+      return null;
     }
   }
 

@@ -28,9 +28,9 @@ class ApiClient {
   static final Dio _dio = Dio(
     BaseOptions(
       baseUrl: ApiEndpoints.baseUrl,
-      connectTimeout: Duration(seconds: 10),
-      sendTimeout: Duration(seconds: 10),
-      receiveTimeout: Duration(seconds: 10),
+      connectTimeout: const Duration(seconds: 60),
+      sendTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 60),
     ),
   )..interceptors.add(_AuthInterceptor());
 
