@@ -93,6 +93,10 @@ class AuthRepository {
     return await remoteSource.resendOtp(email: email);
   }
 
+  Future<bool> resendPhoneOtp({required String userId}) async {
+    return await remoteSource.resendPhoneOtp(userId: userId);
+  }
+
   Future<bool> resetPassword({
     required String email,
     required String password,

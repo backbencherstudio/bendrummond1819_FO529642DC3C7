@@ -59,6 +59,18 @@ class SignupOtpViewmodel extends StateNotifier<SignupOtpState> {
       return false;
     }
   }
+
+  Future<bool> resendPhoneOtp({required String userId}) async {
+    state = state.copyWith(isLoading: true, errorMessage: null);
+    try {
+      final success = await repository.resendPhoneOtp(userId: userId);
+      state = state.copyWith(isLoading: false, isSuccess: success);
+      return success;
+    } catch (e) {
+      state = state.copyWith(isLoading: false, errorMessage: e.toString());
+      return false;
+    }
+  }
 }
 
 class SignupOtpState {

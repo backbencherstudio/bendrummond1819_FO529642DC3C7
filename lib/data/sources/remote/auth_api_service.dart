@@ -476,6 +476,27 @@ class AuthApiService {
     }
   }
 
+  //resend phone otp
+  Future<bool> resendPhoneOtp({required String userId}) async {
+    try {
+      final body = {"userId": userId};
+      final dynamic response = await apiClient.postRequest(
+        endpoints: ApiEndpoints.resendPhoneOtp,
+        body: body,
+      );
+      if (response == null) return false;
+      log("Resend Phone OTP response: $response");
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          return false;
+        }
+      }
+      return true;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   //reset password
   Future<bool> resetPassword({
     required String email,

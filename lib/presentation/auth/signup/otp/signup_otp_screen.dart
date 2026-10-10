@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,6 +25,30 @@ class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
   final _otpController = TextEditingController();
   String _phone = '';
   String _userId = '';
+  Timer? _timer;
+  int _secondsRemaining = 120;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _secondsRemaining = 120;
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {
+          if (_secondsRemaining > 0) {
+            _secondsRemaining--;
+          } else {
+            _timer?.cancel();
+          }
+        });
+      }
+    });
+  }
 
   @override
   void didChangeDependencies() {
@@ -59,14 +84,16 @@ class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
   }
 
   Future<void> handleResendOtp() async {
-    if (_phone.isEmpty) return;
+    if (_userId.isEmpty) return;
+    if (_secondsRemaining > 0) return;
 
     final success = await ref
         .read(signupOtpViewModelProvider.notifier)
-        .resendOtp(email: _phone);
+        .resendPhoneOtp(userId: _userId);
 
     if (mounted) {
       if (success) {
+        _startTimer();
         Utils.showToast(
           message: "OTP resent successfully",
           backgroundColor: Colors.green,
@@ -80,8 +107,16 @@ class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
 
   @override
   void dispose() {
+    _timer?.cancel();
     _otpController.dispose();
     super.dispose();
+  }
+
+  String get _timerText {
+    if (_secondsRemaining == 0) return "Resend";
+    final minutes = (_secondsRemaining / 60).floor();
+    final seconds = _secondsRemaining % 60;
+    return "Resend in $minutes:${seconds.toString().padLeft(2, '0')}";
   }
 
   @override
@@ -144,14 +179,20 @@ class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
                     children: [
                       TextSpan(text: "Didn't get the OTP? "),
                       TextSpan(
-                        text: "Resend",
-                        style: getRegularStyle14_500(color: ColorManager.brown)
-                            .copyWith(
-                              decoration: TextDecoration.underline,
-                              decorationColor: ColorManager.brown,
-                            ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => handleResendOtp(),
+                        text: _timerText,
+                        style: getRegularStyle14_500(
+                          color: _secondsRemaining == 0
+                              ? ColorManager.brown
+                              : ColorManager.brown300,
+                        ).copyWith(
+                          decoration: _secondsRemaining == 0
+                              ? TextDecoration.underline
+                              : TextDecoration.none,
+                          decorationColor: ColorManager.brown,
+                        ),
+                        recognizer: _secondsRemaining == 0
+                            ? (TapGestureRecognizer()..onTap = () => handleResendOtp())
+                            : null,
                       ),
                     ],
                   ),

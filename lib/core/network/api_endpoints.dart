@@ -7,6 +7,7 @@ class ApiEndpoints {
   static const String switchRole = 'auth/switch-role';
   static const String verifyMail = 'auth/verify-email';
   static const String verifyPhone = 'auth/verify-phone';
+  static const String resendPhoneOtp = 'auth/register/resend-phone-otp';
   static const String resendOtp = 'auth/resend-verification-email';
   static const String loadUser = 'auth/me';
   static const String updateProfile = 'auth/update';
