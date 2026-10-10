@@ -7,6 +7,9 @@ import 'package:country_picker/country_picker.dart';
 import '../../../../core/resource/constants/style_manager.dart';
 
 import '../../../../core/resource/constants/color_manger.dart';
+import '../../../../core/resource/constants/icon_manager.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import '../../../../core/resource/utils.dart';
 import '../../../../core/route/routes_name.dart';
 import '../../../widgets/primary_button.dart';
@@ -16,7 +19,6 @@ import '../viewmodel/signup_viewmodel.dart';
 import '../../widgets/auth_header.dart';
 import '../../widgets/auth_headline.dart';
 import '../../widgets/auth_switch_link.dart';
-import '../../widgets/date_of_birth_field.dart';
 import '../../widgets/labeled_form_field.dart';
 import '../../widgets/social_login_buttons.dart';
 
@@ -233,11 +235,30 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
                         ),
                         SizedBox(height: 12.h),
 
-                        DateOfBirthField(
+                        LabeledFormField(
                           label: "Date of birth",
+                          hintText: "Date of birth",
                           controller: _dobController,
                           focusNode: _dobFocusNode,
+                          readOnly: true,
+                          onTap: () async {
+                            await Utils.selectDate(context, _dobController);
+                            setState(() {});
+                          },
+                          trailing: SvgPicture.asset(
+                            IconManager.calendar,
+                            width: 22,
+                            height: 22,
+                            colorFilter: ColorFilter.mode(
+                              ColorManager.brown300,
+                              BlendMode.srcIn,
+                            ),
+                          ),
                           onChanged: (_) => setState(() {}),
+                          validator: (value) =>
+                              (value == null || value.trim().isEmpty)
+                              ? "Date of birth is required"
+                              : null,
                         ),
 
                         SizedBox(height: 25.h),
@@ -292,12 +313,24 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
       return;
     }
 
+    String? isoDob;
+    if (_dobController.text.isNotEmpty) {
+      try {
+        final parsed = DateFormat(
+          'MMMM dd, yyyy',
+        ).parse(_dobController.text.trim());
+        isoDob = parsed.toIso8601String();
+      } catch (e) {
+        isoDob = _dobController.text.trim();
+      }
+    }
+
     final formData = {
       "name": _fullNameController.text.trim(),
       "email": _emailController.text.trim(),
       "countryCode": _selectedCountryCode,
       "phone": "+$_selectedPhoneCode ${_phoneController.text.trim()}",
-      "birthDate": _dobController.text.trim(),
+      "birthDate": isoDob,
       "password": _passwordController.text,
     };
     log("Registration Form Data: $formData");
@@ -310,7 +343,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen>
           countryCode: _selectedCountryCode,
           password: _passwordController.text,
           phone: "+$_selectedPhoneCode ${_phoneController.text.trim()}",
-          dob: _dobController.text.trim(),
+          dob: isoDob ?? _dobController.text.trim(),
         );
 
     if (userId != null && mounted) {

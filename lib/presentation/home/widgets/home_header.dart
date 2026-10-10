@@ -9,10 +9,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({super.key, required this.greeting, required this.userName});
+  const HomeHeader({
+    super.key,
+    required this.greeting,
+    required this.userName,
+    this.avatarUrl,
+  });
 
   final String greeting;
   final String userName;
+  final String? avatarUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -45,23 +51,39 @@ class HomeHeader extends StatelessWidget {
           onTap: () =>
               Navigator.pushNamed(context, RoutesName.homeSettingsScreen),
           child: Container(
-            padding: EdgeInsets.all(12.r),
+            // padding: EdgeInsets.all(12.r),
             decoration: BoxDecoration(
               color: ColorManager.secondaryBackGround,
               shape: BoxShape.circle,
+              border: Border.all(color: const Color(0xFF5C473B), width: 1.5),
             ),
-            child: SvgPicture.asset(
-              IconManager.userIcon,
-              colorFilter: ColorFilter.mode(
-                ColorManager.primaryButton,
-                BlendMode.srcIn,
-              ),
-              width: 24.w,
-              height: 24.h,
+            child: ClipOval(
+              child: avatarUrl != null && avatarUrl!.isNotEmpty
+                  ? Image.network(
+                      avatarUrl!,
+                      width: 54.w,
+                      height: 54.h,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          _buildDefaultAvatar(),
+                    )
+                  : _buildDefaultAvatar(),
             ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildDefaultAvatar() {
+    return SvgPicture.asset(
+      IconManager.userIcon,
+      colorFilter: ColorFilter.mode(
+        ColorManager.primaryButton,
+        BlendMode.srcIn,
+      ),
+      width: 24.w,
+      height: 24.h,
     );
   }
 }
