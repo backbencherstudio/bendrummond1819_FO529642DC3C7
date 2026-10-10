@@ -1,16 +1,18 @@
 class ApiEndpoints {
   // static const String baseUrl = "https://backend.stabilityus.com/api";
-  static const String baseUrl = 'http://10.10.9.189:4000/api';
+  static const String baseUrl = 'http://10.10.9.230:4000/api';
   //===================== auth ApiEndpoints ===========================//
   static const String register = 'auth/register';
   static const String login = 'auth/login';
   static const String switchRole = 'auth/switch-role';
   static const String verifyMail = 'auth/verify-email';
+  static const String verifyPhone = 'auth/verify-phone';
+  static const String resendPhoneOtp = 'auth/register/resend-phone-otp';
   static const String resendOtp = 'auth/resend-verification-email';
   static const String loadUser = 'auth/me';
   static const String updateProfile = 'auth/update';
   static const String forgetPassword = 'auth/forgot-password';
-  static const String verifyResetOtp = 'auth/verify-email';
+  static const String verifyResetOtp = 'auth/forgot-password/verify-otp';
   static const String resetPassword = 'auth/reset-password';
   static const String logout = 'auth/logout';
   static const String googleLogin = 'auth/google';

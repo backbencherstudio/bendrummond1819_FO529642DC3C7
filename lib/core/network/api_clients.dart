@@ -13,12 +13,18 @@ class _AuthInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     if (err.response?.statusCode == 401) {
-      SharedPreferenceData.removeToken();
-      SharedPreferenceData.removeRole();
-      navigatorKey.currentState?.pushNamedAndRemoveUntil(
-        RoutesName.signInRoute,
-        (route) => false,
-      );
+      final path = err.requestOptions.path;
+      if (!path.contains(ApiEndpoints.resetPassword) &&
+          !path.contains(ApiEndpoints.login) &&
+          !path.contains(ApiEndpoints.verifyResetOtp) &&
+          !path.contains(ApiEndpoints.forgetPassword)) {
+        SharedPreferenceData.removeToken();
+        SharedPreferenceData.removeRole();
+        navigatorKey.currentState?.pushNamedAndRemoveUntil(
+          RoutesName.signInRoute,
+          (route) => false,
+        );
+      }
     }
     handler.next(err);
   }
@@ -28,9 +34,9 @@ class ApiClient {
   static final Dio _dio = Dio(
     BaseOptions(
       baseUrl: ApiEndpoints.baseUrl,
-      connectTimeout: Duration(seconds: 10),
-      sendTimeout: Duration(seconds: 10),
-      receiveTimeout: Duration(seconds: 10),
+      connectTimeout: const Duration(seconds: 60),
+      sendTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 60),
     ),
   )..interceptors.add(_AuthInterceptor());
 

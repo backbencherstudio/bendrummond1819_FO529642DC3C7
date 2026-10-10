@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../../core/resource/constants/color_manger.dart';
 import '../../../../../core/resource/constants/icon_manager.dart';
 import '../../../../../core/resource/constants/style_manager.dart';
+import '../../../../../core/resource/utils.dart';
 import '../../../../widgets/custom_from_field.dart';
 import '../../../../widgets/outline_button.dart';
 import '../../../../widgets/primary_button.dart';
@@ -72,7 +73,14 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
   void _addNewGoal() {
     final name = savingNameController.text.trim();
     final amount = amountController.text.trim();
-    if (name.isEmpty || amount.isEmpty) return;
+    if (name.isEmpty || amount.isEmpty) {
+      Utils.showToast(
+        message: "Please enter goal name and amount",
+        backgroundColor: ColorManager.errorColor,
+        textColor: ColorManager.whiteColor,
+      );
+      return;
+    }
 
     final frequency = _selectedFrequency ?? 'MONTHLY';
 
@@ -290,36 +298,14 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
                       ),
                     ),
                     SizedBox(height: 6.h),
-                    GestureDetector(
+                    CustomFromField(
+                      controller: frequencyController,
+                      hintText: "Select frequency",
+                      readOnly: true,
                       onTap: _showFrequencyPicker,
-                      child: Container(
-                        height: 52.h,
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        decoration: BoxDecoration(
-                          color: ColorManager.backgroundSecondary,
-                          borderRadius: BorderRadius.circular(16.r),
-                          border: Border.all(color: ColorManager.borderColor1),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                frequencyController.text.isEmpty
-                                    ? "Select frequency"
-                                    : frequencyController.text,
-                                style: getRegularStyle16_400(
-                                  color: frequencyController.text.isEmpty
-                                      ? ColorManager.brown300
-                                      : ColorManager.brown400,
-                                ),
-                              ),
-                            ),
-                            Icon(
-                              Icons.keyboard_arrow_down_outlined,
-                              color: ColorManager.brown400,
-                            ),
-                          ],
-                        ),
+                      suffixIcon: Icon(
+                        Icons.keyboard_arrow_down_outlined,
+                        color: ColorManager.brown400,
                       ),
                     ),
                   ],

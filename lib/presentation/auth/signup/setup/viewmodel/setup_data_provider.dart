@@ -19,6 +19,17 @@ class SetupDataState {
   final bool? isSuccess;
   final String? errorMessage;
 
+  String get payFrequencyLabel {
+    switch (payFrequencyIndex) {
+      case 0: return "Weekly";
+      case 1: return "Every 2 weeks";
+      case 2: return "Twice a month";
+      case 3: return "Monthly";
+      case 4: return "Inconsistent";
+      default: return "Weekly";
+    }
+  }
+
   SetupDataState({
     this.incomeTypeIndex = 0,
     this.payFrequencyIndex = 0,

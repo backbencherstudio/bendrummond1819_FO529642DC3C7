@@ -45,13 +45,57 @@ class _SetUpMainViewState extends ConsumerState<SetUpScreen> {
   }
 
   void _onNext() {
+    final currentStep = ref.read(setupStepProvider);
+    final data = ref.read(setupDataProvider);
+
+    bool isValid = true;
+    String errorMessage = "";
+
+    switch (currentStep) {
+      case 3:
+        if (data.baseIncome.trim().isEmpty) {
+          isValid = false;
+          errorMessage = "Please enter your income amount";
+        }
+        break;
+      case 4:
+        if (data.rentAmount.trim().isEmpty) {
+          isValid = false;
+          errorMessage = "Please enter your rent amount or tap 'No rent right now'";
+        }
+        break;
+      case 5:
+        if (data.carPaymentAmount.trim().isEmpty) {
+          isValid = false;
+          errorMessage = "Please enter your car payment amount or tap skip";
+        }
+        break;
+    }
+
+    if (!isValid) {
+      Utils.showToast(
+        message: errorMessage,
+        backgroundColor: ColorManager.errorColor,
+        textColor: ColorManager.whiteColor,
+      );
+      return;
+    }
+
+    _proceedToNext();
+  }
+
+  void _onSkip() {
+    _proceedToNext();
+  }
+
+  void _proceedToNext() {
     if (_pageController.page! < totalSteps - 1) {
       ref.read(setupStepProvider.notifier).nextStep();
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
-    } else {}
+    }
   }
 
   void _onBack() {
@@ -63,6 +107,16 @@ class _SetUpMainViewState extends ConsumerState<SetUpScreen> {
       );
     } else {
       Navigator.pop(context);
+    }
+  }
+
+  String _getSkipButtonText(int step) {
+    switch (step) {
+      case 4: return "No rent right now";
+      case 5: return "No car payment right now";
+      case 6: return "No regular bills";
+      case 7: return "No debts";
+      default: return "Skip";
     }
   }
 
@@ -162,8 +216,8 @@ class _SetUpMainViewState extends ConsumerState<SetUpScreen> {
                     PrimaryButton(title: "Continue", onTap: _onNext),
                     SizedBox(height: 12.h),
                     CustomOutlinedButton(
-                      title: "No rent right now",
-                      onTap: _onNext,
+                      title: _getSkipButtonText(currentStep),
+                      onTap: _onSkip,
                     ),
                   ],
                   if (currentStep == 8) ...[

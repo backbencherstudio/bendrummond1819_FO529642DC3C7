@@ -10,9 +10,10 @@ class AuthApiService {
   final ApiClient apiClient;
   AuthApiService({required this.apiClient});
   //register
-  Future<bool> register({
+  Future<String?> register({
     required String name,
     String? email,
+    required String countryCode,
     required String password,
     required String phone,
     required String dob,
@@ -21,24 +22,30 @@ class AuthApiService {
       final body = <String, dynamic>{
         "name": name,
         if (email != null && email.trim().isNotEmpty) "email": email.trim(),
-        "password": password,
+        "countryCode": countryCode,
         "phone": phone,
         "birthDate": dob.replaceAll('/', '-'),
+        "password": password,
       };
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.register,
         body: body,
       );
 
-      if (response == null) return false;
+      if (response == null) return null;
 
       if (response is Map<String, dynamic>) {
         if (response['success'] == false ||
             response['error'] != null ||
             (response['statusCode'] != null && response['statusCode'] >= 400)) {
-          throw Exception(
-            response['message'] ?? response['error'] ?? 'Registration failed',
-          );
+          var msg = response['message'] ?? response['error'] ?? 'Registration failed';
+          if (msg is Map) {
+            msg = msg['message'] ?? msg['error'] ?? msg.toString();
+          }
+          if (msg is List && msg.isNotEmpty) {
+            msg = msg.join('\n');
+          }
+          throw Exception(msg.toString());
         }
 
         try {
@@ -56,17 +63,34 @@ class AuthApiService {
         }
       }
 
-      return true;
-    } catch (e) {
-      log("Register error: ${e.toString()}");
+      final data = response['data'];
+      if (data != null && data['userId'] != null) {
+        return data['userId'].toString();
+      }
+
+      return "success";
+    } catch (error) {
+      log("Register error: ${error.toString()}");
+      if (error is DioException &&
+          error.response?.data is Map<String, dynamic>) {
+        final data = error.response?.data as Map<String, dynamic>;
+        var msg = data['message'] ?? data['error'] ?? 'Registration failed';
+        if (msg is Map) {
+          msg = msg['message'] ?? msg['error'] ?? msg.toString();
+        }
+        if (msg is List && msg.isNotEmpty) {
+          msg = msg.join('\n');
+        }
+        throw Exception(msg.toString());
+      }
       rethrow;
     }
   }
 
   //login
-  Future<bool> login({required String email, required String password}) async {
+  Future<bool> login({required String phone, required String password}) async {
     try {
-      final body = {"email": email, "password": password};
+      final body = {"phone": phone, "password": password};
       final dynamic response = await apiClient.postRequest(
         body: body,
         endpoints: ApiEndpoints.login,
@@ -231,46 +255,72 @@ class AuthApiService {
   }
 
   //forgotpassord
-  Future<bool> forgotPassword({required String email}) async {
+  Future<String?> forgotPassword({required String phone}) async {
     try {
-      final body = {"email": email};
+      final body = {"phone": phone};
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.forgetPassword,
         body: body,
       );
-      if (response == null) return false;
+      if (response == null) return null;
 
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
-          return false;
+          return null;
         }
+        return response['data']?['userId'] ?? response['userId']?.toString();
       }
-      return true;
+      return null;
     } catch (error) {
+      if (error is DioException &&
+          error.response?.data is Map<String, dynamic>) {
+        final data = error.response?.data as Map<String, dynamic>;
+        var msg = data['message'] ?? data['error'] ?? 'Forgot password failed';
+        if (msg is Map) {
+          msg = msg['message'] ?? msg['error'] ?? msg.toString();
+        }
+        if (msg is List && msg.isNotEmpty) {
+          msg = msg.join('\n');
+        }
+        throw Exception(msg.toString());
+      }
       rethrow;
     }
   }
 
   //verify reset otp
-  Future<bool> verifyResetOtp({
-    required String email,
-    required String otp,
+  Future<String?> verifyResetOtp({
+    required String userId,
+    required String code,
   }) async {
     try {
-      final body = {"email": email, "token": otp};
+      final body = {"userId": userId, "code": code};
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.verifyResetOtp,
         body: body,
       );
-      if (response == null) return false;
+      if (response == null) return null;
 
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
-          return false;
+          return null;
         }
+        return response['data']?['resetToken']?.toString();
       }
-      return true;
+      return null;
     } catch (error) {
+      if (error is DioException &&
+          error.response?.data is Map<String, dynamic>) {
+        final data = error.response?.data as Map<String, dynamic>;
+        var msg = data['message'] ?? data['error'] ?? 'OTP verification failed';
+        if (msg is Map) {
+          msg = msg['message'] ?? msg['error'] ?? msg.toString();
+        }
+        if (msg is List && msg.isNotEmpty) {
+          msg = msg.join('\n');
+        }
+        throw Exception(msg.toString());
+      }
       rethrow;
     }
   }
@@ -283,27 +333,36 @@ class AuthApiService {
     String? phoneNumber,
     bool? billRemainders,
     bool? notificationRemainder,
+    bool? emailUpdates,
     String? gender,
     String? dateOfBirth,
   }) async {
     try {
-      final body = <String, dynamic>{};
-      if (name != null) body['name'] = name;
-      if (avatar != null) body['avatar'] = avatar;
-      if (address != null) body['address'] = address;
-      if (phoneNumber != null) body['phone_number'] = phoneNumber;
+      final Map<String, dynamic> data = {};
+      if (name != null) data['name'] = name;
+      if (address != null) data['address'] = address;
+      if (phoneNumber != null) data['phone_number'] = phoneNumber;
       if (billRemainders != null) {
-        body['bill_remainders'] = billRemainders ? "1" : "0";
+        data['bill_remainders'] = billRemainders.toString();
       }
       if (notificationRemainder != null) {
-        body['notification_remainder'] = notificationRemainder ? "1" : "0";
+        data['notification_remainder'] = notificationRemainder.toString();
       }
-      if (gender != null) body['gender'] = gender;
-      if (dateOfBirth != null) body['date_of_birth'] = dateOfBirth;
+      if (emailUpdates != null) {
+        data['email_updates'] = emailUpdates.toString();
+      }
+      if (gender != null) data['gender'] = gender;
+      if (dateOfBirth != null) data['date_of_birth'] = dateOfBirth;
+      
+      if (avatar != null && avatar.isNotEmpty) {
+        data['image'] = await MultipartFile.fromFile(avatar);
+      }
+
+      final formData = FormData.fromMap(data);
 
       final dynamic response = await ApiClient.patchRequest(
         endpoints: ApiEndpoints.updateProfile,
-        body: body,
+        formData: formData,
       );
 
       if (response == null) return null;
@@ -319,8 +378,19 @@ class AuthApiService {
       }
 
       return await loadUser();
-    } catch (e) {
-      log("Update profile error: ${e.toString()}");
+    } catch (error) {
+      if (error is DioException &&
+          error.response?.data is Map<String, dynamic>) {
+        final data = error.response?.data as Map<String, dynamic>;
+        var msg = data['message'] ?? data['error'] ?? 'Update failed';
+        if (msg is Map) {
+          msg = msg['message'] ?? msg['error'] ?? msg.toString();
+        }
+        if (msg is List && msg.isNotEmpty) {
+          msg = msg.join('\n');
+        }
+        throw Exception(msg.toString());
+      }
       rethrow;
     }
   }
@@ -392,6 +462,45 @@ class AuthApiService {
     }
   }
 
+  //verify phone
+  Future<bool> verifyPhone({required String userId, required String code}) async {
+    try {
+      final body = {"userId": userId, "code": code};
+      final dynamic response = await apiClient.postRequest(
+        endpoints: ApiEndpoints.verifyPhone,
+        body: body,
+      );
+      if (response == null) return false;
+      log("Verify phone response: $response");
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          return false;
+        }
+        
+        try {
+          final token = response['accessToken'] ?? 
+                        response['authorization']?['access_token'] ?? 
+                        response['data']?['accessToken'];
+          final refreshToken = response['refreshToken'] ?? 
+                               response['authorization']?['refresh_token'] ?? 
+                               response['data']?['refreshToken'];
+          if (token != null) {
+            await SharedPreferenceData.setToken(token);
+            if (refreshToken != null) {
+              await SharedPreferenceData.setRefreshToken(refreshToken);
+            }
+            await ApiClient.headerSet();
+          }
+        } catch (_) {
+          log("Failed to save token from verify phone response");
+        }
+      }
+      return true;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   //resend otp (signup)
   Future<bool> resendOtp({required String email}) async {
     try {
@@ -413,19 +522,36 @@ class AuthApiService {
     }
   }
 
+  //resend phone otp
+  Future<bool> resendPhoneOtp({required String userId}) async {
+    try {
+      final body = {"userId": userId};
+      final dynamic response = await apiClient.postRequest(
+        endpoints: ApiEndpoints.resendPhoneOtp,
+        body: body,
+      );
+      if (response == null) return false;
+      log("Resend Phone OTP response: $response");
+      if (response is Map<String, dynamic>) {
+        if (response['success'] == false || response['error'] != null) {
+          return false;
+        }
+      }
+      return true;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   //reset password
   Future<bool> resetPassword({
-    required String email,
     required String password,
-    required String passwordConfirmation,
-    required String token,
+    required String resetToken,
   }) async {
     try {
       final body = {
-        "email": email,
         "password": password,
-        "password_confirmation": passwordConfirmation,
-        "token": token,
+        "resetToken": resetToken,
       };
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.resetPassword,
@@ -440,6 +566,18 @@ class AuthApiService {
       }
       return true;
     } catch (error) {
+      if (error is DioException &&
+          error.response?.data is Map<String, dynamic>) {
+        final data = error.response?.data as Map<String, dynamic>;
+        var msg = data['message'] ?? data['error'] ?? 'Reset password failed';
+        if (msg is Map) {
+          msg = msg['message'] ?? msg['error'] ?? msg.toString();
+        }
+        if (msg is List && msg.isNotEmpty) {
+          msg = msg.join('\n');
+        }
+        throw Exception(msg.toString());
+      }
       rethrow;
     }
   }

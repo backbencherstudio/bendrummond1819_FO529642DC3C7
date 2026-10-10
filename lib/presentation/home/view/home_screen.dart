@@ -53,6 +53,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               HomeHeader(
                 greeting: _viewModel.greeting(),
                 userName: userState.user?.name ?? 'there',
+                avatarUrl: userState.user?.avatar,
               ),
               SizedBox(height: 32.h),
               SafeToSpendCard(

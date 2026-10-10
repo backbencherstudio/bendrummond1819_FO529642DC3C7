@@ -1,10 +1,9 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../core/resource/constants/color_manger.dart';
 import '../../../../core/resource/constants/style_manager.dart';
+import '../../../../core/resource/utils.dart';
 import '../../../../core/route/routes_name.dart';
 import '../../../widgets/custom_back_button.dart';
 import '../../../widgets/custom_logo_text.dart';
@@ -23,52 +22,60 @@ class ForgotPasswordOtpScreen extends ConsumerStatefulWidget {
 class _ForgotPasswordOtpScreenState
     extends ConsumerState<ForgotPasswordOtpScreen> {
   final _otpController = TextEditingController();
-  String _email = '';
+  String _phone = '';
+  String _userId = '';
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _email = ModalRoute.of(context)?.settings.arguments as String? ?? _email;
+    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    if (args != null) {
+      _phone = args['phone'] as String? ?? _phone;
+      _userId = args['userId'] as String? ?? _userId;
+    }
   }
 
   Future<void> handleVerifyOtp() async {
     final otp = _otpController.text.trim();
     if (otp.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter the OTP")),
-      );
+      Utils.showErrorToast(message: "Please enter the OTP");
       return;
     }
 
     final success = await ref
         .read(forgotPasswordViewModelProvider.notifier)
-        .verifyOtp(otp: otp);
+        .verifyOtp(userId: _userId, otp: otp);
 
     if (success && mounted) {
       Navigator.pushNamed(
         context,
         RoutesName.resetNewPasswordRoute,
-        arguments: _email,
+        arguments: _phone,
       );
     } else if (mounted) {
       final state = ref.read(forgotPasswordViewModelProvider);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(state.errorMessage ?? "Verification failed")),
+      Utils.showErrorToast(
+        message: state.errorMessage ?? "Verification failed",
       );
     }
   }
 
   Future<void> handleResendOtp() async {
-    final success = await ref
+    final userId = await ref
         .read(forgotPasswordViewModelProvider.notifier)
-        .forgotPassword(email: _email);
+        .forgotPassword(phone: _phone);
+    final success = userId != null;
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(success ? "OTP resent successfully" : "Failed to resend OTP"),
-        ),
-      );
+      if (success) {
+        Utils.showToast(
+          message: "OTP resent successfully",
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+      } else {
+        Utils.showErrorToast(message: "Failed to resend OTP");
+      }
     }
   }
 
@@ -112,9 +119,7 @@ class _ForgotPasswordOtpScreenState
                     ),
                     SizedBox(height: 15.h),
 
-                    CustomPinCodeField(
-                      controller: _otpController,
-                    ),
+                    CustomPinCodeField(controller: _otpController),
                   ],
                 ),
               ),
@@ -124,32 +129,32 @@ class _ForgotPasswordOtpScreenState
                 isLoading: state.isLoading,
                 onTap: () => handleVerifyOtp(),
               ),
-              SizedBox(height: 15.h),
-              customDivider(),
-              SizedBox(height: 15.h),
+              // SizedBox(height: 15.h),
+              // customDivider(),
+              // SizedBox(height: 15.h),
 
-              Center(
-                child: RichText(
-                  text: TextSpan(
-                    style: getRegularStyle14_400(color: ColorManager.brown300),
-                    children: [
-                      TextSpan(text: "Didn't get the OTP? "),
-                      TextSpan(
-                        text: "Resend",
-                        style: getRegularStyle14_500(
-                          color: ColorManager.brown,
-                        ).copyWith(
-                          decoration: TextDecoration.underline,
-                          decorationColor: ColorManager.brown,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => handleResendOtp(),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 20.h),
+              // Center(
+              //   child: RichText(
+              //     text: TextSpan(
+              //       style: getRegularStyle14_400(color: ColorManager.brown300),
+              //       children: [
+              //         TextSpan(text: "Didn't get the OTP? "),
+              //         TextSpan(
+              //           text: "Resend",
+              //           style: getRegularStyle14_500(
+              //             color: ColorManager.brown,
+              //           ).copyWith(
+              //             decoration: TextDecoration.underline,
+              //             decorationColor: ColorManager.brown,
+              //           ),
+              //           recognizer: TapGestureRecognizer()
+              //             ..onTap = () => handleResendOtp(),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(height: 20.h),
             ],
           ),
         ),

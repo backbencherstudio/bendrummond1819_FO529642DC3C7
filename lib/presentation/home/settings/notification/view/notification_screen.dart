@@ -28,6 +28,7 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
         setState(() {
           _billReminders = user.billRemainders;
           _notificationReminder = user.notificationRemainder;
+          _emailUpdates = user.emailUpdates;
           _initialized = true;
         });
       } else if (user == null) {
@@ -64,6 +65,20 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
     }
   }
 
+  Future<void> _onEmailUpdatesChanged(bool val) async {
+    setState(() => _emailUpdates = val);
+    final errorMessage = await ref
+        .read(userProvider.notifier)
+        .updateProfile(emailUpdates: val);
+    if (!mounted) return;
+    if (errorMessage != null) {
+      setState(() => _emailUpdates = !val);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(errorMessage)));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.listen<UserState>(userProvider, (previous, next) {
@@ -71,6 +86,7 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
         setState(() {
           _billReminders = next.user!.billRemainders;
           _notificationReminder = next.user!.notificationRemainder;
+          _emailUpdates = next.user!.emailUpdates;
           _initialized = true;
         });
       }
@@ -119,7 +135,7 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
               _buildNotificationTile(
                 "Email Updates",
                 _emailUpdates,
-                (val) => setState(() => _emailUpdates = val),
+                _onEmailUpdatesChanged,
               ),
             ],
           ),

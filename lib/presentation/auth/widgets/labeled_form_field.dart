@@ -14,6 +14,7 @@ class LabeledFormField extends StatelessWidget {
   final VoidCallback? onTap;
   final String? Function(String?)? validator;
   final Widget? trailing;
+  final Widget? prefix;
   final void Function(String)? onChanged;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputType? keyboardType;
@@ -29,6 +30,7 @@ class LabeledFormField extends StatelessWidget {
     this.onTap,
     this.validator,
     this.trailing,
+    this.prefix,
     this.onChanged,
     this.inputFormatters,
     this.keyboardType,
@@ -56,6 +58,7 @@ class LabeledFormField extends StatelessWidget {
           inputFormatters: inputFormatters,
           keyboardType: keyboardType,
           suffixIcon: trailing,
+          prefixWidget: prefix,
         ),
       ],
     );

@@ -6,9 +6,10 @@ class AuthRepository {
 
   AuthRepository({required this.remoteSource});
 
-  Future<bool> register({
+  Future<String?> register({
     required String name,
     String? email,
+    required String countryCode,
     required String password,
     required String phone,
     required String dob,
@@ -16,14 +17,15 @@ class AuthRepository {
     return remoteSource.register(
       name: name,
       email: email,
+      countryCode: countryCode,
       password: password,
       phone: phone,
       dob: dob,
     );
   }
 
-  Future<bool> login({required String email, required String password}) async {
-    return await remoteSource.login(email: email, password: password);
+  Future<bool> login({required String phone, required String password}) async {
+    return await remoteSource.login(phone: phone, password: password);
   }
 
   Future<bool> googleLogin({required String idToken}) async {
@@ -45,6 +47,7 @@ class AuthRepository {
     String? phoneNumber,
     bool? billRemainders,
     bool? notificationRemainder,
+    bool? emailUpdates,
     String? gender,
     String? dateOfBirth,
   }) async {
@@ -55,6 +58,7 @@ class AuthRepository {
       phoneNumber: phoneNumber,
       billRemainders: billRemainders,
       notificationRemainder: notificationRemainder,
+      emailUpdates: emailUpdates,
       gender: gender,
       dateOfBirth: dateOfBirth,
     );
@@ -68,36 +72,40 @@ class AuthRepository {
     return await remoteSource.deleteAccount();
   }
 
-  Future<bool> forgotPassword({required String email}) async {
-    return await remoteSource.forgotPassword(email: email);
+  Future<String?> forgotPassword({required String phone}) async {
+    return await remoteSource.forgotPassword(phone: phone);
   }
 
-  Future<bool> verifyResetOtp({
-    required String email,
-    required String otp,
+  Future<String?> verifyResetOtp({
+    required String userId,
+    required String code,
   }) async {
-    return await remoteSource.verifyResetOtp(email: email, otp: otp);
+    return await remoteSource.verifyResetOtp(userId: userId, code: code);
   }
 
   Future<bool> verifyEmail({required String email, required String otp}) async {
     return await remoteSource.verifyEmail(email: email, otp: otp);
   }
 
+  Future<bool> verifyPhone({required String userId, required String code}) async {
+    return await remoteSource.verifyPhone(userId: userId, code: code);
+  }
+
   Future<bool> resendOtp({required String email}) async {
     return await remoteSource.resendOtp(email: email);
   }
 
+  Future<bool> resendPhoneOtp({required String userId}) async {
+    return await remoteSource.resendPhoneOtp(userId: userId);
+  }
+
   Future<bool> resetPassword({
-    required String email,
     required String password,
-    required String passwordConfirmation,
-    required String token,
+    required String resetToken,
   }) async {
     return await remoteSource.resetPassword(
-      email: email,
       password: password,
-      passwordConfirmation: passwordConfirmation,
-      token: token,
+      resetToken: resetToken,
     );
   }
 }

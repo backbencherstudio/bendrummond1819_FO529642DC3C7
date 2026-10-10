@@ -9,9 +9,11 @@ class CustomFromField extends StatefulWidget {
   final String? labelText;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
+  final String? errorText;
   final String? Function(String?)? validator;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
+  final Widget? prefixWidget;
   final bool isSecured;
   final void Function(String)? onChanged;
   final EdgeInsetsGeometry? contentPadding;
@@ -35,9 +37,11 @@ class CustomFromField extends StatefulWidget {
     this.labelText,
     this.controller,
     this.keyboardType,
+    this.errorText,
     this.validator,
     this.suffixIcon,
     this.prefixIcon,
+    this.prefixWidget,
     this.isSecured = false,
     this.onChanged,
     this.contentPadding,
@@ -82,24 +86,25 @@ class _CustomFromFieldState extends State<CustomFromField> {
             EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
         filled: widget.filled ?? true,
         fillColor: widget.fillColor ?? ColorManager.backgroundSecondary,
+        errorText: widget.errorText,
         hintText: widget.hintText,
         labelText: widget.labelText,
         hintStyle: getRegularStyle16_400(color: ColorManager.brown300),
 
         // Prefix Icon setup with constraints
-        prefixIcon: widget.prefixIcon != null
-            ? Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                child: SizedBox(
-                  width: 20.w,
-                  height: 20.h,
-                  child: FittedBox(
-                    fit: BoxFit.contain,
-                    child: widget.prefixIcon!,
-                  ),
-                ),
-              )
-            : null,
+        prefixIcon: widget.prefixWidget ?? (widget.prefixIcon != null
+                ? Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                    child: SizedBox(
+                      width: 20.w,
+                      height: 20.h,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: widget.prefixIcon!,
+                      ),
+                    ),
+                  )
+                : null),
         prefixIconConstraints:
             widget.prefixIconConstraints ??
             BoxConstraints(minWidth: 44.w, minHeight: 20.h),

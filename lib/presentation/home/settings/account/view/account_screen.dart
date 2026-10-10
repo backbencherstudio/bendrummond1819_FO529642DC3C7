@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
+import 'package:intl/intl.dart';
 
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/icon_manager.dart';
@@ -26,8 +26,8 @@ class AccountScreen extends ConsumerStatefulWidget {
 class _AccountScreenState extends ConsumerState<AccountScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  // final _passwordController = TextEditingController();
+  // final _confirmPasswordController = TextEditingController();
   final _phoneController = TextEditingController();
   final _dobController = TextEditingController();
   bool _initialized = false;
@@ -65,8 +65,8 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
+    // _passwordController.dispose();
+    // _confirmPasswordController.dispose();
     _phoneController.dispose();
     _dobController.dispose();
     super.dispose();
@@ -85,7 +85,17 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
       _nameController.text = user.name;
       _emailController.text = user.email;
       _phoneController.text = user.phoneNumber ?? '';
-      _dobController.text = user.dateOfBirth ?? '';
+
+      String formattedDob = '';
+      if (user.dateOfBirth != null && user.dateOfBirth!.isNotEmpty) {
+        try {
+          final parsedDate = DateTime.parse(user.dateOfBirth!);
+          formattedDob = DateFormat('MMMM dd, yyyy').format(parsedDate);
+        } catch (e) {
+          formattedDob = user.dateOfBirth!;
+        }
+      }
+      _dobController.text = formattedDob;
     }
 
     return Scaffold(
@@ -206,26 +216,41 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
               CustomFromField(controller: _emailController),
               SizedBox(height: 12.h),
 
-              _buildLabel("Password"),
-              SizedBox(height: 6.h),
-              CustomFromField(hintText: 'Your Password', isSecured: true),
+              // _buildLabel("Password"),
+              // SizedBox(height: 6.h),
+              // CustomFromField(hintText: 'Your Password', isSecured: true),
 
-              SizedBox(height: 12.h),
-              _buildLabel("Confirm Password"),
-              SizedBox(height: 6.h),
-              CustomFromField(
-                hintText: 'Confirm your password',
-                isSecured: true,
-              ),
+              // SizedBox(height: 12.h),
+              // _buildLabel("Confirm Password"),
+              // SizedBox(height: 6.h),
+              // CustomFromField(
+              //   hintText: 'Confirm your password',
+              //   isSecured: true,
+              // ),
 
-              SizedBox(height: 12.h),
+              // SizedBox(height: 12.h),
               _buildLabel("Phone number"),
               SizedBox(height: 6.h),
-              CustomFromField(controller: _phoneController),
+              CustomFromField(controller: _phoneController, readOnly: true),
               SizedBox(height: 12.h),
               _buildLabel("Date of birth"),
               SizedBox(height: 8.h),
-              CustomFromField(controller: _dobController),
+              CustomFromField(
+                controller: _dobController,
+                readOnly: true,
+                onTap: () async {
+                  await Utils.selectDate(context, _dobController);
+                },
+                suffixIcon: SvgPicture.asset(
+                  IconManager.calendar,
+                  width: 22,
+                  height: 22,
+                  colorFilter: ColorFilter.mode(
+                    ColorManager.brown300,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
               SizedBox(height: 32.h),
               // ========== Action Buttons ============
               Row(
@@ -240,18 +265,25 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                   SizedBox(width: 15.w),
                   Expanded(
                     child: _buildButton("Save", () async {
-                      String? avatarBase64;
+                      String? avatarPath;
                       if (_pickedImage != null) {
-                        final bytes = await _pickedImage!.readAsBytes();
-                        avatarBase64 = base64Encode(bytes);
+                        avatarPath = _pickedImage!.path;
+                      }
+                      String? isoDob;
+                      if (_dobController.text.isNotEmpty) {
+                        try {
+                          final parsed = DateFormat('MMMM dd, yyyy').parse(_dobController.text);
+                          isoDob = parsed.toIso8601String();
+                        } catch (e) {
+                          isoDob = _dobController.text;
+                        }
                       }
                       final errorMessage = await ref
                           .read(userProvider.notifier)
                           .updateProfile(
                             name: _nameController.text,
-                            phoneNumber: _phoneController.text,
-                            dateOfBirth: _dobController.text,
-                            avatar: avatarBase64,
+                            dateOfBirth: isoDob,
+                            avatar: avatarPath,
                           );
                       if (context.mounted) {
                         final isSuccess = errorMessage == null;

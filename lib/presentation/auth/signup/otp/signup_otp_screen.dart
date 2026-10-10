@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/resource/constants/color_manger.dart';
 import '../../../../core/resource/constants/style_manager.dart';
+import '../../../../core/resource/utils.dart';
 import '../../../../core/route/routes_name.dart';
 import '../../../widgets/custom_back_button.dart';
 import '../../../widgets/custom_logo_text.dart';
@@ -21,66 +23,100 @@ class SignupOtpScreen extends ConsumerStatefulWidget {
 
 class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
   final _otpController = TextEditingController();
-  String _email = '';
+  String _phone = '';
+  String _userId = '';
+  Timer? _timer;
+  int _secondsRemaining = 120;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _secondsRemaining = 120;
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {
+          if (_secondsRemaining > 0) {
+            _secondsRemaining--;
+          } else {
+            _timer?.cancel();
+          }
+        });
+      }
+    });
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final args = ModalRoute.of(context)?.settings.arguments;
-    if (args is String) {
-      _email = args;
+    if (args is Map<String, dynamic>) {
+      _phone = args['phone'] as String? ?? '';
+      _userId = args['userId'] as String? ?? '';
     }
   }
 
   Future<void> handleVerifyOtp() async {
     final otp = _otpController.text.trim();
-    if (otp.isEmpty || _email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter the OTP")),
-      );
+    if (otp.isEmpty || _phone.isEmpty || _userId.isEmpty) {
+      Utils.showErrorToast(message: "Please enter the OTP");
       return;
     }
 
     final success = await ref
         .read(signupOtpViewModelProvider.notifier)
-        .verifyEmail(email: _email, otp: otp);
+        .verifyPhone(userId: _userId, otp: otp);
 
     if (success && mounted) {
       Navigator.pushNamedAndRemoveUntil(
         context,
-        RoutesName.signInRoute,
+        RoutesName.setUpScreen,
         (route) => false,
       );
     } else if (mounted) {
       final state = ref.read(signupOtpViewModelProvider);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(state.errorMessage ?? "Verification failed")),
-      );
+      Utils.showErrorToast(message: state.errorMessage ?? "Verification failed");
     }
   }
 
   Future<void> handleResendOtp() async {
-    if (_email.isEmpty) return;
+    if (_userId.isEmpty) return;
+    if (_secondsRemaining > 0) return;
 
     final success = await ref
         .read(signupOtpViewModelProvider.notifier)
-        .resendOtp(email: _email);
+        .resendPhoneOtp(userId: _userId);
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            success ? "OTP resent successfully" : "Failed to resend OTP",
-          ),
-        ),
-      );
+      if (success) {
+        _startTimer();
+        Utils.showToast(
+          message: "OTP resent successfully",
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+      } else {
+        Utils.showErrorToast(message: "Failed to resend OTP");
+      }
     }
   }
 
   @override
   void dispose() {
+    _timer?.cancel();
     _otpController.dispose();
     super.dispose();
+  }
+
+  String get _timerText {
+    if (_secondsRemaining == 0) return "Resend";
+    final minutes = (_secondsRemaining / 60).floor();
+    final seconds = _secondsRemaining % 60;
+    return "Resend in $minutes:${seconds.toString().padLeft(2, '0')}";
   }
 
   @override
@@ -115,14 +151,14 @@ class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
                     ),
                     SizedBox(height: 10.h),
                     Text(
-                      "We have sent an OTP code to your email",
-                      style: getRegularStyle14_400(color: ColorManager.brown300),
+                      "We have sent an OTP code to your\nphone number $_phone",
+                      style: getRegularStyle14_400(
+                        color: ColorManager.brown300,
+                      ),
                     ),
                     SizedBox(height: 15.h),
 
-                    CustomPinCodeField(
-                      controller: _otpController,
-                    ),
+                    CustomPinCodeField(controller: _otpController),
                   ],
                 ),
               ),
@@ -143,14 +179,20 @@ class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
                     children: [
                       TextSpan(text: "Didn't get the OTP? "),
                       TextSpan(
-                        text: "Resend",
-                        style: getRegularStyle14_500(color: ColorManager.brown)
-                            .copyWith(
-                              decoration: TextDecoration.underline,
-                              decorationColor: ColorManager.brown,
-                            ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => handleResendOtp(),
+                        text: _timerText,
+                        style: getRegularStyle14_500(
+                          color: _secondsRemaining == 0
+                              ? ColorManager.brown
+                              : ColorManager.brown300,
+                        ).copyWith(
+                          decoration: _secondsRemaining == 0
+                              ? TextDecoration.underline
+                              : TextDecoration.none,
+                          decorationColor: ColorManager.brown,
+                        ),
+                        recognizer: _secondsRemaining == 0
+                            ? (TapGestureRecognizer()..onTap = () => handleResendOtp())
+                            : null,
                       ),
                     ],
                   ),

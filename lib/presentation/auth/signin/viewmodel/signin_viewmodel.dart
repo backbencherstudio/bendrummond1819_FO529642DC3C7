@@ -25,7 +25,7 @@ class SignInModelview extends AsyncNotifier<SignInState> {
     );
   }
 
-  Future<bool> signIn({required String email, required String password}) async {
+  Future<bool> signIn({required String phone, required String password}) async {
     final current =
         state.value ??
         const SignInState(
@@ -37,7 +37,7 @@ class SignInModelview extends AsyncNotifier<SignInState> {
       current.copyWith(isEmailLoading: true, errorMessage: null),
     );
     try {
-      final success = await repository.login(email: email, password: password);
+      final success = await repository.login(phone: phone, password: password);
       state = AsyncData(
         (state.value ?? current).copyWith(
           isEmailLoading: false,

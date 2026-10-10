@@ -31,7 +31,9 @@ class _BillsScreenState extends ConsumerState<BillsScreen>
     );
     Future.microtask(() async {
       await ref.read(billsProvider.notifier).fetchBills();
-      _controller.forward();
+      if (mounted) {
+        _controller.forward();
+      }
     });
   }
 
