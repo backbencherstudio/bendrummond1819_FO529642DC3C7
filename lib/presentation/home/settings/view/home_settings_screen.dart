@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../widgets/cached_image.dart';
+import '../../../widgets/custom_back_button.dart';
 
 class HomeSettingsScreen extends ConsumerStatefulWidget {
   const HomeSettingsScreen({super.key});
@@ -110,14 +111,25 @@ class _HomeSettingsScreenState extends ConsumerState<HomeSettingsScreen> {
       backgroundColor: ColorManager.secondaryBackGround,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.0.r, vertical: 32.r),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // =============  Header ================
-              Text(
-                'Settings',
-                style: getRegularStyle16_600(color: ColorManager.textPrimary),
+              Row(
+                children: [
+                  customBackButton(
+                    context,
+                    borderColor: ColorManager.borderColor,
+                  ),
+                  SizedBox(width: 8.w),
+                  Text(
+                    'Settings',
+                    style: getRegularStyle16_600(
+                      color: ColorManager.textPrimary,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 24.h),
 

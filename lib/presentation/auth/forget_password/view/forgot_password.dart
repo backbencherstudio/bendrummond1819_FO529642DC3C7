@@ -34,8 +34,6 @@ class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
         .read(forgotPasswordViewModelProvider.notifier)
         .forgotPassword(email: email);
 
-
-    
     if (success && mounted) {
       Navigator.pushNamed(
         context,

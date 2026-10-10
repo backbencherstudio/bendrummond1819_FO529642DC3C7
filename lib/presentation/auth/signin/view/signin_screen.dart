@@ -163,15 +163,24 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
                     controller: _passwordController,
                     isSecured: true,
                     focusNode: _passwordFocusNode,
-                    trailing: TextButton(
+                  ),
+
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
                       onPressed: () {
                         Navigator.pushNamed(
                           context,
                           RoutesName.forgotPasswordRoute,
                         );
                       },
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.only(top: 8.h),
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
                       child: Text(
-                        "Forgot password?",
+                        "Forgot Password?",
                         style:
                             getRegularStyle14_500(
                               color: ColorManager.brown500,
@@ -226,19 +235,19 @@ class _SigningScreenState extends ConsumerState<SigningScreen>
 
   //***************** Helper Methods***********************
   Future<void> handleCredentialsSignIn() async {
-    // final success = await ref
-    //     .read(signInViewModelProvider.notifier)
-    //     .signIn(
-    //       phone: '+$_selectedPhoneCode${_phoneController.text.trim()}',
-    //       password: _passwordController.text,
-    //     );
+    final success = await ref
+        .read(signInViewModelProvider.notifier)
+        .signIn(
+          phone: '+$_selectedPhoneCode${_phoneController.text.trim()}',
+          password: _passwordController.text,
+        );
 
-    // if (success && mounted) {
-    //   await _onSignInSuccess();
-    // } else if (mounted) {
-    //   final state = ref.read(signInViewModelProvider).value;
-    //   Utils.showErrorToast(message: state?.errorMessage ?? "Login failed");
-    // }
+    if (success && mounted) {
+      await _onSignInSuccess();
+    } else if (mounted) {
+      final state = ref.read(signInViewModelProvider).value;
+      Utils.showErrorToast(message: state?.errorMessage ?? "Login failed");
+    }
   }
 
   //***************** Social Login Mixin ***********************

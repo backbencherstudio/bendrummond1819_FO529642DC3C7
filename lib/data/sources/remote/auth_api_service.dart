@@ -88,9 +88,9 @@ class AuthApiService {
   }
 
   //login
-  Future<bool> login({required String email, required String password}) async {
+  Future<bool> login({required String phone, required String password}) async {
     try {
-      final body = {"email": email, "password": password};
+      final body = {"phone": phone, "password": password};
       final dynamic response = await apiClient.postRequest(
         body: body,
         endpoints: ApiEndpoints.login,
@@ -432,8 +432,12 @@ class AuthApiService {
         }
         
         try {
-          final token = response['authorization']?['access_token'] ?? response['data']?['accessToken'];
-          final refreshToken = response['authorization']?['refresh_token'] ?? response['data']?['refreshToken'];
+          final token = response['accessToken'] ?? 
+                        response['authorization']?['access_token'] ?? 
+                        response['data']?['accessToken'];
+          final refreshToken = response['refreshToken'] ?? 
+                               response['authorization']?['refresh_token'] ?? 
+                               response['data']?['refreshToken'];
           if (token != null) {
             await SharedPreferenceData.setToken(token);
             if (refreshToken != null) {

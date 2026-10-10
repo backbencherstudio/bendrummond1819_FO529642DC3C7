@@ -298,36 +298,14 @@ class _SetUp8ScreenState extends ConsumerState<SetUp8Screen> {
                       ),
                     ),
                     SizedBox(height: 6.h),
-                    GestureDetector(
+                    CustomFromField(
+                      controller: frequencyController,
+                      hintText: "Select frequency",
+                      readOnly: true,
                       onTap: _showFrequencyPicker,
-                      child: Container(
-                        height: 52.h,
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        decoration: BoxDecoration(
-                          color: ColorManager.backgroundSecondary,
-                          borderRadius: BorderRadius.circular(16.r),
-                          border: Border.all(color: ColorManager.borderColor1),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                frequencyController.text.isEmpty
-                                    ? "Select frequency"
-                                    : frequencyController.text,
-                                style: getRegularStyle16_400(
-                                  color: frequencyController.text.isEmpty
-                                      ? ColorManager.brown300
-                                      : ColorManager.brown400,
-                                ),
-                              ),
-                            ),
-                            Icon(
-                              Icons.keyboard_arrow_down_outlined,
-                              color: ColorManager.brown400,
-                            ),
-                          ],
-                        ),
+                      suffixIcon: Icon(
+                        Icons.keyboard_arrow_down_outlined,
+                        color: ColorManager.brown400,
                       ),
                     ),
                   ],

@@ -49,7 +49,7 @@ class _SignupOtpScreenState extends ConsumerState<SignupOtpScreen> {
     if (success && mounted) {
       Navigator.pushNamedAndRemoveUntil(
         context,
-        RoutesName.signInRoute,
+        RoutesName.setUpScreen,
         (route) => false,
       );
     } else if (mounted) {
