@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../core/resource/constants/color_manger.dart';
 import '../../../../core/resource/constants/style_manager.dart';
 import '../../../../core/route/routes_name.dart';

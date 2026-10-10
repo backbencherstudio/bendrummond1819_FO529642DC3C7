@@ -47,6 +47,7 @@ class AuthRepository {
     String? phoneNumber,
     bool? billRemainders,
     bool? notificationRemainder,
+    bool? emailUpdates,
     String? gender,
     String? dateOfBirth,
   }) async {
@@ -57,6 +58,7 @@ class AuthRepository {
       phoneNumber: phoneNumber,
       billRemainders: billRemainders,
       notificationRemainder: notificationRemainder,
+      emailUpdates: emailUpdates,
       gender: gender,
       dateOfBirth: dateOfBirth,
     );

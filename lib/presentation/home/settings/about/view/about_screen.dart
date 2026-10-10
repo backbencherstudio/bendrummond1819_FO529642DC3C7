@@ -3,6 +3,7 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_mana
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
@@ -12,6 +13,27 @@ class AboutScreen extends StatefulWidget {
 }
 
 class _AboutScreenState extends State<AboutScreen> {
+  String _appVersion = "Loading...";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAppVersion();
+  }
+
+  Future<void> _loadAppVersion() async {
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      setState(() {
+        _appVersion = "${packageInfo.version} (${packageInfo.buildNumber})";
+      });
+    } catch (e) {
+      debugPrint("PackageInfo Error: $e");
+      setState(() {
+        _appVersion = "Unknown";
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +79,7 @@ class _AboutScreenState extends State<AboutScreen> {
               _buildAboutTile(
                 "App Version",
                 trailing: Text(
-                  "1.0.0",
+                  _appVersion,
                   style: getRegularStyle16_400(color: ColorManager.brown300),
                 ),
               ),

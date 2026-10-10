@@ -7,6 +7,7 @@ class UserModel {
   final String? phoneNumber;
   final bool billRemainders;
   final bool notificationRemainder;
+  final bool emailUpdates;
   final String type;
   final String? gender;
   final String? dateOfBirth;
@@ -21,6 +22,7 @@ class UserModel {
     this.phoneNumber,
     required this.billRemainders,
     required this.notificationRemainder,
+    required this.emailUpdates,
     required this.type,
     this.gender,
     this.dateOfBirth,
@@ -36,6 +38,7 @@ class UserModel {
     phoneNumber: json['phone_number'],
     billRemainders: json['bill_remainders'] == "1" || json['bill_remainders'] == 1 || json['bill_remainders'] == true,
     notificationRemainder: json['notification_remainder'] == "1" || json['notification_remainder'] == 1 || json['notification_remainder'] == true,
+    emailUpdates: json['email_updates'] == "1" || json['email_updates'] == 1 || json['email_updates'] == true,
     type: json['type'] ?? 'user',
     gender: json['gender'],
     dateOfBirth: json['date_of_birth'],
@@ -51,6 +54,7 @@ class UserModel {
     'phone_number': phoneNumber,
     'bill_remainders': billRemainders,
     'notification_remainder': notificationRemainder,
+    'email_updates': emailUpdates,
     'type': type,
     'gender': gender,
     'date_of_birth': dateOfBirth,

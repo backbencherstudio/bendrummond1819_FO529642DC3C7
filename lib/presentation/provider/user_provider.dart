@@ -46,6 +46,7 @@ class UserNotifier extends Notifier<UserState> {
     String? phoneNumber,
     bool? billRemainders,
     bool? notificationRemainder,
+    bool? emailUpdates,
     String? gender,
     String? dateOfBirth,
   }) async {
@@ -61,6 +62,7 @@ class UserNotifier extends Notifier<UserState> {
         phoneNumber: phoneNumber,
         billRemainders: billRemainders,
         notificationRemainder: notificationRemainder,
+        emailUpdates: emailUpdates,
         gender: gender,
         dateOfBirth: dateOfBirth,
       );

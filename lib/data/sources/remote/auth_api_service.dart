@@ -333,27 +333,36 @@ class AuthApiService {
     String? phoneNumber,
     bool? billRemainders,
     bool? notificationRemainder,
+    bool? emailUpdates,
     String? gender,
     String? dateOfBirth,
   }) async {
     try {
-      final body = <String, dynamic>{};
-      if (name != null) body['name'] = name;
-      if (avatar != null) body['avatar'] = avatar;
-      if (address != null) body['address'] = address;
-      if (phoneNumber != null) body['phone_number'] = phoneNumber;
+      final Map<String, dynamic> data = {};
+      if (name != null) data['name'] = name;
+      if (address != null) data['address'] = address;
+      if (phoneNumber != null) data['phone_number'] = phoneNumber;
       if (billRemainders != null) {
-        body['bill_remainders'] = billRemainders ? "1" : "0";
+        data['bill_remainders'] = billRemainders.toString();
       }
       if (notificationRemainder != null) {
-        body['notification_remainder'] = notificationRemainder ? "1" : "0";
+        data['notification_remainder'] = notificationRemainder.toString();
       }
-      if (gender != null) body['gender'] = gender;
-      if (dateOfBirth != null) body['date_of_birth'] = dateOfBirth;
+      if (emailUpdates != null) {
+        data['email_updates'] = emailUpdates.toString();
+      }
+      if (gender != null) data['gender'] = gender;
+      if (dateOfBirth != null) data['date_of_birth'] = dateOfBirth;
+      
+      if (avatar != null && avatar.isNotEmpty) {
+        data['image'] = await MultipartFile.fromFile(avatar);
+      }
+
+      final formData = FormData.fromMap(data);
 
       final dynamic response = await ApiClient.patchRequest(
         endpoints: ApiEndpoints.updateProfile,
-        body: body,
+        formData: formData,
       );
 
       if (response == null) return null;
@@ -369,8 +378,19 @@ class AuthApiService {
       }
 
       return await loadUser();
-    } catch (e) {
-      log("Update profile error: ${e.toString()}");
+    } catch (error) {
+      if (error is DioException &&
+          error.response?.data is Map<String, dynamic>) {
+        final data = error.response?.data as Map<String, dynamic>;
+        var msg = data['message'] ?? data['error'] ?? 'Update failed';
+        if (msg is Map) {
+          msg = msg['message'] ?? msg['error'] ?? msg.toString();
+        }
+        if (msg is List && msg.isNotEmpty) {
+          msg = msg.join('\n');
+        }
+        throw Exception(msg.toString());
+      }
       rethrow;
     }
   }
