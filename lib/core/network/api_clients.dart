@@ -13,12 +13,18 @@ class _AuthInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     if (err.response?.statusCode == 401) {
-      SharedPreferenceData.removeToken();
-      SharedPreferenceData.removeRole();
-      navigatorKey.currentState?.pushNamedAndRemoveUntil(
-        RoutesName.signInRoute,
-        (route) => false,
-      );
+      final path = err.requestOptions.path;
+      if (!path.contains(ApiEndpoints.resetPassword) &&
+          !path.contains(ApiEndpoints.login) &&
+          !path.contains(ApiEndpoints.verifyResetOtp) &&
+          !path.contains(ApiEndpoints.forgetPassword)) {
+        SharedPreferenceData.removeToken();
+        SharedPreferenceData.removeRole();
+        navigatorKey.currentState?.pushNamedAndRemoveUntil(
+          RoutesName.signInRoute,
+          (route) => false,
+        );
+      }
     }
     handler.next(err);
   }

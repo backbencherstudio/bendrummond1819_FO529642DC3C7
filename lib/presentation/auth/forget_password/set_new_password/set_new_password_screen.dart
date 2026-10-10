@@ -9,6 +9,7 @@ import '../../../widgets/custom_back_button.dart';
 import '../../../widgets/custom_from_field.dart';
 import '../../../widgets/custom_logo_text.dart';
 import '../../../widgets/primary_button.dart';
+import '../../../../core/resource/utils.dart';
 import '../viewmodel/forgot_password_viewmodel.dart';
 
 class SetNewPasswordScreen extends ConsumerStatefulWidget {
@@ -22,33 +23,48 @@ class SetNewPasswordScreen extends ConsumerStatefulWidget {
 class _SetNewPasswordScreenState extends ConsumerState<SetNewPasswordScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  bool _isInteracted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _passwordController.addListener(() => setState(() {}));
+    _confirmPasswordController.addListener(() => setState(() {}));
+  }
+
+  String? get _passwordError {
+    if (!_isInteracted) return null;
+    final password = _passwordController.text;
+    if (password.isEmpty) return "Please enter a new password";
+    if (password.length < 6) return "Password must be at least 6 characters";
+    return null;
+  }
+
+  String? get _confirmPasswordError {
+    if (!_isInteracted) return null;
+    final confirmPassword = _confirmPasswordController.text;
+    if (confirmPassword.isEmpty) return "Please confirm your password";
+    if (_passwordController.text != confirmPassword) return "Passwords do not match";
+    return null;
+  }
 
   Future<void> handleResetPassword() async {
-    final password = _passwordController.text;
-    final confirmPassword = _confirmPasswordController.text;
-
-    if (password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter a new password")),
-      );
-      return;
-    }
-
-    if (password != confirmPassword) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Passwords do not match")),
-      );
+    setState(() => _isInteracted = true);
+    
+    if (_passwordError != null || _confirmPasswordError != null) {
       return;
     }
 
     final success = await ref
         .read(forgotPasswordViewModelProvider.notifier)
-        .resetPassword(
-          password: password,
-          passwordConfirmation: confirmPassword,
-        );
+        .resetPassword(password: _passwordController.text);
 
     if (success && mounted) {
+      Utils.showToast(
+        message: "Password reset successfully",
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+      );
       Navigator.pushNamedAndRemoveUntil(
         context,
         RoutesName.signInRoute,
@@ -56,10 +72,8 @@ class _SetNewPasswordScreenState extends ConsumerState<SetNewPasswordScreen> {
       );
     } else if (mounted) {
       final state = ref.read(forgotPasswordViewModelProvider);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(state.errorMessage ?? "Failed to reset password"),
-        ),
+      Utils.showErrorToast(
+        message: state.errorMessage ?? "Failed to reset password",
       );
     }
   }
@@ -117,6 +131,7 @@ class _SetNewPasswordScreenState extends ConsumerState<SetNewPasswordScreen> {
                       hintText: "Enter your password",
                       controller: _passwordController,
                       isSecured: true,
+                      errorText: _passwordError,
                     ),
 
                     SizedBox(height: 15.h),
@@ -132,6 +147,7 @@ class _SetNewPasswordScreenState extends ConsumerState<SetNewPasswordScreen> {
                       hintText: "Confirm your password",
                       controller: _confirmPasswordController,
                       isSecured: true,
+                      errorText: _confirmPasswordError,
                     ),
                   ],
                 ),

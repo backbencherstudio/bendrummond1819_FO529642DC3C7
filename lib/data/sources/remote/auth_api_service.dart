@@ -255,46 +255,72 @@ class AuthApiService {
   }
 
   //forgotpassord
-  Future<bool> forgotPassword({required String email}) async {
+  Future<String?> forgotPassword({required String phone}) async {
     try {
-      final body = {"email": email};
+      final body = {"phone": phone};
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.forgetPassword,
         body: body,
       );
-      if (response == null) return false;
+      if (response == null) return null;
 
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
-          return false;
+          return null;
         }
+        return response['data']?['userId'] ?? response['userId']?.toString();
       }
-      return true;
+      return null;
     } catch (error) {
+      if (error is DioException &&
+          error.response?.data is Map<String, dynamic>) {
+        final data = error.response?.data as Map<String, dynamic>;
+        var msg = data['message'] ?? data['error'] ?? 'Forgot password failed';
+        if (msg is Map) {
+          msg = msg['message'] ?? msg['error'] ?? msg.toString();
+        }
+        if (msg is List && msg.isNotEmpty) {
+          msg = msg.join('\n');
+        }
+        throw Exception(msg.toString());
+      }
       rethrow;
     }
   }
 
   //verify reset otp
-  Future<bool> verifyResetOtp({
-    required String email,
-    required String otp,
+  Future<String?> verifyResetOtp({
+    required String userId,
+    required String code,
   }) async {
     try {
-      final body = {"email": email, "token": otp};
+      final body = {"userId": userId, "code": code};
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.verifyResetOtp,
         body: body,
       );
-      if (response == null) return false;
+      if (response == null) return null;
 
       if (response is Map<String, dynamic>) {
         if (response['success'] == false || response['error'] != null) {
-          return false;
+          return null;
         }
+        return response['data']?['resetToken']?.toString();
       }
-      return true;
+      return null;
     } catch (error) {
+      if (error is DioException &&
+          error.response?.data is Map<String, dynamic>) {
+        final data = error.response?.data as Map<String, dynamic>;
+        var msg = data['message'] ?? data['error'] ?? 'OTP verification failed';
+        if (msg is Map) {
+          msg = msg['message'] ?? msg['error'] ?? msg.toString();
+        }
+        if (msg is List && msg.isNotEmpty) {
+          msg = msg.join('\n');
+        }
+        throw Exception(msg.toString());
+      }
       rethrow;
     }
   }
@@ -499,17 +525,13 @@ class AuthApiService {
 
   //reset password
   Future<bool> resetPassword({
-    required String email,
     required String password,
-    required String passwordConfirmation,
-    required String token,
+    required String resetToken,
   }) async {
     try {
       final body = {
-        "email": email,
         "password": password,
-        "password_confirmation": passwordConfirmation,
-        "token": token,
+        "resetToken": resetToken,
       };
       final dynamic response = await apiClient.postRequest(
         endpoints: ApiEndpoints.resetPassword,
@@ -524,6 +546,18 @@ class AuthApiService {
       }
       return true;
     } catch (error) {
+      if (error is DioException &&
+          error.response?.data is Map<String, dynamic>) {
+        final data = error.response?.data as Map<String, dynamic>;
+        var msg = data['message'] ?? data['error'] ?? 'Reset password failed';
+        if (msg is Map) {
+          msg = msg['message'] ?? msg['error'] ?? msg.toString();
+        }
+        if (msg is List && msg.isNotEmpty) {
+          msg = msg.join('\n');
+        }
+        throw Exception(msg.toString());
+      }
       rethrow;
     }
   }

@@ -1,9 +1,9 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/splash/viewmodel/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../widgets/splash_logo.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -12,110 +12,82 @@ class SplashScreen extends ConsumerStatefulWidget {
   ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends ConsumerState<SplashScreen>
-    with TickerProviderStateMixin {
-  late AnimationController _progressController;
-  late AnimationController _shimmerController;
-  late AnimationController _punchEffectController;
-  late Animation<double> _bounceAnimation;
-
-  bool _moveUp = false;
-  bool _showColorEffect = false;
-
+class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
-    _progressController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    );
-
-    _shimmerController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 2000),
-    )..repeat();
-
-    _punchEffectController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 600),
-    );
-
-    _bounceAnimation =
-        TweenSequence<double>([
-          TweenSequenceItem(tween: Tween(begin: 0.0, end: 15.0), weight: 50),
-          TweenSequenceItem(tween: Tween(begin: 15.0, end: 0.0), weight: 50),
-        ]).animate(
-          CurvedAnimation(
-            parent: _punchEffectController,
-            curve: Curves.easeInOut,
-          ),
-        );
-
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        setState(() => _moveUp = true);
-      }
-    });
-
-    Future.delayed(const Duration(milliseconds: 2000), () {
-      if (!mounted) return;
-      setState(() => _showColorEffect = true);
-      _progressController.forward().then((_) async {
-        await _punchEffectController.forward();
-        await Future.delayed(const Duration(seconds: 3));
-        if (!mounted) return;
-        final route = await ref
-            .read(splashProvider.notifier)
-            .decideInitialRoute();
-        if (mounted) {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            route,
-            (predicate) => false,
-          );
-        }
-      });
-    });
+    _navigateToNext();
   }
 
-  @override
-  void dispose() {
-    _progressController.dispose();
-    _shimmerController.dispose();
-    _punchEffectController.dispose();
-    super.dispose();
+  Future<void> _navigateToNext() async {
+    await Future.delayed(const Duration(seconds: 3));
+    if (!mounted) return;
+    final route = await ref.read(splashProvider.notifier).decideInitialRoute();
+    if (mounted) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        route,
+        (predicate) => false,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.secondary,
-
       body: SizedBox(
         width: double.infinity,
-        child: Center(
-          child: AnimatedPadding(
-            duration: const Duration(milliseconds: 1200),
-            curve: Curves.easeOutCubic,
-            padding: EdgeInsets.only(bottom: _moveUp ? 100.h : 0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SplashLogo(
-                  showColorEffect: _showColorEffect,
-                  shimmerController: _shimmerController,
-                  punchEffectController: _punchEffectController,
-                  bounceAnimation: _bounceAnimation,
-                ),
-                // SplashProgressSection(
-                //   showColorEffect: _showColorEffect,
-                //   progressController: _progressController,
-                // ),
-              ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "STABILITY",
+              style: getBoldStyle32(
+                color: ColorManager.brown,
+              ).copyWith(fontFamily: 'Lora', letterSpacing: 8, fontSize: 36.sp),
             ),
-          ),
+            SizedBox(height: 12.h),
+            TweenAnimationBuilder<double>(
+              tween: Tween<double>(begin: 0.0, end: 1.0),
+              duration: const Duration(seconds: 3),
+              builder: (context, value, child) {
+                return Container(
+                  width: 250.w,
+                  height: 12.h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100.r),
+                    border: Border.all(
+                      color: ColorManager.brown.withValues(alpha: 0.3),
+                      width: 1,
+                    ),
+                  ),
+                  child: Stack(
+                    alignment: Alignment.centerLeft,
+                    children: [
+                      // The filled path with metallic gradient
+                      Container(
+                        width: 14.w + ((250.w - 14.w - 4.w) * value),
+                        height: 8.h,
+                        margin: EdgeInsets.only(left: 2.w),
+                        decoration: BoxDecoration(
+                          gradient: ColorManager.metallicGradient,
+                          borderRadius: BorderRadius.circular(100.r),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+            SizedBox(height: 20.h),
+            Text(
+              "Know what's safe to spend.",
+              style: getRegularStyle16_400(
+                color: ColorManager.brown,
+              ).copyWith(fontFamily: 'Lora', fontSize: 16.sp),
+            ),
+          ],
         ),
       ),
     );

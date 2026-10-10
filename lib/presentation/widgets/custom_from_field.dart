@@ -9,6 +9,7 @@ class CustomFromField extends StatefulWidget {
   final String? labelText;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
+  final String? errorText;
   final String? Function(String?)? validator;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
@@ -36,6 +37,7 @@ class CustomFromField extends StatefulWidget {
     this.labelText,
     this.controller,
     this.keyboardType,
+    this.errorText,
     this.validator,
     this.suffixIcon,
     this.prefixIcon,
@@ -84,6 +86,7 @@ class _CustomFromFieldState extends State<CustomFromField> {
             EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
         filled: widget.filled ?? true,
         fillColor: widget.fillColor ?? ColorManager.backgroundSecondary,
+        errorText: widget.errorText,
         hintText: widget.hintText,
         labelText: widget.labelText,
         hintStyle: getRegularStyle16_400(color: ColorManager.brown300),

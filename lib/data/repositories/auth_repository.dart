@@ -70,15 +70,15 @@ class AuthRepository {
     return await remoteSource.deleteAccount();
   }
 
-  Future<bool> forgotPassword({required String email}) async {
-    return await remoteSource.forgotPassword(email: email);
+  Future<String?> forgotPassword({required String phone}) async {
+    return await remoteSource.forgotPassword(phone: phone);
   }
 
-  Future<bool> verifyResetOtp({
-    required String email,
-    required String otp,
+  Future<String?> verifyResetOtp({
+    required String userId,
+    required String code,
   }) async {
-    return await remoteSource.verifyResetOtp(email: email, otp: otp);
+    return await remoteSource.verifyResetOtp(userId: userId, code: code);
   }
 
   Future<bool> verifyEmail({required String email, required String otp}) async {
@@ -98,16 +98,12 @@ class AuthRepository {
   }
 
   Future<bool> resetPassword({
-    required String email,
     required String password,
-    required String passwordConfirmation,
-    required String token,
+    required String resetToken,
   }) async {
     return await remoteSource.resetPassword(
-      email: email,
       password: password,
-      passwordConfirmation: passwordConfirmation,
-      token: token,
+      resetToken: resetToken,
     );
   }
 }

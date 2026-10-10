@@ -12,7 +12,7 @@ class ApiEndpoints {
   static const String loadUser = 'auth/me';
   static const String updateProfile = 'auth/update';
   static const String forgetPassword = 'auth/forgot-password';
-  static const String verifyResetOtp = 'auth/verify-email';
+  static const String verifyResetOtp = 'auth/forgot-password/verify-otp';
   static const String resetPassword = 'auth/reset-password';
   static const String logout = 'auth/logout';
   static const String googleLogin = 'auth/google';
