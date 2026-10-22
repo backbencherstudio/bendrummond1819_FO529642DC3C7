@@ -1,9 +1,8 @@
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/color_manger.dart';
-import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_manager.dart';
+import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/image_manager.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/splash/viewmodel/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -34,16 +33,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       backgroundColor: ColorManager.secondary,
       body: SizedBox(
         width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "STABILITY",
-              style: getBoldStyle32(
-                color: ColorManager.brown,
-              ).copyWith(fontFamily: 'Lora', letterSpacing: 8, fontSize: 36.sp),
-            ),
-          ],
+        height: double.infinity,
+        child: Image.asset(
+          ImageManager.splashImage,
+          width: double.infinity,
+          height: double.infinity,
+          fit: BoxFit.fill,
         ),
       ),
     );
