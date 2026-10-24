@@ -35,10 +35,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         width: double.infinity,
         height: double.infinity,
         child: Image.asset(
-          ImageManager.splashImage,
+          ImageManager.stabilitySplash,
           width: double.infinity,
           height: double.infinity,
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
         ),
       ),
     );
