@@ -1,6 +1,32 @@
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferenceData {
+  // BILLS
+  static const String _billsKey = 'saved_bills';
+
+  static Future<void> saveBills(List<Map<String, String>> bills) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_billsKey, jsonEncode(bills));
+  }
+
+  static Future<List<Map<String, String>>> getBills() async {
+    final prefs = await SharedPreferences.getInstance();
+    final data = prefs.getString(_billsKey);
+    if (data == null || data.isEmpty) return [];
+    try {
+      final decoded = jsonDecode(data) as List<dynamic>;
+      return decoded.map((e) => Map<String, String>.from(e as Map)).toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  static Future<void> clearBills() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_billsKey);
+  }
+
   static Future<void> setToken(String? token) async {
     final prefs = await SharedPreferences.getInstance();
     if (token != null) {

@@ -5,6 +5,7 @@ import 'package:bendrummond1819_fo529642dc3c7/core/resource/constants/style_mana
 import 'package:bendrummond1819_fo529642dc3c7/core/resource/utils.dart';
 import 'package:bendrummond1819_fo529642dc3c7/core/route/routes_name.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/auth/signup/setup/viewmodel/setup_data_provider.dart';
+import 'package:bendrummond1819_fo529642dc3c7/data/sources/local/shared_preference/shared_preference.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/custom_back_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/outline_button.dart';
 import 'package:bendrummond1819_fo529642dc3c7/presentation/widgets/primary_button.dart';
@@ -44,7 +45,7 @@ class _SetUpMainViewState extends ConsumerState<SetUpScreen> {
     super.dispose();
   }
 
-  void _onNext() {
+  void _onNext() async {
     final currentStep = ref.read(setupStepProvider);
     final data = ref.read(setupDataProvider);
 
@@ -61,7 +62,8 @@ class _SetUpMainViewState extends ConsumerState<SetUpScreen> {
       case 4:
         if (data.rentAmount.trim().isEmpty) {
           isValid = false;
-          errorMessage = "Please enter your rent amount or tap 'No rent right now'";
+          errorMessage =
+              "Please enter your rent amount or tap 'No rent right now'";
         }
         break;
       case 5:
@@ -69,6 +71,9 @@ class _SetUpMainViewState extends ConsumerState<SetUpScreen> {
           isValid = false;
           errorMessage = "Please enter your car payment amount or tap skip";
         }
+        break;
+      case 6:
+        await SharedPreferenceData.saveBills(data.bills);
         break;
     }
 
@@ -84,7 +89,12 @@ class _SetUpMainViewState extends ConsumerState<SetUpScreen> {
     _proceedToNext();
   }
 
-  void _onSkip() {
+  void _onSkip() async {
+    final currentStep = ref.read(setupStepProvider);
+    if (currentStep == 6) {
+      ref.read(setupDataProvider.notifier).setBills([]);
+      await SharedPreferenceData.saveBills([]);
+    }
     _proceedToNext();
   }
 
@@ -112,11 +122,16 @@ class _SetUpMainViewState extends ConsumerState<SetUpScreen> {
 
   String _getSkipButtonText(int step) {
     switch (step) {
-      case 4: return "No rent right now";
-      case 5: return "No car payment right now";
-      case 6: return "No regular bills";
-      case 7: return "No debts";
-      default: return "Skip";
+      case 4:
+        return "No rent right now";
+      case 5:
+        return "No car payment right now";
+      case 6:
+        return "No regular bills";
+      case 7:
+        return "No debts";
+      default:
+        return "Skip";
     }
   }
 
