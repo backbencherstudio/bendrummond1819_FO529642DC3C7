@@ -12,7 +12,7 @@ class GoogleAuthService {
       final credential = GoogleAuthProvider.credential(
         idToken: googleUser.authentication.idToken,
       );
-      return FirebaseAuth.instance.signInWithCredential(credential);
+      return await FirebaseAuth.instance.signInWithCredential(credential);
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled) return null;
       rethrow;
