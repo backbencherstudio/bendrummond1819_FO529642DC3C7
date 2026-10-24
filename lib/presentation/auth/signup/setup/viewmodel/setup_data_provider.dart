@@ -3,6 +3,7 @@ import '../../../../../core/network/api_clients.dart';
 import '../../../../../data/models/setup_models.dart';
 import '../../../../../data/repositories/setup_repository.dart';
 import '../../../../../data/sources/remote/setup_api_service.dart';
+import '../../../../../data/sources/local/shared_preference/shared_preference.dart';
 
 //************** State***************
 class SetupDataState {
@@ -21,12 +22,18 @@ class SetupDataState {
 
   String get payFrequencyLabel {
     switch (payFrequencyIndex) {
-      case 0: return "Weekly";
-      case 1: return "Every 2 weeks";
-      case 2: return "Twice a month";
-      case 3: return "Monthly";
-      case 4: return "Inconsistent";
-      default: return "Weekly";
+      case 0:
+        return "Weekly";
+      case 1:
+        return "Every 2 weeks";
+      case 2:
+        return "Twice a month";
+      case 3:
+        return "Monthly";
+      case 4:
+        return "Inconsistent";
+      default:
+        return "Weekly";
     }
   }
 
@@ -93,6 +100,17 @@ class SetupDataNotifier extends Notifier<SetupDataState> {
       state = state.copyWith(carPaymentAmount: value);
   void setBills(List<Map<String, String>> bills) =>
       state = state.copyWith(bills: bills);
+
+  Future<void> saveBillsLocally(List<Map<String, String>> bills) async {
+    state = state.copyWith(bills: bills);
+    await SharedPreferenceData.saveBills(bills);
+  }
+
+  Future<void> clearBillsLocally() async {
+    state = state.copyWith(bills: []);
+    await SharedPreferenceData.saveBills([]);
+  }
+
   void setDebts(List<Map<String, String>> debts) =>
       state = state.copyWith(debts: debts);
   void setSavings(List<Map<String, String>> savings) =>
@@ -172,7 +190,11 @@ class SetupDataNotifier extends Notifier<SetupDataState> {
           name: bill['name'] ?? 'Bill',
           amount: double.tryParse(bill['amount'] ?? '0') ?? 0,
           dueDay: int.tryParse(bill['day'] ?? ''),
-          frequency: 'MONTHLY',
+          frequency:
+              (bill['isBiWeekly'] == 'true' ||
+                  bill['frequency'] == 'EVERY_2_WEEKS')
+              ? 'EVERY_2_WEEKS'
+              : 'MONTHLY',
           isRecurring: true,
         ),
       );
